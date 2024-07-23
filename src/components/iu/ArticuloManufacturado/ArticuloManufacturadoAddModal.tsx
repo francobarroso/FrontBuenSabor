@@ -295,8 +295,8 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
             denominacion: 25,
             precioVenta: 6,
             tiempoEstimadoMinutos: 2,
-            descripcion: 100,
-            preparacion: 250
+            descripcion: 200,
+            preparacion: 500
         };
 
         if (value.length > maxLength[name]) {
