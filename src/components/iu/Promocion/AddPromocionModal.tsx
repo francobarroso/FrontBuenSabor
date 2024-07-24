@@ -299,6 +299,12 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
 
     const handleEliminar = (index: number) => {
         const nuevosDetalles = detalles.filter((_, i) => i !== index);
+        const details = [...detalles];
+
+        if (details[index].articulo.precioVenta !== null) {
+            handleTotal(details[index].articulo.precioVenta, -details[index].cantidad);
+        }
+
         setDetalles(nuevosDetalles);
     };
 
@@ -338,7 +344,7 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
         const { name, value } = e.target;
         const maxLength: Record<string, number> = {
             denominacion: 25,
-            descripcionDescuento: 100,
+            descripcionDescuento: 200,
             precioPromocional: 6
         };
 

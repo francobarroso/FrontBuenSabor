@@ -194,7 +194,7 @@ const ArticuloManufacturadoTable: React.FC<ArticuloManufacturadoTableProps> = ({
                         label={articulo.unidadMedida.denominacion}
                     />
                 </TableCell>
-                <TableCell align="center">{articulo.precioVenta}</TableCell>
+                <TableCell align="center">${articulo.precioVenta}</TableCell>
                 <TableCell align="center">{articulo.tiempoEstimadoMinutos}</TableCell>
                 <TableCell align="center">
                     <Chip
