@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Paper, TablePagination } from "@mui/material";
+import { Button, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Paper, TablePagination, TextField, Grid, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import SideBar from "../components/common/SideBar";
 import ArticuloInsumo from "../types/ArticuloInsumo";
 import { ArticuloInsumoFindBySucursal } from "../services/ArticuloInsumoService";
@@ -28,6 +28,8 @@ function ArticuloInsumoList() {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filter, setFilter] = useState("Todos");
 
     const getAllArticuloInsumoBySucursal = async () => {
         const token = await getAccessTokenSilently({
@@ -58,7 +60,7 @@ function ArticuloInsumoList() {
     const handleSuccess = () => {
         toast.success("Se creo correctamente", {
             position: "top-right",
-            autoClose: 5000, // Tiempo en milisegundos antes de que se cierre automáticamente
+            autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -71,7 +73,7 @@ function ArticuloInsumoList() {
     const handleError = () => {
         toast.error("Error al crear el insumo, intente más tarde", {
             position: "top-right",
-            autoClose: 5000, // Tiempo en milisegundos antes de que se cierre automáticamente
+            autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -91,15 +93,72 @@ function ArticuloInsumoList() {
         setPage(0);
     };
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleFilterChange = (event: SelectChangeEvent<string>) => {
+        setFilter(event.target.value as string);
+    };
+
+    const filteredArticulosInsumo = articulosInsumo.filter(articulo =>
+        articulo.denominacion.toLowerCase().includes(searchTerm.toLowerCase())
+    ).filter(articulo => {
+        if (filter === "Activos") {
+            return articulo.habilitado;
+        } else if (filter === "No Activos") {
+            return !articulo.habilitado;
+        }
+        return true;
+    });
+
+    const activeInsumoCount = articulosInsumo.filter(articulo => articulo.habilitado).length;
+
     return (
         <>
             <SideBar />
-            <Box p={0} ml={3}>
+            <Box p={0} ml={3} mr={3}>
                 <Typography variant="h5" component="h1" gutterBottom fontWeight={'bold'} paddingBottom={'10px'}>
                     Articulos Insumos
                 </Typography>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={3} justifyContent="flex-start">
+                        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleOpen}>Agregar Insumo</Button>
+                    </Grid>
+                    <Grid item xs={3} container justifyContent="center">
+                        <TextField
+                            variant="outlined"
+                            placeholder="Buscar por nombre"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            style={{ width: '300px' }}
+                        />
+                    </Grid>
+                    <Grid item xs={3} container justifyContent="center">
+                        <Select
+                            value={filter}
+                            onChange={handleFilterChange}
+                            variant="outlined"
+                            displayEmpty
+                            style={{ width: '150px' }}
+                        >
+                            <MenuItem value="Todos">Todos</MenuItem>
+                            <MenuItem value="Activos">Activos</MenuItem>
+                            <MenuItem value="No Activos">No Activos</MenuItem>
+                        </Select>
+                    </Grid>
+                    <Grid item xs={3} container justifyContent="flex-end">
+                        <Grid container direction="column" alignItems="flex-end">
+                            <Typography variant="h2">
+                                {activeInsumoCount}
+                            </Typography>
+                            <Typography variant="h6">
+                                Insumos Activos
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
 
-                <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleOpen}>Agregar Insumo</Button>
                 <TableContainer component={Paper} style={{ maxHeight: '60vh', marginBottom: '10px', marginTop: '20px' }}>
                     <Table >
                         <TableHead >
@@ -117,7 +176,7 @@ function ArticuloInsumoList() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {articulosInsumo
+                            {filteredArticulosInsumo
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .filter(articulo => articulo.eliminado === false)
                                 .map((articulo) => (
@@ -130,13 +189,13 @@ function ArticuloInsumoList() {
                 <TablePagination
                     rowsPerPageOptions={[5]}
                     component="div"
-                    count={articulosInsumo.length}
+                    count={filteredArticulosInsumo.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-                <ArticuloInsumoAddModal open={open} onClose={handleClose} articulo={currentArticuloInsumo} imagenes={images} articuloImagenes={articuloImages} success={handleSuccess} error={handleError}/>
+                <ArticuloInsumoAddModal open={open} onClose={handleClose} articulo={currentArticuloInsumo} imagenes={images} articuloImagenes={articuloImages} success={handleSuccess} error={handleError} />
                 <ToastContainer />
             </Box>
         </>

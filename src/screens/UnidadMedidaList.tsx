@@ -21,6 +21,7 @@ import {
     DialogContentText,
     DialogTitle,
     TablePagination,
+    Grid,
 } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -37,6 +38,7 @@ function UnidadMedidaList() {
     const [openDialog, setOpenDialog] = useState(false);
     const [unidadToDelete, setUnidadToDelete] = useState<UnidadMedida | null>(null);
     const [page, setPage] = useState(0);
+    const [searchTerm, setSearchTerm] = useState("");
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const { getAccessTokenSilently } = useAuth0();
 
@@ -264,30 +266,62 @@ function UnidadMedidaList() {
         setPage(0);
     };
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredUnidadMedida = unidadMedidas
+        .filter(unidad =>
+            unidad.denominacion.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+
     return (
         <>
             <SideBar />
-            <Box p={0} ml={3}>
+            <Box p={0} ml={3} mr={3}>
                 <Typography variant="h5" component="h1" gutterBottom fontWeight={'bold'}>
                     Unidades de Medida
                 </Typography>
 
-                <Box display="flex" alignItems="center" mb={2}>
-                    <TextField
-                        label="Denominación"
-                        value={currentUnidadMedida.denominacion}
-                        onChange={handleInputChange}
-                        margin="normal"
-                        style={{ marginRight: '8px' }}
-                    />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={isEditing ? handleUpdate : handleSave}
-                    >
-                        {isEditing ? "Actualizar" : "Crear"}
-                    </Button>
-                </Box>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={4} justifyContent="flex-start">
+                        <Box display="flex" alignItems="center" mb={2}>
+                            <TextField
+                                label="Denominación"
+                                value={currentUnidadMedida.denominacion}
+                                onChange={handleInputChange}
+                                margin="normal"
+                                style={{ marginRight: '8px' }}
+                            />
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={isEditing ? handleUpdate : handleSave}
+                            >
+                                {isEditing ? "Actualizar" : "Crear"}
+                            </Button>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={4} container justifyContent="center">
+                        <TextField
+                            variant="outlined"
+                            placeholder="Buscar por nombre"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            style={{ width: '300px' }}
+                        />
+                    </Grid>
+                    <Grid item xs={4} container justifyContent="flex-end">
+                        <Grid container direction="column" alignItems="flex-end">
+                            <Typography variant="h2">
+                                {unidadMedidas.length}
+                            </Typography>
+                            <Typography variant="h6">
+                                Unidades de Medida
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
 
                 <TableContainer component={Paper} style={{ maxHeight: '400px', marginBottom: '10px' }}>
                     <Table stickyHeader size="small">
@@ -298,7 +332,7 @@ function UnidadMedidaList() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {unidadMedidas
+                            {filteredUnidadMedida
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((unidad) => (
                                     <TableRow key={unidad.id}>
@@ -319,7 +353,7 @@ function UnidadMedidaList() {
                 <TablePagination
                     rowsPerPageOptions={[5]}
                     component="div"
-                    count={unidadMedidas.length}
+                    count={filteredUnidadMedida.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

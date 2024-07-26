@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Typography, Box, Button, TableCell, TableBody, Table, TableContainer, TableRow, TableHead, Paper, TablePagination } from "@mui/material";
+import { Typography, Box, Button, TableCell, TableBody, Table, TableContainer, TableRow, TableHead, Paper, TablePagination, SelectChangeEvent, Grid, Select, MenuItem, TextField } from "@mui/material";
 import SideBar from "../components/common/SideBar";
 import CategoriaGetDto from "../types/CategoriaGetDto";
 import { CategoriaByEmpresaGetAll } from "../services/CategoriaService";
@@ -19,6 +19,8 @@ function CategoriaList() {
     const [currentCategoria, setCurrentCategoria] = useState<Categoria>({ ...emptyCategoria });
     const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filter, setFilter] = useState("Todos");
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const { getAccessTokenSilently } = useAuth0();
 
@@ -47,7 +49,6 @@ function CategoriaList() {
         setCurrentCategoria(emptyCategoria);
     };
 
-
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
         console.log(event);
@@ -68,14 +69,14 @@ function CategoriaList() {
             draggable: true,
             progress: undefined,
             theme: "colored",
-            toastId: 'success-toast' // Asegura que el toast tenga un ID único
+            toastId: 'success-toast'
         });
     }
 
     const handleError = () => {
         toast.error("Error al crear la categoría, intente más tarde", {
             position: "top-right",
-            autoClose: 5000, // Tiempo en milisegundos antes de que se cierre automáticamente
+            autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -85,31 +86,89 @@ function CategoriaList() {
         });
     }
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleFilterChange = (event: SelectChangeEvent<string>) => {
+        setFilter(event.target.value as string);
+    };
+
+    const filteredCategoria = categorias
+        .filter(categoria =>
+            categoria.denominacion.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .filter(categoria => {
+            if (filter === "Insumos") {
+                return categoria.esInsumo;
+            } else if (filter === "Manufacturados") {
+                return !categoria.esInsumo;
+            }
+            return true;
+        });
+
     return (
         <>
             <SideBar />
-            <Box p={0} ml={3}>
+            <Box p={0} ml={3} mr={3}>
                 <Typography variant="h5" gutterBottom fontWeight={'bold'} paddingBottom={'10px'}>
                     Categorías
                 </Typography>
-                <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={() => handleOpen()} sx={{ mb: 2 }}>
-                    Agregar Categoría
-                </Button>
+
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={3} justifyContent="flex-start">
+                        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleOpen}>
+                            Agregar Categoría
+                        </Button>
+                    </Grid>
+                    <Grid item xs={3} container justifyContent="center">
+                        <TextField
+                            variant="outlined"
+                            placeholder="Buscar por nombre"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            style={{ width: '300px' }}
+                        />
+                    </Grid>
+                    <Grid item xs={3} container justifyContent="center">
+                        <Select
+                            value={filter}
+                            onChange={handleFilterChange}
+                            variant="outlined"
+                            displayEmpty
+                            style={{ width: '200px' }}
+                        >
+                            <MenuItem value="Todos">Todos</MenuItem>
+                            <MenuItem value="Insumos">Insumos</MenuItem>
+                            <MenuItem value="Manufacturados">Manufacturados</MenuItem>
+                        </Select>
+                    </Grid>
+                    <Grid item xs={3} container justifyContent="flex-end">
+                        <Grid container direction="column" alignItems="flex-end">
+                            <Typography variant="h2">
+                                {categorias.length}
+                            </Typography>
+                            <Typography variant="h6">
+                                Categorías
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
 
                 <TableContainer component={Paper} style={{ maxHeight: '400px', marginBottom: '10px', marginTop: '20px' }}>
-                    <Table >
-                        <TableHead >
+                    <Table>
+                        <TableHead>
                             <TableRow>
                                 <TableCell style={{ color: 'black', fontWeight: 'bold' }}>Nombre</TableCell>
                                 <TableCell style={{ color: 'black', fontWeight: 'bold' }}>Acciones</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {categorias
+                            {filteredCategoria
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .filter(categoria => categoria.categoriaPadre === null && !categoria.eliminado)
                                 .map((categoria) => (
-                                    <CategoriaTable onClose={handleClose} categoria={categoria} />
+                                    <CategoriaTable key={categoria.id} onClose={handleClose} categoria={categoria} />
                                 ))}
                         </TableBody>
                     </Table>
@@ -117,7 +176,7 @@ function CategoriaList() {
                 <TablePagination
                     rowsPerPageOptions={[5]}
                     component="div"
-                    count={categorias.length}
+                    count={filteredCategoria.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

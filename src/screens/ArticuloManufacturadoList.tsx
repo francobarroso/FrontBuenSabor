@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Box,
-    TablePagination
+    TablePagination,
+    Grid,
+    TextField,
+    SelectChangeEvent,
+    Select,
+    MenuItem
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SideBar from "../components/common/SideBar";
@@ -29,6 +34,8 @@ function ArticuloManufacturadoList() {
     const [openModal, setOpenModal] = useState(false);
     const [detalles, setDetalles] = useState<ArticuloManufacturadoDetalle[]>([]);
     const [articuloImages, setArticuloImages] = useState<Imagen[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filter, setFilter] = useState("Todos");
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const { getAccessTokenSilently } = useAuth0();
@@ -102,18 +109,71 @@ function ArticuloManufacturadoList() {
         });
     }
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleFilterChange = (event: SelectChangeEvent<string>) => {
+        setFilter(event.target.value as string);
+    };
+
+    const filteredArticulosManufacturado = articulosManufacturados.filter(articulo =>
+        articulo.denominacion.toLowerCase().includes(searchTerm.toLowerCase())
+    ).filter(articulo => {
+        if (filter === "Activos") {
+            return articulo.habilitado;
+        } else if (filter === "No Activos") {
+            return !articulo.habilitado;
+        }
+        return true;
+    });
+
+    const activeManufacturadoCount = articulosManufacturados.filter(articulo => articulo.habilitado).length;
+
     return (
         <>
             <SideBar />
-            <Box p={0} ml={3}>
+            <Box p={0} ml={3} mr={3}>
                 <Typography variant="h5" gutterBottom fontWeight={'bold'} paddingBottom={'10px'}>
                     Articulos Manufacturados
                 </Typography>
-                <Box mb={2}>
-                    <Button variant="contained" startIcon={<AddIcon />} color="primary" onClick={handleOpenModal}>
-                        Agregar Manufacturado
-                    </Button>
-                </Box>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={3} justifyContent="flex-start">
+                        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleOpenModal}>Agregar Manufacturado</Button>
+                    </Grid>
+                    <Grid item xs={3} container justifyContent="center">
+                        <TextField
+                            variant="outlined"
+                            placeholder="Buscar por nombre"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            style={{ width: '300px' }}
+                        />
+                    </Grid>
+                    <Grid item xs={3} container justifyContent="center">
+                        <Select
+                            value={filter}
+                            onChange={handleFilterChange}
+                            variant="outlined"
+                            displayEmpty
+                            style={{ width: '150px' }}
+                        >
+                            <MenuItem value="Todos">Todos</MenuItem>
+                            <MenuItem value="Activos">Activos</MenuItem>
+                            <MenuItem value="No Activos">No Activos</MenuItem>
+                        </Select>
+                    </Grid>
+                    <Grid item xs={3} container justifyContent="flex-end">
+                        <Grid container direction="column" alignItems="flex-end">
+                            <Typography variant="h2">
+                                {activeManufacturadoCount}
+                            </Typography>
+                            <Typography variant="h6">
+                                Manufacturados Activos
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
                 <TableContainer component={Paper} style={{ maxHeight: '60vh', marginBottom: '10px', marginTop: '20px' }}>
                     <Table>
                         <TableHead>
@@ -127,7 +187,7 @@ function ArticuloManufacturadoList() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {articulosManufacturados
+                            {filteredArticulosManufacturado
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .filter(articulo => articulo.eliminado === false)
                                 .map((articulo) => (
@@ -139,7 +199,7 @@ function ArticuloManufacturadoList() {
                 <TablePagination
                     rowsPerPageOptions={[5]}
                     component="div"
-                    count={articulosManufacturados.length}
+                    count={filteredArticulosManufacturado.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
@@ -147,7 +207,7 @@ function ArticuloManufacturadoList() {
                 />
             </Box>
 
-            <ArticuloManufacturadoAddModal open={openModal} onClose={handleCloseModal} articulo={currentArticuloManufacturado} imagenes={images} articuloImagenes={articuloImages} articuloDetalles={detalles} success={handleSuccess} error={handleError}/>
+            <ArticuloManufacturadoAddModal open={openModal} onClose={handleCloseModal} articulo={currentArticuloManufacturado} imagenes={images} articuloImagenes={articuloImages} articuloDetalles={detalles} success={handleSuccess} error={handleError} />
             <ToastContainer />
         </>
     );
