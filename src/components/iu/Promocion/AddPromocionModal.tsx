@@ -18,6 +18,7 @@ import PromocionDetalle from '../../../types/PromocionDetalle';
 import { SucursalGetByEmpresaId } from '../../../services/SucursalService';
 import SucursalShortDto from '../../../types/SucursalShortDto';
 import { useAuth0 } from '@auth0/auth0-react';
+import LoadingModal from '../Loading/LoadingModal';
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -54,6 +55,8 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
     const [sucursales, setSucursales] = useState<SucursalShortDto[]>([]);
     const [currentSucursales, setCurrentSucursales] = useState<SucursalShortDto[]>(currentPromocion.sucursales);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [loading, setLoading] = useState(false);
+    const [accionLoading, setAccionLoading] = useState("Creando");
     const { getAccessTokenSilently } = useAuth0();
 
     const createPromocion = async (promocion: Promocion) => {
@@ -326,6 +329,7 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
         setImages([]);
         setArticuloImages([]);
         setPromocion(currentPromocion);
+        setAccionLoading("Creando");
         setCurrentSucursales(currentPromocion.sucursales);
         if (promocion.id !== null && promocion.id > 0) {
             setDetalles(JSON.parse(JSON.stringify(currentPromocion.promocionDetalles)));
@@ -405,6 +409,8 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
         }
         const imagenes = await cloudinaryUpload();
 
+        setLoading(true);
+
         if (imagenes && imagenes?.length > 0) {
             imagenes.forEach(imagen => {
                 articuloImages.push(imagen);
@@ -430,7 +436,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
 
             } catch (error) {
                 console.log("Error al actualizar un articulo manufacturado.");
+            } finally {
+                setLoading(false);
             }
+
         } else {
             try {
                 const data = await createPromocion(promocion);
@@ -442,8 +451,9 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
 
             } catch (error) {
                 console.log("Error al actualizar un articulo manufacturado.");
+            } finally {
+                setLoading(false);
             }
-
         }
 
         success();
@@ -812,6 +822,7 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                                     Crear Promoción
                                 </Button>
                             }
+                            <LoadingModal open={loading} msj={"Manufacturado"} accion={accionLoading}/>
                         </Box>
                     </>
                 )}

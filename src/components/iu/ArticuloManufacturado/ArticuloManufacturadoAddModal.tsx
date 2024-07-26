@@ -16,6 +16,7 @@ import ArticuloManufacturado from "../../../types/ArticuloManufacturado";
 import ArticuloManufacturadoDetalle from "../../../types/ArticuloManufacturadoDetalle";
 import { ArticuloInsumoFindBySucursal } from "../../../services/ArticuloInsumoService";
 import { ArticuloManufacturadoCreate, ArticuloManufacturadoUpdate } from "../../../services/ArticuloManufacturadoService";
+import LoadingModal from "../Loading/LoadingModal";
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -55,6 +56,8 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
     const { idEmpresa, idSucursal } = useParams();
     const [modalStep, setModalStep] = useState(1);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [loading, setLoading] = useState(false);
+    const [accionLoading, setAccionLoading] = useState("Creando");
     const { getAccessTokenSilently } = useAuth0();
 
     const createArticuloManufacturado = async (articulo: ArticuloManufacturado) => {
@@ -352,6 +355,7 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
         setImages(imagenes);
         setSearch("");
         setErrors({});
+        setAccionLoading("Creando");
         setArticuloImages(articuloImagenes);
         if (currentArticuloManufacturado.id !== null && currentArticuloManufacturado.id > 0) {
             if (currentArticuloManufacturado.id !== null && currentArticuloManufacturado.id > 0) {
@@ -370,6 +374,8 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
             return;
         }
 
+        setLoading(true);
+
         const imagenes = await cloudinaryUpload();
 
         if (imagenes && imagenes?.length > 0) {
@@ -385,6 +391,7 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
         currentArticuloManufacturado.articuloManufacturadoDetalles = detalles;
 
         if (currentArticuloManufacturado.id > 0) {
+            setAccionLoading("Actualizando");
             try {
                 const data = await updateArticuloManufacturado(currentArticuloManufacturado);
                 if (data.status !== 200) {
@@ -395,6 +402,8 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
 
             } catch (error) {
                 console.log("Error al actualizar un articulo manufacturado.");
+            } finally {
+                setLoading(false);
             }
 
         } else {
@@ -409,6 +418,8 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
 
             } catch (error) {
                 console.log("Error al crear un articulo manufacturado.");
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -719,6 +730,7 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                 <Button onClick={handleSubmit} color="primary" variant="contained">
                                     {currentArticuloManufacturado.id !== null && currentArticuloManufacturado.id > 0 ? "Actualizar Manufacturado" : "Crear Manufacturado"}
                                 </Button>
+                                <LoadingModal open={loading} msj={"Manufacturado"} accion={accionLoading}/>
                             </Box>
                         </Box>
                     )}

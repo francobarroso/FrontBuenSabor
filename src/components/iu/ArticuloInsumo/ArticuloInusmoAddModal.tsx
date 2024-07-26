@@ -13,6 +13,7 @@ import { Delete } from "@mui/icons-material";
 import { CloudinaryDelete, CloudinaryUpload } from "../../../services/CloudinaryService";
 import { ArticuloInsumoCreate, ArticuloInsumoUpdate } from "../../../services/ArticuloInsumoService";
 import CloseIcon from '@mui/icons-material/Close';
+import LoadingModal from "../Loading/LoadingModal";
 
 
 const modalStyle = {
@@ -49,7 +50,8 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
     const { idEmpresa } = useParams();
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [modalStep, setModalStep] = useState(1);
-    
+    const [loading, setLoading] = useState(false);
+    const [accionLoading, setAccionLoading] = useState("Creando");
     const { getAccessTokenSilently } = useAuth0();
 
     const createArticuloInsumo = async (articuloInsumo: ArticuloInsumo) => {
@@ -294,6 +296,7 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
         setImages(imagenes);
         setArticuloImages(articuloImagenes);
         setErrors({});
+        setAccionLoading("Creando");
         onClose();
     }
 
@@ -303,6 +306,8 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
         }
 
         const imagenes = await cloudinaryUpload();
+
+        setLoading(true);
 
         if (imagenes && imagenes?.length > 0) {
             imagenes.forEach(imagen => {
@@ -326,6 +331,8 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
 
             } catch (error) {
                 console.log("Error al actualizar un articulo insumo");
+            } finally {
+                setLoading(false);
             }
 
         } else {
@@ -341,6 +348,8 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
 
             } catch (error) {
                 console.log("Error al crear un articulo insumo");
+            }finally {
+                setLoading(false);
             }
 
         }
@@ -661,6 +670,7 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
                                     <Button onClick={handleSubmit} color="primary" variant="contained">
                                         {currentArticuloInsumo.id !== null && currentArticuloInsumo.id > 0 ? "Actualizar Insumo" : "Crear Insumo"}
                                     </Button>
+                                    <LoadingModal open={loading} msj={"Insumo"} accion={accionLoading}/>
                                 </Box>
                             </>
                         )
