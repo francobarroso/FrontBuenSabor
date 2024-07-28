@@ -21,15 +21,24 @@ import {
     DialogContentText,
     DialogTitle,
     TablePagination,
-    Grid,
+    Stack,
+    Tooltip,
 } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth0 } from "@auth0/auth0-react";
+import SpeedIcon from '@mui/icons-material/Speed';
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
+
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
+};
 
 function UnidadMedidaList() {
     const [unidadMedidas, setUnidadMedidas] = useState<UnidadMedida[]>([]);
@@ -279,52 +288,52 @@ function UnidadMedidaList() {
         <>
             <SideBar />
             <Box p={0} ml={3} mr={3}>
-                <Typography variant="h5" component="h1" gutterBottom fontWeight={'bold'}>
-                    Unidades de Medida
-                </Typography>
-
-                <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={4} justifyContent="flex-start">
-                        <Box display="flex" alignItems="center" mb={2}>
-                            <TextField
-                                label="Denominación"
-                                value={currentUnidadMedida.denominacion}
-                                onChange={handleInputChange}
-                                margin="normal"
-                                style={{ marginRight: '8px' }}
-                            />
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={isEditing ? handleUpdate : handleSave}
-                            >
-                                {isEditing ? "Actualizar" : "Crear"}
-                            </Button>
-                        </Box>
-                    </Grid>
-                    <Grid item xs={4} container justifyContent="center">
+                <Box
+                    mt={2}
+                    sx={{
+                        backgroundColor: "#c5c5c5",
+                        borderRadius: "20px",
+                        p: 2,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <Box display="flex" alignItems="center" mb={2}>
                         <TextField
-                            variant="outlined"
-                            placeholder="Buscar por nombre"
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                            style={{ width: '300px' }}
+                            label="Denominación"
+                            value={currentUnidadMedida.denominacion}
+                            onChange={handleInputChange}
+                            margin="normal"
+                            style={{ marginRight: '8px' }}
                         />
-                    </Grid>
-                    <Grid item xs={4} container justifyContent="flex-end">
-                        <Grid container direction="column" alignItems="flex-end">
-                            <Typography variant="h2">
-                                {unidadMedidas.length}
-                            </Typography>
-                            <Typography variant="h6">
-                                Unidades de Medida
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
+                        <Button
+                            variant="contained"
+                            onClick={isEditing ? handleUpdate : handleSave}
+                            sx={{ ...buttonStyles }}
+                        >
+                            {isEditing ? "Actualizar" : "Crear"}
+                        </Button>
+                    </Box>
+                    <TextField
+                        variant="outlined"
+                        placeholder="Buscar por nombre"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        style={{ width: '300px' }}
+                    />
+                    <Stack direction="column" alignItems="flex-end">
+                        <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
+                            <SpeedIcon /> {unidadMedidas.length}
+                        </Typography>
+                        <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                            Unidades de Medida
+                        </Typography>
+                    </Stack>
+                </Box>
 
-                <TableContainer component={Paper} style={{ maxHeight: '400px', marginBottom: '10px' }}>
-                    <Table stickyHeader size="small">
+                <TableContainer component={Paper} style={{ flex: "1", marginBottom: '10px', marginTop: '20px', backgroundColor: "#c5c5c5", borderRadius: "20px" }}>
+                    <Table sx={{ minHeight: "0" }}>
                         <TableHead>
                             <TableRow>
                                 <TableCell style={{ color: 'black', fontWeight: 'bold', maxWidth: '200px' }}>Nombre</TableCell>
@@ -338,12 +347,16 @@ function UnidadMedidaList() {
                                     <TableRow key={unidad.id}>
                                         <TableCell>{unidad.denominacion}</TableCell>
                                         <TableCell>
-                                            <IconButton onClick={() => handleEdit(unidad)} color="primary">
-                                                <EditIcon />
-                                            </IconButton>
-                                            <IconButton onClick={() => handleOpenDialog(unidad)} color="error">
-                                                <DeleteIcon />
-                                            </IconButton>
+                                            <Tooltip title="Editar" arrow>
+                                                <IconButton onClick={() => handleEdit(unidad)} color="primary">
+                                                    <EditIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Eliminar" arrow>
+                                                <IconButton onClick={() => handleOpenDialog(unidad)} color="error">
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Tooltip>
                                         </TableCell>
                                     </TableRow>
                                 ))}

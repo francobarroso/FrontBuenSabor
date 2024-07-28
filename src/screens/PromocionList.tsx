@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Grid, Button } from '@mui/material';
+import { Box, Typography, Grid, Button, Stack } from '@mui/material';
 import SideBar from '../components/common/SideBar';
 import Promocion from '../types/Promocion';
 import { PromocionFindBySucursal } from '../services/PromocionService';
@@ -9,6 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import AddPromocionModal from '../components/iu/Promocion/AddPromocionModal';
 import { useAuth0 } from '@auth0/auth0-react';
 import { toast, ToastContainer } from 'react-toastify';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 const emptyPromocion: Promocion = {
     id: null,
@@ -25,6 +26,13 @@ const emptyPromocion: Promocion = {
     imagenes: [],
     sucursales: [],
     promocionDetalles: [],
+};
+
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
 };
 
 function PromocionList() {
@@ -86,19 +94,37 @@ function PromocionList() {
         });
     }
 
+    const promocionCount = promociones.filter(promocion => promocion.habilitado && new Date(promocion.fechaHasta) > new Date()).length;
+
     return (
         <>
             <SideBar />
-            <Box p={0} ml={3}>
-                <Typography variant="h5" gutterBottom fontWeight={'bold'} paddingBottom={'10px'}>
-                    Promociones
-                </Typography>
-                <Box mb={2}>
-                    <Button variant="contained" startIcon={<AddIcon />} color="primary" onClick={handleOpenModal}>
+            <Box p={0} ml={3} mr={3}>
+                <Box
+                    mt={2}
+                    sx={{
+                        backgroundColor: "#c5c5c5",
+                        borderRadius: "20px",
+                        p: 2,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenModal} sx={{ ...buttonStyles }}>
                         Agregar Promoción
                     </Button>
+                    <Stack direction="column" alignItems="flex-end">
+                        <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
+                            <AttachMoneyIcon /> {promocionCount}
+                        </Typography>
+                        <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                            Promociones Activas
+                        </Typography>
+                    </Stack>
                 </Box>
-                <Grid container spacing={3}>
+                
+                <Grid container spacing={3} mt={2}>
                     {promociones.filter(promocion => !promocion.eliminado).map((promocion) => (
                         <Grid item xs={12} sm={6} md={4} key={promocion.id}>
                             <PromocionCard onClose={handleCloseModal} promocion={promocion} />
@@ -106,7 +132,7 @@ function PromocionList() {
                     ))}
                 </Grid>
             </Box>
-            <AddPromocionModal open={open} onClose={handleCloseModal} currentPromocion={currentPromocion} success={handleSuccess} error={handleError}/>
+            <AddPromocionModal open={open} onClose={handleCloseModal} currentPromocion={currentPromocion} success={handleSuccess} error={handleError} />
             <ToastContainer />
         </>
     )

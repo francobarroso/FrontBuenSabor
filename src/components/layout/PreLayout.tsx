@@ -13,7 +13,8 @@ const PreLayout = () => {
           flexGrow: 1,
           p: 1,
           width: `calc(100% - ${sizeConfigs.sidebar.width})`,
-          minHeight: "100vh"
+          minHeight: "100vh",
+          backgroundColor: "#fffff"
         }}
       >
         <Toolbar />

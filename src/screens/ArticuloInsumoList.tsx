@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Paper, TablePagination, TextField, Grid, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { Button, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Paper, TablePagination, TextField, Select, MenuItem, SelectChangeEvent, Stack } from "@mui/material";
 import SideBar from "../components/common/SideBar";
 import ArticuloInsumo from "../types/ArticuloInsumo";
 import { ArticuloInsumoFindBySucursal } from "../services/ArticuloInsumoService";
@@ -10,6 +10,14 @@ import { useAuth0 } from "@auth0/auth0-react";
 import ArticuloInsumoTable from "../components/iu/ArticuloInsumo/ArticuloInsumoTable";
 import ArticuloInsumoAddModal from "../components/iu/ArticuloInsumo/ArticuloInusmoAddModal";
 import { ToastContainer, toast } from "react-toastify";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
+};
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
@@ -118,49 +126,56 @@ function ArticuloInsumoList() {
         <>
             <SideBar />
             <Box p={0} ml={3} mr={3}>
-                <Typography variant="h5" component="h1" gutterBottom fontWeight={'bold'} paddingBottom={'10px'}>
-                    Articulos Insumos
-                </Typography>
-                <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={3} justifyContent="flex-start">
-                        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleOpen}>Agregar Insumo</Button>
-                    </Grid>
-                    <Grid item xs={3} container justifyContent="center">
-                        <TextField
-                            variant="outlined"
-                            placeholder="Buscar por nombre"
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                            style={{ width: '300px' }}
-                        />
-                    </Grid>
-                    <Grid item xs={3} container justifyContent="center">
-                        <Select
-                            value={filter}
-                            onChange={handleFilterChange}
-                            variant="outlined"
-                            displayEmpty
-                            style={{ width: '150px' }}
-                        >
-                            <MenuItem value="Todos">Todos</MenuItem>
-                            <MenuItem value="Activos">Activos</MenuItem>
-                            <MenuItem value="No Activos">No Activos</MenuItem>
-                        </Select>
-                    </Grid>
-                    <Grid item xs={3} container justifyContent="flex-end">
-                        <Grid container direction="column" alignItems="flex-end">
-                            <Typography variant="h2">
-                                {activeInsumoCount}
-                            </Typography>
-                            <Typography variant="h6">
-                                Insumos Activos
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
+                <Box
+                    mt={2}
+                    sx={{
+                        backgroundColor: "#c5c5c5",
+                        borderRadius: "20px",
+                        p: 2,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        onClick={handleOpen}
+                        sx={{...buttonStyles}}
+                    >
+                        Agregar Insumo
+                    </Button>
+                    <TextField
+                        variant="outlined"
+                        placeholder="Buscar por nombre"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        style={{ width: '300px' }}
+                    />
+                    <Select
+                        value={filter}
+                        onChange={handleFilterChange}
+                        variant="outlined"
+                        displayEmpty
+                        style={{ width: '150px' }}
+                    >
+                        <MenuItem value="Todos">Todos</MenuItem>
+                        <MenuItem value="Activos">Activos</MenuItem>
+                        <MenuItem value="No Activos">No Activos</MenuItem>
+                    </Select>
+                    <Stack direction="column" alignItems="flex-end">
+                        <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
+                            <ShoppingCartIcon /> {activeInsumoCount}
+                        </Typography>
+                        <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                            Insumos Activos
+                        </Typography>
+                    </Stack>
+                </Box>
 
-                <TableContainer component={Paper} style={{ maxHeight: '60vh', marginBottom: '10px', marginTop: '20px' }}>
-                    <Table >
+                <TableContainer component={Paper} style={{ flex: "1", marginBottom: '10px', marginTop: '20px', backgroundColor: "#c5c5c5", borderRadius: "20px" }}>
+                    <Table sx={{minHeight: "0"}}>
                         <TableHead >
                             <TableRow>
                                 <TableCell style={{ color: 'black', fontWeight: 'bold' }} align="center">Nombre</TableCell>

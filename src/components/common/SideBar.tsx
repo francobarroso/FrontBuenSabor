@@ -48,12 +48,12 @@ function SideBar() {
                             direction="row"
                             justifyContent="center"
                         >
-                            <Avatar src={avatarImage} sx={{ width: 100, height: 100 }} />
+                            <Avatar src={avatarImage} sx={{ width: 70, height: 70 }} />
                         </Stack>
                     </Toolbar>
 
                     <ProtectedComponent roles={["administrador"]}>
-                    <ListItemButton component={Link} to={"/dashboard/" + idEmpresa + "/" + idSucursal}>
+                    <ListItemButton component={Link} to={"/estadisticas/" + idEmpresa + "/" + idSucursal}>
                         <ListItemIcon sx={{
                             color: colorConfigs.sidebar.color
                         }}>

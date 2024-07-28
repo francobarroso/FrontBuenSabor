@@ -31,6 +31,20 @@ const modalStyle = {
     p: 4,
 };
 
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
+};
+
+const backButtonStyles = {
+    backgroundColor: "#59697f",
+    '&:hover': {
+        backgroundColor: "#6e7d92"
+    }
+};
+
 interface AddPromocionModalProps {
     open: boolean;
     onClose: () => void;
@@ -593,10 +607,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             </Grid>
                         </Grid>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button disabled onClick={handleBack} color="secondary" variant="contained">
+                            <Button disabled onClick={handleBack} variant="contained" sx={{...backButtonStyles}}>
                                 Atrás
                             </Button>
-                            <Button onClick={handleNext} color="primary" variant="contained">
+                            <Button onClick={handleNext} variant="contained" sx={{...buttonStyles}}>
                                 Siguiente
                             </Button>
                         </Box>
@@ -668,10 +682,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             }
                         </Box>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button variant="contained" color='secondary' onClick={handleBack}>
+                            <Button variant="contained" onClick={handleBack} sx={{...backButtonStyles}}>
                                 Atrás
                             </Button>
-                            <Button variant="contained" onClick={handleNext}>
+                            <Button variant="contained" onClick={handleNext} sx={{...buttonStyles}}>
                                 Siguiente
                             </Button>
                         </Box>
@@ -777,10 +791,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             </Grid>
                         </Box>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button variant="contained" color='secondary' onClick={handleBack}>
+                            <Button variant="contained" onClick={handleBack} sx={{...backButtonStyles}}>
                                 Atrás
                             </Button>
-                            <Button variant="contained" onClick={handleNext}>
+                            <Button variant="contained" onClick={handleNext} sx={{...buttonStyles}}>
                                 Siguiente
                             </Button>
                         </Box>
@@ -800,7 +814,11 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                                             <Checkbox
                                                 checked={promocion.sucursales?.some(s => s.id === sucursal.id) || false}
                                                 onChange={() => handleSucursalChange(sucursal.id)}
-                                                color="primary"
+                                                sx={{
+                                                    '&.Mui-checked': {
+                                                        color: "#233044"
+                                                    }
+                                                }}
                                             />
                                         }
                                         label={sucursal.nombre}
@@ -810,7 +828,7 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             </FormControl>
                         </Box>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button variant="contained" color='secondary' onClick={handleBack}>
+                            <Button variant="contained" onClick={handleBack} sx={{...backButtonStyles}}>
                                 Atrás
                             </Button>
                             {promocion.id !== null && promocion.id > 0 ?
@@ -818,7 +836,7 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                                     Actualizar Promoción
                                 </Button>
                                 :
-                                <Button variant="contained" onClick={() => { handleSubmit(); }}>
+                                <Button variant="contained" onClick={() => { handleSubmit(); }} sx={{...buttonStyles}}>
                                     Crear Promoción
                                 </Button>
                             }

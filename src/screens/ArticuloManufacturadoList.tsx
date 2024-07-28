@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Box,
     TablePagination,
-    Grid,
     TextField,
     SelectChangeEvent,
     Select,
-    MenuItem
+    MenuItem,
+    Stack
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SideBar from "../components/common/SideBar";
@@ -19,11 +19,19 @@ import { useAuth0 } from "@auth0/auth0-react";
 import ArticuloManufacturadoTable from "../components/iu/ArticuloManufacturado/ArticuloManufacturadoTable";
 import ArticuloManufacturadoAddModal from "../components/iu/ArticuloManufacturado/ArticuloManufacturadoAddModal";
 import { toast, ToastContainer } from "react-toastify";
+import FastfoodIcon from '@mui/icons-material/Fastfood';
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
 const emptyArticuloManufacturado = {
     id: 0, eliminado: false, denominacion: '', precioVenta: null, habilitado: true, imagenes: [], unidadMedida: emptyUnidadMedida, categoria: emptyCategoria, sucursal: null, descripcion: '', tiempoEstimadoMinutos: null, preparacion: '', articuloManufacturadoDetalles: null
+};
+
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
 };
 
 function ArticuloManufacturadoList() {
@@ -134,48 +142,54 @@ function ArticuloManufacturadoList() {
         <>
             <SideBar />
             <Box p={0} ml={3} mr={3}>
-                <Typography variant="h5" gutterBottom fontWeight={'bold'} paddingBottom={'10px'}>
-                    Articulos Manufacturados
-                </Typography>
-                <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={3} justifyContent="flex-start">
-                        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleOpenModal}>Agregar Manufacturado</Button>
-                    </Grid>
-                    <Grid item xs={3} container justifyContent="center">
-                        <TextField
-                            variant="outlined"
-                            placeholder="Buscar por nombre"
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                            style={{ width: '300px' }}
-                        />
-                    </Grid>
-                    <Grid item xs={3} container justifyContent="center">
-                        <Select
-                            value={filter}
-                            onChange={handleFilterChange}
-                            variant="outlined"
-                            displayEmpty
-                            style={{ width: '150px' }}
-                        >
-                            <MenuItem value="Todos">Todos</MenuItem>
-                            <MenuItem value="Activos">Activos</MenuItem>
-                            <MenuItem value="No Activos">No Activos</MenuItem>
-                        </Select>
-                    </Grid>
-                    <Grid item xs={3} container justifyContent="flex-end">
-                        <Grid container direction="column" alignItems="flex-end">
-                            <Typography variant="h2">
-                                {activeManufacturadoCount}
-                            </Typography>
-                            <Typography variant="h6">
-                                Manufacturados Activos
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <TableContainer component={Paper} style={{ maxHeight: '60vh', marginBottom: '10px', marginTop: '20px' }}>
-                    <Table>
+                <Box
+                    mt={2}
+                    sx={{
+                        backgroundColor: "#c5c5c5",
+                        borderRadius: "20px",
+                        p: 2,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={handleOpenModal}
+                        sx={{...buttonStyles}}
+                    >
+                        Agregar Manufacturado
+                    </Button>
+                    <TextField
+                        variant="outlined"
+                        placeholder="Buscar por nombre"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        sx={{ width: '250px' }}
+                    />
+                    <Select
+                        value={filter}
+                        onChange={handleFilterChange}
+                        variant="outlined"
+                        displayEmpty
+                        sx={{ width: '150px' }}
+                    >
+                        <MenuItem value="Todos">Todos</MenuItem>
+                        <MenuItem value="Activos">Activos</MenuItem>
+                        <MenuItem value="No Activos">No Activos</MenuItem>
+                    </Select>
+                    <Stack direction="column" alignItems="flex-end">
+                        <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
+                            <FastfoodIcon /> {activeManufacturadoCount}
+                        </Typography>
+                        <Typography variant="h6" sx={{fontSize: "18px"}}>
+                            Manufacturados Activos
+                        </Typography>
+                    </Stack>
+                </Box>
+                <TableContainer component={Paper} style={{ flex: "1", marginBottom: '10px', marginTop: '20px', backgroundColor: "#c5c5c5", borderRadius: "20px" }}>
+                    <Table sx={{minHeight: "0"}}>
                         <TableHead>
                             <TableRow>
                                 <TableCell style={{ color: 'black', fontWeight: 'bold' }} align="center">Nombre</TableCell>
@@ -204,6 +218,7 @@ function ArticuloManufacturadoList() {
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
+                    sx={{ alignSelf: 'flex-end'}}
                 />
             </Box>
 

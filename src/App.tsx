@@ -36,7 +36,7 @@ function App() {
       </Route>
       <Route element={<MainLayout />}>
         <Route element={<ProtectedRoute roles={['administrador']} />}>
-          <Route path="dashboard/:idEmpresa/:idSucursal" element={<Dashboard />} />
+          <Route path="estadisticas/:idEmpresa/:idSucursal" element={<Dashboard />} />
           <Route path="empleados/:idEmpresa/:idSucursal" element={<Empleado />} />
         </Route>
         <Route path="manufacturados/:idEmpresa/:idSucursal" element={<ArticuloManufacturado />} />

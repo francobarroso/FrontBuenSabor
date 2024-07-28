@@ -29,12 +29,14 @@ const ViewPromocionModal: React.FC<ViewPromocionModalProps> = ({ open, onClose, 
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: "40%",
+                width: "60%",
+                maxWidth: "600px",
+                maxHeight: "80%",
                 bgcolor: 'background.paper',
                 boxShadow: 24,
                 borderRadius: 8,
-                maxWidth: 800,
                 p: 4,
+                overflowY: 'auto',
             }}>
                 <IconButton onClick={onClose} sx={{ position: 'absolute', top: 8, right: 8 }}>
                     <CloseIcon />

@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@mui/material";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
@@ -16,7 +17,7 @@ const LoginButton = () => {
         })
       }
     >
-      Ingresar
+     <AccountCircleIcon/> Ingresar
     </Button>
   );
 };

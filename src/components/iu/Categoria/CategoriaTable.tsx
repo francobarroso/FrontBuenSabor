@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, IconButton, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, IconButton, TableCell, TableRow, Tooltip, Typography } from '@mui/material';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
@@ -62,7 +62,7 @@ const CategoriaTable: React.FC<CategoriaTableProps> = ({ onClose, categoria }) =
         if (categoria.id !== null) {
             try {
                 const data = await deleteCategoria(categoria.id);
-                if(data.status !== 200){
+                if (data.status !== 200) {
                     toast.error(data.data.message, {
                         position: "top-right",
                         autoClose: 5000, // Tiempo en milisegundos antes de que se cierre automáticamente
@@ -194,14 +194,19 @@ const CategoriaTable: React.FC<CategoriaTableProps> = ({ onClose, categoria }) =
         const filteredSubCategorias = filterSubCategoriasBySucursal(subCategorias, Number(idSucursal));
         return filteredSubCategorias.filter(subCategoria => !subCategoria.eliminado).map((subCategoria) => (
             <Box key={subCategoria.id} sx={{ paddingLeft: 1 }}>
-                <Accordion>
+                <Accordion style={{ backgroundColor: "#c5c5c5" }}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>{subCategoria.denominacion}</Typography>
                         <Box sx={{ marginLeft: 'auto' }}>
-                            <IconButton onClick={() => handleEdit(subCategoria)} color="primary"><EditIcon /></IconButton>
-                            <IconButton onClick={handleOpenBajaSubDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
-                            <IconButton onClick={handleOpenEliminarSubDialog} color="error"><DeleteIcon /></IconButton>
-
+                            <Tooltip title="Editar" arrow>
+                                <IconButton onClick={() => handleEdit(subCategoria)} color="primary"><EditIcon /></IconButton>
+                            </Tooltip>
+                            <Tooltip title="Dar de Baja" arrow>
+                                <IconButton onClick={handleOpenBajaSubDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
+                            </Tooltip>
+                            <Tooltip title="Eliminar" arrow>
+                                <IconButton onClick={handleOpenEliminarSubDialog} color="error"><DeleteIcon /></IconButton>
+                            </Tooltip>
                         </Box>
                     </AccordionSummary>
                     <EliminarComponent openDialog={openEliminarSub} onClose={handleCloseDialog} onConfirm={() => handleDelete(subCategoria)} tipo='la categoría' entidad={subCategoria} />
@@ -217,25 +222,36 @@ const CategoriaTable: React.FC<CategoriaTableProps> = ({ onClose, categoria }) =
 
     return (
         <>
-            <Accordion key={categoria.id}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography>{categoria.denominacion}{
-                        categoria.esInsumo ?
-                            <Chip label="Insumo" size="small" color="secondary" sx={{ ml: 1 }} /> :
-                            <Chip label="Manufacturado" size="small" color="error" sx={{ ml: 1 }} />
-                    }</Typography>
-                    <Box sx={{ marginLeft: 'auto' }}>
-                        <IconButton onClick={() => handleEdit(categoria)} color="primary">{categoria.sucursales !== null && <EditIcon />}</IconButton>
-                        <IconButton onClick={handleOpenBajaDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
-                        <IconButton onClick={handleOpenEliminarDialog} color="error"><DeleteIcon /></IconButton>
-                    </Box>
-                </AccordionSummary>
-                <EliminarComponent openDialog={openEliminar} onClose={handleCloseDialog} onConfirm={() => handleDelete(categoria)} tipo='la categoría' entidad={categoria} />
-                <BajaSucursalComponent openDialog={openBaja} onClose={handleCloseDialog} onConfirm={() => handleBaja(categoria)} tipo='la categoría' entidad={categoria} />
-                <AccordionDetails>
-                    {renderSubCategorias(categoria.subCategorias)}
-                </AccordionDetails>
-            </Accordion>
+            <TableRow>
+                <TableCell colSpan={2} style={{ padding: 0 }}>
+                    <Accordion key={categoria.id} style={{ backgroundColor: "#c5c5c5" }}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography>{categoria.denominacion}{
+                                categoria.esInsumo ?
+                                    <Chip label="Insumo" size="small" color="secondary" sx={{ ml: 1 }} /> :
+                                    <Chip label="Manufacturado" size="small" color="error" sx={{ ml: 1 }} />
+                            }</Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+                                <Tooltip title="Editar" arrow>
+                                    <IconButton onClick={() => handleEdit(categoria)} color="primary">{categoria.sucursales !== null && <EditIcon />}</IconButton>
+                                </Tooltip>
+                                <Tooltip title="Dar de Baja" arrow>
+                                    <IconButton onClick={handleOpenBajaDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
+                                </Tooltip>
+                                <Tooltip title="Eliminar" arrow>
+                                    <IconButton onClick={handleOpenEliminarDialog} color="error"><DeleteIcon /></IconButton>
+                                </Tooltip>
+                            </Box>
+                        </AccordionSummary>
+                        <EliminarComponent openDialog={openEliminar} onClose={handleCloseDialog} onConfirm={() => handleDelete(categoria)} tipo='la categoría' entidad={categoria} />
+                        <BajaSucursalComponent openDialog={openBaja} onClose={handleCloseDialog} onConfirm={() => handleBaja(categoria)} tipo='la categoría' entidad={categoria} />
+                        <AccordionDetails>
+                            {renderSubCategorias(categoria.subCategorias)}
+                        </AccordionDetails>
+                    </Accordion>
+                </TableCell>
+            </TableRow>
+
             <CategoriaModal open={open} onClose={handleClose} categoria={categoriaUpdate} success={handleSuccess} error={handleError} />
         </>
     )

@@ -10,6 +10,13 @@ import { CategoriaCreate, CategoriaUpdate } from "../../../services/CategoriaSer
 
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
 
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
+};
+
 interface CategoriaModalProps {
     open: boolean;
     onClose: () => void;
@@ -249,8 +256,12 @@ const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categori
                                                     checked={currentCategoria.esInsumo}
                                                     onChange={handleEsInsumoChange}
                                                     name="esInsumo"
-                                                    color="primary"
                                                     disabled={categoria.id !== null && categoria.id > 0}
+                                                    sx={{
+                                                        '&.Mui-checked': {
+                                                            color: "#233044"
+                                                        }
+                                                    }}
                                                 />
                                             }
                                             label="Es Insumo"
@@ -279,8 +290,12 @@ const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categori
                                                     <Checkbox
                                                         checked={currentCategoria.sucursales?.some((s) => s.id === sucursal.id) || false}
                                                         onChange={() => handleSucursalChange(sucursal.id)}
-                                                        color="primary"
                                                         disabled={isDisabled}
+                                                        sx={{
+                                                            '&.Mui-checked': {
+                                                                color: "#233044"
+                                                            }
+                                                        }}
                                                     />
                                                 }
                                                 label={sucursal.nombre}
@@ -297,7 +312,24 @@ const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categori
                         <Typography variant="subtitle1" gutterBottom>
                             Agregar Subcategorías
                         </Typography>
-                        <Button variant="outlined" color="primary" onClick={handleAddSubCategoria} style={{ marginLeft: 10 }}>
+                        <Button
+                            variant="outlined"
+                            onClick={handleAddSubCategoria}
+                            style={{ marginLeft: 10 }}
+                            sx={{
+                                color: "#233044",
+                                borderColor: "#233044",
+                                borderWidth: 2, // Grosor del contorno
+                                fontWeight: 'bold', // Grosor del texto
+                                '&:hover': {
+                                    borderColor: "#48576f",
+                                    backgroundColor: 'transparent',
+                                    color: "#48576f",
+                                    borderWidth: 2, // Grosor del contorno
+                                    fontWeight: 'bold' // Grosor del texto
+                                }
+                            }}
+                        >
                             Agregar
                         </Button>
                     </Box>
@@ -314,14 +346,14 @@ const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categori
                             </FormControl>
                             {
                                 subCategoria.id === null &&
-                                <IconButton color="secondary" onClick={() => handleRemoveSubCategoria(index)}>
+                                <IconButton sx={{ color: "#233044" }} onClick={() => handleRemoveSubCategoria(index)}>
                                     <CloseIcon />
                                 </IconButton>
                             }
                         </Box>
                     ))}
                     <Box mt={2} display="flex" justifyContent="flex-end">
-                        <Button variant="contained" color="primary" onClick={handleSubmit}>
+                        <Button variant="contained" onClick={handleSubmit} sx={{ ...buttonStyles }}>
                             {currentCategoria.id === null ? 'Crear Categoría' : 'Actualizar Categoría'}
                         </Button>
                     </Box>

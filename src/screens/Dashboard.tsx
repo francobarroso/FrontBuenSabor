@@ -4,7 +4,7 @@ function Dashboard() {
     return (
         <>
             <SideBar />
-            <h1>Dashboard</h1>
+            <h1>Estadisticas</h1>
         </>
     )
 }

@@ -11,6 +11,13 @@ interface ArticuloManufacturadoViewModalProps {
     images: string[];
 }
 
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
+};
+
 const ArticuloManufacturadoViewModal: React.FC<ArticuloManufacturadoViewModalProps> = ({ view, onClose, articulo, images }) => {
     const [currentArticuloManufacturado, setCurrentArticuloManufacturado] = useState<ArticuloManufacturado>(articulo);
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
@@ -79,7 +86,7 @@ const ArticuloManufacturadoViewModal: React.FC<ArticuloManufacturadoViewModalPro
                         {currentArticuloManufacturado.preparacion}
                     </Typography>
                     <Box display="flex" justifyContent="flex-end" mt={2}>
-                        <Button variant="contained" color="secondary" onClick={handleClose}>
+                        <Button variant="contained" onClick={handleClose} sx={{...buttonStyles}}>
                             Cerrar
                         </Button>
                     </Box>

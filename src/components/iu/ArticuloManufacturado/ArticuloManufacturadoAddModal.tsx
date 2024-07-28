@@ -29,6 +29,20 @@ const modalStyle = {
     p: 4,
 };
 
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
+};
+
+const backButtonStyles = {
+    backgroundColor: "#59697f",
+    '&:hover': {
+        backgroundColor: "#6e7d92"
+    }
+};
+
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
 
@@ -606,10 +620,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                     </Grid>
                                 </Grid>
                                 <Box mt={2} display="flex" justifyContent="space-between">
-                                    <Button disabled onClick={handlePreviousStep} color="secondary" variant="contained">
+                                    <Button disabled onClick={handlePreviousStep} color="secondary" variant="contained" sx={{...backButtonStyles}}>
                                         Atrás
                                     </Button>
-                                    <Button onClick={handleNextStep} color="primary" variant="contained">
+                                    <Button onClick={handleNextStep} color="primary" variant="contained" sx={{...buttonStyles}}>
                                         Siguiente
                                     </Button>
                                 </Box>
@@ -644,10 +658,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                 {errors.preparacion && <FormHelperText>{errors.preparacion}</FormHelperText>}
                             </FormControl>
                             <Box mt={2} display="flex" justifyContent="space-between">
-                                <Button onClick={handlePreviousStep} color="secondary" variant="contained">
+                                <Button onClick={handlePreviousStep} color="secondary" variant="contained"  sx={{...backButtonStyles}}>
                                     Atrás
                                 </Button>
-                                <Button onClick={handleNextStep} color="primary" variant="contained">
+                                <Button onClick={handleNextStep} color="primary" variant="contained" sx={{...buttonStyles}}>
                                     Siguiente
                                 </Button>
                             </Box>
@@ -724,13 +738,13 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                 ))}
                             </Grid>
                             <Box mt={2} display="flex" justifyContent="space-between">
-                                <Button onClick={handlePreviousStep} color="secondary" variant="contained">
+                                <Button onClick={handlePreviousStep} color="secondary" variant="contained" sx={{...backButtonStyles}}>
                                     Atrás
                                 </Button>
-                                <Button onClick={handleSubmit} color="primary" variant="contained">
+                                <Button onClick={handleSubmit} color="primary" variant="contained" sx={{...buttonStyles}}>
                                     {currentArticuloManufacturado.id !== null && currentArticuloManufacturado.id > 0 ? "Actualizar Manufacturado" : "Crear Manufacturado"}
                                 </Button>
-                                <LoadingModal open={loading} msj={"Manufacturado"} accion={accionLoading}/>
+                                <LoadingModal open={loading} msj={"Manufacturado"} accion={accionLoading} />
                             </Box>
                         </Box>
                     )}

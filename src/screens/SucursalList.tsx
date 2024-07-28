@@ -91,7 +91,7 @@ function SucursalList() {
     }
 
     return (
-        <div style={{ backgroundColor: '#E0E0E0', padding: '20px', borderRadius: '8px' }}>
+        <div style={{ backgroundColor: '#c5c5c5', padding: '20px', borderRadius: '8px' }}>
             <Typography
                 variant="h4"
                 component="h4"

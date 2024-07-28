@@ -1,4 +1,4 @@
-import { Box, Chip, IconButton, TableCell, TableRow } from "@mui/material";
+import { Box, Chip, IconButton, TableCell, TableRow, Tooltip } from "@mui/material";
 import ArticuloInsumo from "../../../types/ArticuloInsumo";
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { Edit, Visibility, Check } from "@mui/icons-material";
@@ -178,7 +178,7 @@ const ArticuloInsumoTable: React.FC<ArticuloInsumoTableProps> = ({ onClose, arti
 
     return (
         <>
-            <TableRow sx={{ backgroundColor: articulo.habilitado ? "none" : "#B0B0B0" }} key={articulo.id}>
+            <TableRow sx={{ backgroundColor: articulo.habilitado ? "none" : "#788293" }} key={articulo.id}>
                 <TableCell align="center">{articulo.denominacion}</TableCell>
                 <TableCell align="center">{articulo.precioCompra}</TableCell>
                 <TableCell align="center">{!articulo.esParaElaborar ? articulo.precioVenta : '-'}</TableCell>
@@ -209,24 +209,34 @@ const ArticuloInsumoTable: React.FC<ArticuloInsumoTableProps> = ({ onClose, arti
                     {
                         articulo.habilitado === true ?
                             <Box>
-                                <IconButton aria-label="view" onClick={() => handleView(articulo)} color="secondary">
-                                    <Visibility />
-                                </IconButton>
-                                <IconButton aria-label="edit" onClick={() => handleEdit(articulo)} color="primary">
-                                    <Edit />
-                                </IconButton>
-                                <IconButton aria-label="delete" onClick={handleOpenBaja} color="error">
-                                    <RemoveCircleOutlineIcon />
-                                </IconButton>
+                                <Tooltip title="Editar" arrow>
+                                    <IconButton aria-label="edit" onClick={() => handleEdit(articulo)} color="primary">
+                                        <Edit />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Ver Insumo" arrow>
+                                    <IconButton aria-label="view" onClick={() => handleView(articulo)} color="secondary">
+                                        <Visibility />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Deshabilitar" arrow>
+                                    <IconButton aria-label="delete" onClick={handleOpenBaja} color="error">
+                                        <RemoveCircleOutlineIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </Box>
                             :
                             <Box>
-                                <IconButton aria-label="view" onClick={() => handleView(articulo)} color="secondary">
-                                    <Visibility />
-                                </IconButton>
-                                <IconButton aria-label="alta" onClick={handleOpenAlta} color="success">
-                                    <KeyboardDoubleArrowUpIcon />
-                                </IconButton>
+                                <Tooltip title="Ver Insumo" arrow>
+                                    <IconButton aria-label="view" onClick={() => handleView(articulo)} color="secondary">
+                                        <Visibility />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Habilitar" arrow>
+                                    <IconButton aria-label="alta" onClick={handleOpenAlta} color="success">
+                                        <KeyboardDoubleArrowUpIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </Box>
                     }
                 </TableCell>

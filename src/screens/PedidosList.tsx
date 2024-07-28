@@ -10,8 +10,8 @@ function PedidosList() {
     return (
         <>
             <SideBar />
-            <Box ml={3} mb={3}>
-                <Typography variant='h5'>Pedidos</Typography>
+            <Box ml={3} mb={3} mr={3}>
+                <Typography variant='h5'></Typography>
                 <TableContainer component={Paper} style={{ maxHeight: '400px', marginBottom: '10px', marginTop: '20px' }}>
                     <Table>
                         <TableHead>

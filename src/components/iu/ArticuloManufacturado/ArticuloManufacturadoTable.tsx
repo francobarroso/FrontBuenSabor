@@ -2,7 +2,7 @@ import ArticuloManufacturado from "../../../types/ArticuloManufacturado";
 import { useState } from "react";
 import Imagen from "../../../types/Imagen";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Chip, IconButton, TableCell, TableRow } from "@mui/material";
+import { Chip, IconButton, TableCell, TableRow, Tooltip } from "@mui/material";
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -184,7 +184,7 @@ const ArticuloManufacturadoTable: React.FC<ArticuloManufacturadoTableProps> = ({
 
     return (
         <>
-            <TableRow sx={{ backgroundColor: articulo.habilitado === true ? "none" : "#B0B0B0" }} key={articulo.id}>
+            <TableRow sx={{ backgroundColor: articulo.habilitado === true ? "none" : "#788293" }} key={articulo.id}>
                 <TableCell align="center">{articulo.denominacion}</TableCell>
                 <TableCell align="center">
                     <Chip
@@ -207,24 +207,34 @@ const ArticuloManufacturadoTable: React.FC<ArticuloManufacturadoTableProps> = ({
                 {
                     articulo.habilitado === true ?
                         <TableCell align="center">
-                            <IconButton aria-label="edit" onClick={() => handleOpenEditModal(articulo)} color="primary">
-                                <EditIcon />
-                            </IconButton>
-                            <IconButton aria-label="view" onClick={() => handleView(articulo)} color="secondary">
-                                <VisibilityIcon />
-                            </IconButton>
-                            <IconButton aria-label="delete" onClick={handleOpenBaja} color="error">
-                                <RemoveCircleOutlineIcon />
-                            </IconButton>
+                            <Tooltip title="Editar" arrow>
+                                <IconButton aria-label="edit" onClick={() => handleOpenEditModal(articulo)} color="primary">
+                                    <EditIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Ver Manufacturado" arrow>
+                                <IconButton aria-label="view" onClick={() => handleView(articulo)} color="secondary">
+                                    <VisibilityIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Deshabilitar" arrow>
+                                <IconButton aria-label="baja" onClick={handleOpenBaja} color="error">
+                                    <RemoveCircleOutlineIcon />
+                                </IconButton>
+                            </Tooltip>
                         </TableCell>
                         :
-                        <TableCell>
-                            <IconButton aria-label="view" onClick={() => handleView(articulo)} color="secondary">
-                                <VisibilityIcon />
-                            </IconButton>
-                            <IconButton aria-label="alta" onClick={handleOpenAlta} color="success">
-                                <KeyboardDoubleArrowUpIcon />
-                            </IconButton>
+                        <TableCell align="center">
+                            <Tooltip title="Ver Manufacturado" arrow>
+                                <IconButton aria-label="view" onClick={() => handleView(articulo)} color="secondary">
+                                    <VisibilityIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Habilitar" arrow>
+                                <IconButton aria-label="alta" onClick={handleOpenAlta} color="success">
+                                    <KeyboardDoubleArrowUpIcon />
+                                </IconButton>
+                            </Tooltip>
                         </TableCell>
                 }
             </TableRow>

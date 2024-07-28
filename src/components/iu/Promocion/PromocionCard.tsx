@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardHeader, CardMedia, CardContent, Typography, IconButton, Box } from '@mui/material';
+import { Card, CardHeader, CardMedia, CardContent, Typography, IconButton, Box, Tooltip } from '@mui/material';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -235,24 +235,34 @@ const PromocionCard: React.FC<PromocionCardProps> = ({ onClose, promocion }) => 
                     {
                         promocion.habilitado ?
                             <>
-                                <IconButton aria-label="edit" color='primary' size="small" onClick={handleEdit}>
-                                    <EditIcon fontSize="small" />
-                                </IconButton>
-                                <IconButton aria-label="view" color='secondary' size="small" onClick={handleView}>
-                                    <Visibility />
-                                </IconButton>
-                                <IconButton aria-label="baja" color='error' size="small" onClick={handleOpenBaja}>
-                                    <RemoveCircleOutlineIcon fontSize="small" />
-                                </IconButton>
+                                <Tooltip title="Editar" arrow>
+                                    <IconButton aria-label="edit" color='primary' size="small" onClick={handleEdit}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Ver Promoción" arrow>
+                                    <IconButton aria-label="view" color='secondary' size="small" onClick={handleView}>
+                                        <Visibility />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Deshabilitar" arrow>
+                                    <IconButton aria-label="baja" color='error' size="small" onClick={handleOpenBaja}>
+                                        <RemoveCircleOutlineIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
                             </>
                             :
                             <>
-                                <IconButton aria-label="view" color='secondary' size="small" onClick={handleView}>
-                                    <Visibility />
-                                </IconButton>
-                                <IconButton aria-label="alta" color='success' size="small" onClick={handleOpenAlta}>
-                                    <KeyboardDoubleArrowUpIcon fontSize="small" />
-                                </IconButton>
+                                <Tooltip title="Ver Promoción" arrow>
+                                    <IconButton aria-label="view" color='secondary' size="small" onClick={handleView}>
+                                        <Visibility />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Habilitar" arrow>
+                                    <IconButton aria-label="alta" color='success' size="small" onClick={handleOpenAlta}>
+                                        <KeyboardDoubleArrowUpIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
                             </>
                     }
                 </CardContent>

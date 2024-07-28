@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Typography, Box, Button, TableCell, TableBody, Table, TableContainer, TableRow, TableHead, Paper, TablePagination, SelectChangeEvent, Grid, Select, MenuItem, TextField } from "@mui/material";
+import { Typography, Box, Button, TableCell, TableBody, Table, TableContainer, TableRow, TableHead, Paper, TablePagination, SelectChangeEvent, Select, MenuItem, TextField, Stack } from "@mui/material";
 import SideBar from "../components/common/SideBar";
 import CategoriaGetDto from "../types/CategoriaGetDto";
 import { CategoriaByEmpresaGetAll } from "../services/CategoriaService";
@@ -10,6 +10,14 @@ import { useAuth0 } from "@auth0/auth0-react";
 import CategoriaTable from "../components/iu/Categoria/CategoriaTable";
 import CategoriaModal from "../components/iu/Categoria/CategoriaModal";
 import { toast, ToastContainer } from "react-toastify";
+import CategoryIcon from "@mui/icons-material/Category";
+
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
+};
 
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
 
@@ -111,56 +119,60 @@ function CategoriaList() {
         <>
             <SideBar />
             <Box p={0} ml={3} mr={3}>
-                <Typography variant="h5" gutterBottom fontWeight={'bold'} paddingBottom={'10px'}>
-                    Categorías
-                </Typography>
+                <Box
+                    mt={2}
+                    sx={{
+                        backgroundColor: "#c5c5c5",
+                        borderRadius: "20px",
+                        p: 2,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        onClick={handleOpen}
+                        sx={{...buttonStyles}}
+                    >
+                        Agregar Categoría
+                    </Button>
+                    <TextField
+                        variant="outlined"
+                        placeholder="Buscar por nombre"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        style={{ width: '300px' }}
+                    />
+                    <Select
+                        value={filter}
+                        onChange={handleFilterChange}
+                        variant="outlined"
+                        displayEmpty
+                        style={{ width: '200px' }}
+                    >
+                        <MenuItem value="Todos">Todos</MenuItem>
+                        <MenuItem value="Insumos">Insumos</MenuItem>
+                        <MenuItem value="Manufacturados">Manufacturados</MenuItem>
+                    </Select>
+                    <Stack direction="column" alignItems="flex-end">
+                        <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
+                            <CategoryIcon /> {categorias.length}
+                        </Typography>
+                        <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                            Categorías
+                        </Typography>
+                    </Stack>
+                </Box>
 
-                <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={3} justifyContent="flex-start">
-                        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleOpen}>
-                            Agregar Categoría
-                        </Button>
-                    </Grid>
-                    <Grid item xs={3} container justifyContent="center">
-                        <TextField
-                            variant="outlined"
-                            placeholder="Buscar por nombre"
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                            style={{ width: '300px' }}
-                        />
-                    </Grid>
-                    <Grid item xs={3} container justifyContent="center">
-                        <Select
-                            value={filter}
-                            onChange={handleFilterChange}
-                            variant="outlined"
-                            displayEmpty
-                            style={{ width: '200px' }}
-                        >
-                            <MenuItem value="Todos">Todos</MenuItem>
-                            <MenuItem value="Insumos">Insumos</MenuItem>
-                            <MenuItem value="Manufacturados">Manufacturados</MenuItem>
-                        </Select>
-                    </Grid>
-                    <Grid item xs={3} container justifyContent="flex-end">
-                        <Grid container direction="column" alignItems="flex-end">
-                            <Typography variant="h2">
-                                {categorias.length}
-                            </Typography>
-                            <Typography variant="h6">
-                                Categorías
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-
-                <TableContainer component={Paper} style={{ maxHeight: '400px', marginBottom: '10px', marginTop: '20px' }}>
-                    <Table>
+                <TableContainer component={Paper} style={{ flex: "1", marginBottom: '10px', marginTop: '20px', backgroundColor: "#c5c5c5", borderRadius: "20px" }}>
+                    <Table sx={{minHeight: "0"}}>
                         <TableHead>
                             <TableRow>
                                 <TableCell style={{ color: 'black', fontWeight: 'bold' }}>Nombre</TableCell>
-                                <TableCell style={{ color: 'black', fontWeight: 'bold' }}>Acciones</TableCell>
+                                <TableCell style={{ color: 'black', fontWeight: 'bold', textAlign: 'right' }}>Acciones</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

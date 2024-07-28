@@ -31,6 +31,13 @@ const emptyEmpleado: Empleado = {
     },
 }
 
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
+};
+
 function EmpleadosList() {
     const { idSucursal } = useParams();
     const [empleado, setEmpleado] = useState<Empleado>({ ...emptyEmpleado });
@@ -109,11 +116,10 @@ function EmpleadosList() {
     return (
         <>
             <SideBar />
-            <Box p={0} ml={3}>
+            <Box p={0} ml={3} mr={3}>
                 <Typography variant="h5" gutterBottom fontWeight={'bold'} paddingBottom={'10px'}>
-                    Empleados
                 </Typography>
-                <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={() => handleOpen()} sx={{ mb: 2 }}>
+                <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()} sx={{ mb: 2, ...buttonStyles }}>
                     Agregar Empleado
                 </Button>
                 <TableContainer component={Paper} style={{ maxHeight: '400px', marginBottom: '10px', marginTop: '20px' }}>

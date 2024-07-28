@@ -11,6 +11,13 @@ interface ArticuloInsumoViewModalProps {
     images: string[];
 }
 
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
+};
+
 const ArticuloInsumoViewModal: React.FC<ArticuloInsumoViewModalProps> = ({ view, onClose, articulo, images }) => {
     const [currentArticuloInsumo, setCurrentArticuloInsumo] = useState<ArticuloInsumo>(articulo);
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
@@ -67,7 +74,7 @@ const ArticuloInsumoViewModal: React.FC<ArticuloInsumoViewModalProps> = ({ view,
                         </Box>
                     )}
                     <Box display="flex" justifyContent="flex-end" mt={2}>
-                        <Button variant="contained" color="secondary" onClick={handleClose}>
+                        <Button variant="contained" onClick={handleClose} sx={{...buttonStyles}}>
                             Cerrar
                         </Button>
                     </Box>

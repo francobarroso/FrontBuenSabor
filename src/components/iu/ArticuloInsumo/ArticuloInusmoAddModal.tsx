@@ -27,6 +27,20 @@ const modalStyle = {
     p: 4,
 };
 
+const buttonStyles = {
+    backgroundColor: "#233044",
+    '&:hover': {
+        backgroundColor: "#48576f"
+    }
+};
+
+const backButtonStyles = {
+    backgroundColor: "#59697f",
+    '&:hover': {
+        backgroundColor: "#6e7d92"
+    }
+};
+
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
 
@@ -503,10 +517,10 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
                                     }
                                 </Box>
                                 <Box mt={2} display="flex" justifyContent="space-between">
-                                    <Button disabled onClick={handlePreviousStep} color="secondary" variant="contained">
+                                    <Button disabled onClick={handlePreviousStep} variant="contained" sx={{...backButtonStyles}}>
                                         Atrás
                                     </Button>
-                                    <Button onClick={handleNextStep} color="primary" variant="contained">
+                                    <Button onClick={handleNextStep} variant="contained" sx={{...buttonStyles}}>
                                         Siguiente
                                     </Button>
                                 </Box>
@@ -664,10 +678,10 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
                                     </Grid>
                                 </Grid>
                                 <Box mt={2} display="flex" justifyContent="space-between">
-                                    <Button onClick={handlePreviousStep} color="secondary" variant="contained">
+                                    <Button onClick={handlePreviousStep} variant="contained" sx={{...backButtonStyles}}>
                                         Atrás
                                     </Button>
-                                    <Button onClick={handleSubmit} color="primary" variant="contained">
+                                    <Button onClick={handleSubmit} variant="contained" sx={{...buttonStyles}}>
                                         {currentArticuloInsumo.id !== null && currentArticuloInsumo.id > 0 ? "Actualizar Insumo" : "Crear Insumo"}
                                     </Button>
                                     <LoadingModal open={loading} msj={"Insumo"} accion={accionLoading}/>
