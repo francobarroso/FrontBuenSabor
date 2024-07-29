@@ -36,7 +36,7 @@ const SucursalCard: React.FC<EmpresaCardProps> = ({ onClose, sucursal }) => {
     };
 
     const redirectDashboard = (id: number) => {
-        navigate('/dashboard/' + idEmpresa + "/" + id);
+        navigate('/estadisticas/' + idEmpresa + "/" + id);
     }
 
     const handleOpen = () => {
