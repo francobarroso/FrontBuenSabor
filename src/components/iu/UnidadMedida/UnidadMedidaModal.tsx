@@ -158,7 +158,7 @@ const UnidadMedidaAddModal: React.FC<UnidadMedidaAddModalProps> = ({ open, onClo
                         {errors.denominacion && <FormHelperText>{errors.denominacion}</FormHelperText>}
                     </FormControl>
 
-                    <Box mt={2} display="flex" justifyContent="space-between">
+                    <Box mt={2} display="flex" justifyContent="flex-end">
                         <Button onClick={handleSubmit} variant="contained" sx={{ ...buttonStyles }}>
                             {unidad.id !== null && unidad.id > 0 ? "Actualizar Unidad de Medida" : "Crear Unidad de Medida"}
                         </Button>
