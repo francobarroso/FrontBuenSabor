@@ -9,6 +9,7 @@ import Empleado from "../types/Empleado";
 import { EmpleadoGetBySucursal } from "../services/EmpleadoService";
 import EmpleadoAddModal from "../components/iu/Empleado/EmpleadoAddModal";
 import { toast, ToastContainer } from "react-toastify";
+import colorConfigs from "../configs/colorConfig";
 
 const emptyEmpleado: Empleado = {
     id: null,
@@ -30,13 +31,6 @@ const emptyEmpleado: Empleado = {
         rol: null
     },
 }
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
-};
 
 function EmpleadosList() {
     const { idSucursal } = useParams();
@@ -119,7 +113,7 @@ function EmpleadosList() {
             <Box p={0} ml={3} mr={3}>
                 <Typography variant="h5" gutterBottom fontWeight={'bold'} paddingBottom={'10px'}>
                 </Typography>
-                <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()} sx={{ mb: 2, ...buttonStyles }}>
+                <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()} sx={{ mb: 2, ...colorConfigs.buttonStyles }}>
                     Agregar Empleado
                 </Button>
                 <TableContainer component={Paper} style={{ maxHeight: '400px', marginBottom: '10px', marginTop: '20px' }}>

@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useParams } from 'react-router-dom';
 import { EmpleadoCreate, EmpleadoUpdate } from '../../../services/EmpleadoService';
+import colorConfigs from "../../../configs/colorConfig"
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -279,10 +280,10 @@ const EmpleadoAddModal: React.FC<EmpleadoTableProps> = ({ open, onClose, emplead
                             </Grid>
 
                             <Box mt={2} display="flex" justifyContent="space-between">
-                                <Button disabled onClick={handleBack} color="secondary" variant="contained">
+                                <Button disabled onClick={handleBack} variant="contained" sx={{...colorConfigs.backButtonStyles}}>
                                     Atrás
                                 </Button>
-                                <Button onClick={handleNext} color="primary" variant="contained">
+                                <Button onClick={handleNext} variant="contained" sx={{...colorConfigs.buttonStyles}}>
                                     Siguiente
                                 </Button>
                             </Box>
@@ -348,10 +349,10 @@ const EmpleadoAddModal: React.FC<EmpleadoTableProps> = ({ open, onClose, emplead
                             </Grid>
 
                             <Box mt={2} display="flex" justifyContent="space-between">
-                                <Button onClick={handleBack} color="secondary" variant="contained">
+                                <Button onClick={handleBack} variant="contained" sx={{...colorConfigs.backButtonStyles}}>
                                     Atrás
                                 </Button>
-                                <Button onClick={handleSubmit} color="primary" variant="contained">
+                                <Button onClick={handleSubmit} variant="contained" sx={{...colorConfigs.buttonStyles}}>
                                     {empleado.id !== null && empleado.id > 0 ? "Actualizar Empleado" : "Crear Empleado"}
                                 </Button>
                             </Box>

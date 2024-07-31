@@ -10,15 +10,9 @@ import SpeedIcon from '@mui/icons-material/Speed';
 import UnidadMedidaTable from "../components/iu/UnidadMedida/UnidadMedidaTable";
 import AddIcon from "@mui/icons-material/Add";
 import UnidadMedidaAddModal from "../components/iu/UnidadMedida/UnidadMedidaModal";
+import colorConfigs from "../configs/colorConfig";
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
-};
 
 function UnidadMedidaList() {
     const [unidadMedidas, setUnidadMedidas] = useState<UnidadMedida[]>([]);
@@ -120,7 +114,7 @@ function UnidadMedidaList() {
                             variant="contained"
                             startIcon={<AddIcon />}
                             onClick={handleOpen}
-                            sx={{ ...buttonStyles }}
+                            sx={{ ...colorConfigs.buttonStyles }}
                         >
                             Agregar Unidad de Medida
                         </Button>

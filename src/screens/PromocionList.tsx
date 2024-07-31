@@ -10,6 +10,7 @@ import AddPromocionModal from '../components/iu/Promocion/AddPromocionModal';
 import { useAuth0 } from '@auth0/auth0-react';
 import { toast, ToastContainer } from 'react-toastify';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import colorConfigs from "../configs/colorConfig";
 
 const emptyPromocion: Promocion = {
     id: null,
@@ -26,13 +27,6 @@ const emptyPromocion: Promocion = {
     imagenes: [],
     sucursales: [],
     promocionDetalles: [],
-};
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
 };
 
 function PromocionList() {
@@ -111,7 +105,7 @@ function PromocionList() {
                         justifyContent: 'space-between'
                     }}
                 >
-                    <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenModal} sx={{ ...buttonStyles }}>
+                    <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenModal} sx={{ ...colorConfigs.buttonStyles }}>
                         Agregar Promoción
                     </Button>
                     <Stack direction="column" alignItems="flex-end">

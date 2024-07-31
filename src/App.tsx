@@ -15,7 +15,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import ProtectedRoute from "./components/auth0/ProtectedRoute";
 import Loading from "./screens/Loading";
 import Ingreso from "./screens/Ingreso";
-import VistaCiudadano from "./screens/VistaCiudadano";
 
 function App() {
   const { isLoading } = useAuth0();
@@ -26,9 +25,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/login" element={<Ingreso />}></Route>
+      <Route path="/" element={<Ingreso />}></Route>
       <Route element={<PreLayout />}>
-        <Route path="/inicio" element={<VistaCiudadano />}></Route>
         <Route element={<ProtectedRoute roles={['administrador']} />}>
           <Route path="/empresa" element={<Empresa />} />
           <Route path="empresa/:idEmpresa" element={<Sucursal />} />

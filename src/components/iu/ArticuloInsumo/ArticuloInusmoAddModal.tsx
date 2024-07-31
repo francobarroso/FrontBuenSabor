@@ -14,6 +14,7 @@ import { CloudinaryDelete, CloudinaryUpload } from "../../../services/Cloudinary
 import { ArticuloInsumoCreate, ArticuloInsumoUpdate } from "../../../services/ArticuloInsumoService";
 import CloseIcon from '@mui/icons-material/Close';
 import LoadingModal from "../Loading/LoadingModal";
+import colorConfigs from "../../../configs/colorConfig"
 
 
 const modalStyle = {
@@ -25,20 +26,6 @@ const modalStyle = {
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
-};
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
-};
-
-const backButtonStyles = {
-    backgroundColor: "#59697f",
-    '&:hover': {
-        backgroundColor: "#6e7d92"
-    }
 };
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
@@ -517,10 +504,10 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
                                     }
                                 </Box>
                                 <Box mt={2} display="flex" justifyContent="space-between">
-                                    <Button disabled onClick={handlePreviousStep} variant="contained" sx={{...backButtonStyles}}>
+                                    <Button disabled onClick={handlePreviousStep} variant="contained" sx={{...colorConfigs.backButtonStyles}}>
                                         Atrás
                                     </Button>
-                                    <Button onClick={handleNextStep} variant="contained" sx={{...buttonStyles}}>
+                                    <Button onClick={handleNextStep} variant="contained" sx={{...colorConfigs.buttonStyles}}>
                                         Siguiente
                                     </Button>
                                 </Box>
@@ -678,10 +665,10 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
                                     </Grid>
                                 </Grid>
                                 <Box mt={2} display="flex" justifyContent="space-between">
-                                    <Button onClick={handlePreviousStep} variant="contained" sx={{...backButtonStyles}}>
+                                    <Button onClick={handlePreviousStep} variant="contained" sx={{...colorConfigs.backButtonStyles}}>
                                         Atrás
                                     </Button>
-                                    <Button onClick={handleSubmit} variant="contained" sx={{...buttonStyles}}>
+                                    <Button onClick={handleSubmit} variant="contained" sx={{...colorConfigs.buttonStyles}}>
                                         {currentArticuloInsumo.id !== null && currentArticuloInsumo.id > 0 ? "Actualizar Insumo" : "Crear Insumo"}
                                     </Button>
                                     <LoadingModal open={loading} msj={"Insumo"} accion={accionLoading}/>

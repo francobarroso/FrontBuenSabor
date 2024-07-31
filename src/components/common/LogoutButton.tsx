@@ -21,7 +21,7 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
-    navigate('/inicio');
+    navigate('/');
   };
 
   return (

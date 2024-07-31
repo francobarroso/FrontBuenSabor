@@ -3,6 +3,7 @@ import ArticuloInsumo from "../../../types/ArticuloInsumo";
 import { useState } from "react";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import colorConfigs from "../../../configs/colorConfig"
 
 interface ArticuloInsumoViewModalProps {
     view: boolean;
@@ -10,13 +11,6 @@ interface ArticuloInsumoViewModalProps {
     articulo: ArticuloInsumo;
     images: string[];
 }
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
-};
 
 const ArticuloInsumoViewModal: React.FC<ArticuloInsumoViewModalProps> = ({ view, onClose, articulo, images }) => {
     const [currentArticuloInsumo, setCurrentArticuloInsumo] = useState<ArticuloInsumo>(articulo);
@@ -74,7 +68,7 @@ const ArticuloInsumoViewModal: React.FC<ArticuloInsumoViewModalProps> = ({ view,
                         </Box>
                     )}
                     <Box display="flex" justifyContent="flex-end" mt={2}>
-                        <Button variant="contained" onClick={handleClose} sx={{...buttonStyles}}>
+                        <Button variant="contained" onClick={handleClose} sx={{...colorConfigs.buttonStyles}}>
                             Cerrar
                         </Button>
                     </Box>

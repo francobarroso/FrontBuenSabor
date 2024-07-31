@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, Box, Select, MenuItem, FormControl, SelectChangeEvent, Avatar, Stack, ListItemButton, ListItemText } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, Select, MenuItem, FormControl, SelectChangeEvent, Avatar, Stack } from "@mui/material";
 import colorConfigs from "../../configs/colorConfig";
 import sizeConfigs from "../../configs/sizeConfig";
 import LoginButton from "./LoginButton";
@@ -57,7 +57,6 @@ const Topbar = () => {
   }, [location.pathname]);
 
   const isSucursalOrEmpresa = location.pathname.includes('empresa');
-  const showSucursalSelect = location.pathname.includes('inicio');
 
   return (
     <AppBar
@@ -90,38 +89,7 @@ const Topbar = () => {
         <Typography variant="h6"></Typography>
 
         {
-          showSucursalSelect ? (
-            <Toolbar sx={{ marginBottom: "7px", marginTop: "5px" }}>
-              <Stack
-                sx={{ width: "100%" }}
-                direction="row"
-                justifyContent="right"
-              >
-                <Typography variant="h5" noWrap style={{ cursor: 'pointer', marginLeft: '20px', alignContent: 'center', color: '#EEEEEE', fontWeight: 'bold', letterSpacing: '3px', fontFamily: 'Cascadia code, sans-serif' }} onClick={() => window.location.href = '/inicio'}>
-                  El Buen Sabor |
-                </Typography>
-              </Stack>
-              <ListItemButton onClick={() => window.location.href = '/menu'}
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  }
-                }}
-              >
-                <ListItemText
-                  primary="MENÚ"
-                  primaryTypographyProps={{
-                    style: {
-                      fontSize: '15px',
-                      fontWeight: 'bold',
-                      fontFamily: 'century, sans-serif',
-                      marginRight: '5px'
-                    }
-                  }}
-                />
-              </ListItemButton>
-            </Toolbar>
-          ) : (!isSucursalOrEmpresa && (
+          !isSucursalOrEmpresa && (
             <Box
               sx={{
                 display: "flex",
@@ -149,7 +117,7 @@ const Topbar = () => {
               </FormControl>
             </Box>
           )
-          )}
+        }
         <Box
           sx={{
             display: "flex",

@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import colorConfigs from "../../configs/colorConfig";
 
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
@@ -8,7 +9,6 @@ const LoginButton = () => {
   return (
     <Button
       variant="contained"
-      color="primary"
       onClick={() =>
         loginWithRedirect({
           appState: {
@@ -16,6 +16,7 @@ const LoginButton = () => {
           },
         })
       }
+      sx={{...colorConfigs.buttonIngresar}}
     >
      <AccountCircleIcon/> Ingresar
     </Button>

@@ -17,6 +17,7 @@ import ArticuloManufacturadoDetalle from "../../../types/ArticuloManufacturadoDe
 import { ArticuloInsumoFindBySucursal } from "../../../services/ArticuloInsumoService";
 import { ArticuloManufacturadoCreate, ArticuloManufacturadoUpdate } from "../../../services/ArticuloManufacturadoService";
 import LoadingModal from "../Loading/LoadingModal";
+import colorConfigs from "../../../configs/colorConfig"
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -27,20 +28,6 @@ const modalStyle = {
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
-};
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
-};
-
-const backButtonStyles = {
-    backgroundColor: "#59697f",
-    '&:hover': {
-        backgroundColor: "#6e7d92"
-    }
 };
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
@@ -620,10 +607,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                     </Grid>
                                 </Grid>
                                 <Box mt={2} display="flex" justifyContent="space-between">
-                                    <Button disabled onClick={handlePreviousStep} color="secondary" variant="contained" sx={{...backButtonStyles}}>
+                                    <Button disabled onClick={handlePreviousStep} color="secondary" variant="contained" sx={{...colorConfigs.backButtonStyles}}>
                                         Atrás
                                     </Button>
-                                    <Button onClick={handleNextStep} color="primary" variant="contained" sx={{...buttonStyles}}>
+                                    <Button onClick={handleNextStep} color="primary" variant="contained" sx={{...colorConfigs.buttonStyles}}>
                                         Siguiente
                                     </Button>
                                 </Box>
@@ -658,10 +645,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                 {errors.preparacion && <FormHelperText>{errors.preparacion}</FormHelperText>}
                             </FormControl>
                             <Box mt={2} display="flex" justifyContent="space-between">
-                                <Button onClick={handlePreviousStep} color="secondary" variant="contained"  sx={{...backButtonStyles}}>
+                                <Button onClick={handlePreviousStep} color="secondary" variant="contained"  sx={{...colorConfigs.backButtonStyles}}>
                                     Atrás
                                 </Button>
-                                <Button onClick={handleNextStep} color="primary" variant="contained" sx={{...buttonStyles}}>
+                                <Button onClick={handleNextStep} color="primary" variant="contained" sx={{...colorConfigs.buttonStyles}}>
                                     Siguiente
                                 </Button>
                             </Box>
@@ -738,10 +725,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                 ))}
                             </Grid>
                             <Box mt={2} display="flex" justifyContent="space-between">
-                                <Button onClick={handlePreviousStep} color="secondary" variant="contained" sx={{...backButtonStyles}}>
+                                <Button onClick={handlePreviousStep} color="secondary" variant="contained" sx={{...colorConfigs.backButtonStyles}}>
                                     Atrás
                                 </Button>
-                                <Button onClick={handleSubmit} color="primary" variant="contained" sx={{...buttonStyles}}>
+                                <Button onClick={handleSubmit} color="primary" variant="contained" sx={{...colorConfigs.buttonStyles}}>
                                     {currentArticuloManufacturado.id !== null && currentArticuloManufacturado.id > 0 ? "Actualizar Manufacturado" : "Crear Manufacturado"}
                                 </Button>
                                 <LoadingModal open={loading} msj={"Manufacturado"} accion={accionLoading} />

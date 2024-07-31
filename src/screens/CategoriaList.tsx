@@ -11,13 +11,7 @@ import CategoriaTable from "../components/iu/Categoria/CategoriaTable";
 import CategoriaModal from "../components/iu/Categoria/CategoriaModal";
 import { toast, ToastContainer } from "react-toastify";
 import CategoryIcon from "@mui/icons-material/Category";
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
-};
+import colorConfigs from "../configs/colorConfig";
 
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
 
@@ -135,7 +129,7 @@ function CategoriaList() {
                         color="primary"
                         startIcon={<AddIcon />}
                         onClick={handleOpen}
-                        sx={{...buttonStyles}}
+                        sx={{...colorConfigs.buttonStyles}}
                     >
                         Agregar Categoría
                     </Button>

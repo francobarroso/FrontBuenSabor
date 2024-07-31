@@ -20,18 +20,12 @@ import ArticuloManufacturadoTable from "../components/iu/ArticuloManufacturado/A
 import ArticuloManufacturadoAddModal from "../components/iu/ArticuloManufacturado/ArticuloManufacturadoAddModal";
 import { toast, ToastContainer } from "react-toastify";
 import FastfoodIcon from '@mui/icons-material/Fastfood';
+import colorConfigs from "../configs/colorConfig";
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
 const emptyArticuloManufacturado = {
     id: 0, eliminado: false, denominacion: '', precioVenta: null, habilitado: true, imagenes: [], unidadMedida: emptyUnidadMedida, categoria: emptyCategoria, sucursal: null, descripcion: '', tiempoEstimadoMinutos: null, preparacion: '', articuloManufacturadoDetalles: null
-};
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
 };
 
 function ArticuloManufacturadoList() {
@@ -157,7 +151,7 @@ function ArticuloManufacturadoList() {
                         variant="contained"
                         startIcon={<AddIcon />}
                         onClick={handleOpenModal}
-                        sx={{...buttonStyles}}
+                        sx={{...colorConfigs.buttonStyles}}
                     >
                         Agregar Manufacturado
                     </Button>

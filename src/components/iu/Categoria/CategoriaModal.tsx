@@ -7,15 +7,9 @@ import Sucursal from "../../../types/Sucursal";
 import { useAuth0 } from "@auth0/auth0-react";
 import { SucursalGetByEmpresaId } from "../../../services/SucursalService";
 import { CategoriaCreate, CategoriaUpdate } from "../../../services/CategoriaService";
+import colorConfigs from "../../../configs/colorConfig"
 
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
-};
 
 interface CategoriaModalProps {
     open: boolean;
@@ -353,7 +347,7 @@ const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categori
                         </Box>
                     ))}
                     <Box mt={2} display="flex" justifyContent="flex-end">
-                        <Button variant="contained" onClick={handleSubmit} sx={{ ...buttonStyles }}>
+                        <Button variant="contained" onClick={handleSubmit} sx={{ ...colorConfigs.buttonStyles }}>
                             {currentCategoria.id === null ? 'Crear Categoría' : 'Actualizar Categoría'}
                         </Button>
                     </Box>

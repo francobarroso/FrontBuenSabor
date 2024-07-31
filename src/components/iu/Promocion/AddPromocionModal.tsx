@@ -19,6 +19,7 @@ import { SucursalGetByEmpresaId } from '../../../services/SucursalService';
 import SucursalShortDto from '../../../types/SucursalShortDto';
 import { useAuth0 } from '@auth0/auth0-react';
 import LoadingModal from '../Loading/LoadingModal';
+import colorConfigs from "../../../configs/colorConfig"
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -29,20 +30,6 @@ const modalStyle = {
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
-};
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
-};
-
-const backButtonStyles = {
-    backgroundColor: "#59697f",
-    '&:hover': {
-        backgroundColor: "#6e7d92"
-    }
 };
 
 interface AddPromocionModalProps {
@@ -607,10 +594,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             </Grid>
                         </Grid>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button disabled onClick={handleBack} variant="contained" sx={{...backButtonStyles}}>
+                            <Button disabled onClick={handleBack} variant="contained" sx={{...colorConfigs.backButtonStyles}}>
                                 Atrás
                             </Button>
-                            <Button onClick={handleNext} variant="contained" sx={{...buttonStyles}}>
+                            <Button onClick={handleNext} variant="contained" sx={{...colorConfigs.buttonStyles}}>
                                 Siguiente
                             </Button>
                         </Box>
@@ -682,10 +669,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             }
                         </Box>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button variant="contained" onClick={handleBack} sx={{...backButtonStyles}}>
+                            <Button variant="contained" onClick={handleBack} sx={{...colorConfigs.backButtonStyles}}>
                                 Atrás
                             </Button>
-                            <Button variant="contained" onClick={handleNext} sx={{...buttonStyles}}>
+                            <Button variant="contained" onClick={handleNext} sx={{...colorConfigs.buttonStyles}}>
                                 Siguiente
                             </Button>
                         </Box>
@@ -791,10 +778,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             </Grid>
                         </Box>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button variant="contained" onClick={handleBack} sx={{...backButtonStyles}}>
+                            <Button variant="contained" onClick={handleBack} sx={{...colorConfigs.backButtonStyles}}>
                                 Atrás
                             </Button>
-                            <Button variant="contained" onClick={handleNext} sx={{...buttonStyles}}>
+                            <Button variant="contained" onClick={handleNext} sx={{...colorConfigs.buttonStyles}}>
                                 Siguiente
                             </Button>
                         </Box>
@@ -828,7 +815,7 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             </FormControl>
                         </Box>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button variant="contained" onClick={handleBack} sx={{...backButtonStyles}}>
+                            <Button variant="contained" onClick={handleBack} sx={{...colorConfigs.backButtonStyles}}>
                                 Atrás
                             </Button>
                             {promocion.id !== null && promocion.id > 0 ?
@@ -836,7 +823,7 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                                     Actualizar Promoción
                                 </Button>
                                 :
-                                <Button variant="contained" onClick={() => { handleSubmit(); }} sx={{...buttonStyles}}>
+                                <Button variant="contained" onClick={() => { handleSubmit(); }} sx={{...colorConfigs.buttonStyles}}>
                                     Crear Promoción
                                 </Button>
                             }

@@ -3,6 +3,7 @@ import { useState } from "react";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArticuloManufacturado from "../../../types/ArticuloManufacturado";
+import colorConfigs from "../../../configs/colorConfig"
 
 interface ArticuloManufacturadoViewModalProps {
     view: boolean;
@@ -10,13 +11,6 @@ interface ArticuloManufacturadoViewModalProps {
     articulo: ArticuloManufacturado;
     images: string[];
 }
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
-};
 
 const ArticuloManufacturadoViewModal: React.FC<ArticuloManufacturadoViewModalProps> = ({ view, onClose, articulo, images }) => {
     const [currentArticuloManufacturado, setCurrentArticuloManufacturado] = useState<ArticuloManufacturado>(articulo);
@@ -86,7 +80,7 @@ const ArticuloManufacturadoViewModal: React.FC<ArticuloManufacturadoViewModalPro
                         {currentArticuloManufacturado.preparacion}
                     </Typography>
                     <Box display="flex" justifyContent="flex-end" mt={2}>
-                        <Button variant="contained" onClick={handleClose} sx={{...buttonStyles}}>
+                        <Button variant="contained" onClick={handleClose} sx={{...colorConfigs.buttonStyles}}>
                             Cerrar
                         </Button>
                     </Box>

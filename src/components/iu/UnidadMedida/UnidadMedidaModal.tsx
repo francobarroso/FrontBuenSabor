@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
 import { UnidadMedidaCreate, UnidadMedidaUpdate } from "../../../services/UnidadMedidaService";
 import { useAuth0 } from "@auth0/auth0-react";
+import colorConfigs from "../../../configs/colorConfig"
 
 
 const modalStyle = {
@@ -15,13 +16,6 @@ const modalStyle = {
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
-};
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
 };
 
 interface UnidadMedidaAddModalProps {
@@ -159,7 +153,7 @@ const UnidadMedidaAddModal: React.FC<UnidadMedidaAddModalProps> = ({ open, onClo
                     </FormControl>
 
                     <Box mt={2} display="flex" justifyContent="flex-end">
-                        <Button onClick={handleSubmit} variant="contained" sx={{ ...buttonStyles }}>
+                        <Button onClick={handleSubmit} variant="contained" sx={{ ...colorConfigs.buttonStyles }}>
                             {unidad.id !== null && unidad.id > 0 ? "Actualizar Unidad de Medida" : "Crear Unidad de Medida"}
                         </Button>
                     </Box>

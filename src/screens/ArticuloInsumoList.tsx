@@ -11,13 +11,7 @@ import ArticuloInsumoTable from "../components/iu/ArticuloInsumo/ArticuloInsumoT
 import ArticuloInsumoAddModal from "../components/iu/ArticuloInsumo/ArticuloInusmoAddModal";
 import { ToastContainer, toast } from "react-toastify";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-
-const buttonStyles = {
-    backgroundColor: "#233044",
-    '&:hover': {
-        backgroundColor: "#48576f"
-    }
-};
+import colorConfigs from "../configs/colorConfig"
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
@@ -142,7 +136,7 @@ function ArticuloInsumoList() {
                         color="primary"
                         startIcon={<AddIcon />}
                         onClick={handleOpen}
-                        sx={{...buttonStyles}}
+                        sx={{...colorConfigs.buttonStyles}}
                     >
                         Agregar Insumo
                     </Button>
