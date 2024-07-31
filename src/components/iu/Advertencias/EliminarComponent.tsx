@@ -28,9 +28,13 @@ const EliminarComponent: React.FC<EliminarComponentProps> = ({ openDialog, onClo
                     <DialogContentText>
                         ¿Está seguro que desea eliminar {tipo}: {entidad.denominacion}?
                     </DialogContentText>
-                    <DialogContentText>
-                        Esta acción afectara a todas las sucursales y subcategorias asociadas.
-                    </DialogContentText>
+                    {
+                        tipo.includes("categoría") && (
+                            <DialogContentText>
+                                Esta acción afectara a todas las sucursales y subcategorias asociadas.
+                            </DialogContentText>
+                        )
+                    }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary" variant="contained">
