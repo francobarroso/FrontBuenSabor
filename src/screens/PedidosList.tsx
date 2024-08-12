@@ -1,5 +1,6 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography, Box } from '@mui/material';
 import SideBar from "../components/common/SideBar";
+import ProtectedComponent from '../components/auth0/ProtectedComponent';
 
 const data = [
     { id: 1, fecha: '2023-06-29', horaEstimada: '14:00', precioTotal: 1500, medioPago: 'Mercado Pago', tipoEnvio: 'Delivery', estado: 'Pendiente' },
@@ -35,12 +36,20 @@ function PedidosList() {
                                     <TableCell align="center">{pedido.tipoEnvio}</TableCell>
                                     <TableCell align="center">{pedido.estado}</TableCell>
                                     <TableCell align="center">
+                                        <ProtectedComponent roles={["cajero"]}>
                                         <Button variant="contained" color="warning" size="small" sx={{ m: 0.5 }}>A Cocina</Button>
-                                        <Button variant="contained" color="info" size="small" sx={{ m: 0.5 }}>Delivery</Button>
-                                        <Button variant="contained" color="success" size="small" sx={{ m: 0.5 }}>Entregado</Button>
                                         <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }}>Cancelar</Button>
                                         <Button variant="contained" color="primary" size="small" sx={{ m: 0.5 }}>Facturar</Button>
+                                        </ProtectedComponent>
+                                        <ProtectedComponent roles={["cocinero"]}>
+                                        <Button variant="contained" color="info" size="small" sx={{ m: 0.5 }}>Preparado</Button>
+                                        </ProtectedComponent>
+                                        <ProtectedComponent roles={["delivery"]}>
+                                        <Button variant="contained" color="success" size="small" sx={{ m: 0.5 }}>Entregado</Button>
+                                        </ProtectedComponent>
+                                        <ProtectedComponent roles={["administrador", "cajero"]}>
                                         <Button variant="contained" color="secondary" size="small" sx={{ m: 0.5 }}>Detalles</Button>
+                                        </ProtectedComponent>
                                     </TableCell>
                                 </TableRow>
                             ))}
