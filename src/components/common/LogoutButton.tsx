@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Avatar, Menu, MenuItem, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const LogoutButton = () => {
   const { user, logout } = useAuth0();
@@ -50,7 +50,7 @@ const LogoutButton = () => {
         onClose={handleClose}
       >
         <MenuItem onClick={handleLogout}>
-          Cerrar Sesión
+          <ExitToAppIcon /> Cerrar Sesión
         </MenuItem>
       </Menu>
     </div>

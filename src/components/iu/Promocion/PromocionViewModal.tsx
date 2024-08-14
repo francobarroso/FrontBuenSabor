@@ -14,6 +14,16 @@ interface ViewPromocionModalProps {
 const ViewPromocionModal: React.FC<ViewPromocionModalProps> = ({ open, onClose, promocion }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        date.setDate(date.getDate() + 1);
+        return date.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        });
+      };
+
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % promocion.imagenes.length);
     };
@@ -62,7 +72,7 @@ const ViewPromocionModal: React.FC<ViewPromocionModalProps> = ({ open, onClose, 
                     </Box>
                 )}
                 <Typography id="modal-description" sx={{ mt: 2 }}>
-                    Vigencia: {promocion.fechaDesde} - {promocion.fechaHasta}
+                    Vigencia: {formatDate(promocion.fechaDesde)} - {formatDate(promocion.fechaHasta)}
                 </Typography>
                 <Typography variant="h6" color="text.primary" sx={{ marginTop: 2 }}>
                     ${promocion.precioPromocional}

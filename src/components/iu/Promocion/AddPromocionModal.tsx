@@ -819,7 +819,7 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                                 Atrás
                             </Button>
                             {promocion.id !== null && promocion.id > 0 ?
-                                <Button variant="contained" onClick={() => { handleSubmit(); }}>
+                                <Button variant="contained" onClick={() => { handleSubmit(); }} sx={{...colorConfigs.buttonStyles}}>
                                     Actualizar Promoción
                                 </Button>
                                 :

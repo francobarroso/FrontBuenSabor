@@ -99,7 +99,7 @@ const SucursalCard: React.FC<EmpresaCardProps> = ({ onClose, sucursal }) => {
                         <div>
                             <Tooltip title="Editar">
                                 <IconButton onClick={handleOpen} color="primary">
-                                    <EditIcon />
+                                    <EditIcon color="success"/>
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="Ver">

@@ -68,14 +68,20 @@ const EmpresaCard: React.FC<EmpresaCardProps> = ({ onClose, empresa }) => {
                 <CardActions style={{ justifyContent: 'space-between' }}>
                     <Tooltip title="Editar">
                         <IconButton onClick={handleOpen} color="primary">
-                            <EditIcon />
+                            <EditIcon sx={{ color: "#334e77" }} />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Sucursales">
                         <Button
                             variant="contained"
-                            color="primary"
-                            sx={{ height: "30px", width: "170px" }}
+                            sx={{
+                                height: '30px',
+                                width: '170px',
+                                backgroundColor: '#334e77',
+                                '&:hover': {
+                                    backgroundColor: '#253b5c',
+                                },
+                            }}
                             onClick={() => redirectSucursal(empresa.id)}
                         >
                             <VisibilityIcon /> Ver Sucursales
@@ -84,7 +90,7 @@ const EmpresaCard: React.FC<EmpresaCardProps> = ({ onClose, empresa }) => {
                 </CardActions>
             </Card>
 
-            <EmpresaModal open={editOpen} onClose={handleClose} empresa={empresa} success={handleSuccess} error={handleError}/>
+            <EmpresaModal open={editOpen} onClose={handleClose} empresa={empresa} success={handleSuccess} error={handleError} />
         </>
     )
 }
