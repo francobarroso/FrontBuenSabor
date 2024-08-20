@@ -1,19 +1,101 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Box, TablePagination, Select, MenuItem, Stack, SelectChangeEvent } from '@mui/material';
 import SideBar from "../components/common/SideBar";
-import ProtectedComponent from '../components/auth0/ProtectedComponent';
-
-const data = [
-    { id: 1, fecha: '2023-06-29', horaEstimada: '14:00', precioTotal: 1500, medioPago: 'Mercado Pago', tipoEnvio: 'Delivery', estado: 'Pendiente' },
-    { id: 2, fecha: '2023-06-28', horaEstimada: '16:00', precioTotal: 1200, medioPago: 'Efectivo', tipoEnvio: 'Retiro en sucursal', estado: 'Preparacion' },
-];
+import PedidosTable from '../components/iu/Pedido/PedidoTable';
+import { useEffect, useState } from 'react';
+import Pedido from '../types/Pedido';
+import { useParams } from 'react-router-dom';
+import { PedidoGetBySucursal } from '../services/PedidoService';
+import MonitorIcon from '@mui/icons-material/Monitor';
+import { Estado } from '../types/enums/Estado';
 
 function PedidosList() {
+    const [pedidos, setPedidos] = useState<Pedido[]>([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [filter, setFilter] = useState("Todos");
+    const { idSucursal } = useParams();
+    const pedidosActivos = filter === "Todos"
+        ? pedidos.length
+        : pedidos.filter(pedido => pedido.estado === filter).length;
+    const filteredPedidos = pedidos.filter(pedido => {
+        if (filter === "Todos") {
+            return pedido;
+        } else {
+            return pedido.estado === filter;
+        }
+    });
+
+    const getPedidos = async () => {
+        const pedidos: Pedido[] = await PedidoGetBySucursal(Number(idSucursal));
+        setPedidos(pedidos);
+    }
+
+    const handleFilterChange = (event: SelectChangeEvent<string>) => {
+        setFilter(event.target.value as string);
+    };
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+        console.log(event);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const handleClose = () => {
+
+    }
+
+    useEffect(() => {
+        getPedidos();
+    }, []);
+
     return (
         <>
             <SideBar />
+            <Box p={0} ml={3} mr={3}>
+                <Box
+                    mt={2}
+                    sx={{
+                        backgroundColor: "#c5c5c5",
+                        borderRadius: "20px",
+                        p: 2,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}
+                >
+                    <Select
+                        value={filter}
+                        onChange={handleFilterChange}
+                        variant="outlined"
+                        displayEmpty
+                        style={{ width: '250px' }}
+                    >
+                        <MenuItem value="Todos">Todos</MenuItem>
+                        <MenuItem value={Estado.PENDIENTE}>Pendientes</MenuItem>
+                        <MenuItem value={Estado.PREPARACION}>En Preparación</MenuItem>
+                        <MenuItem value={Estado.CANCELADO}>Cancelado</MenuItem>
+                        <MenuItem value={Estado.ENTREGADO}>Entregado</MenuItem>
+                        <MenuItem value={Estado.FACTURADO}>Facturado</MenuItem>
+                        <MenuItem value={Estado.DELIVERY}>Delivery</MenuItem>
+                    </Select>
+                    <Stack direction="column" alignItems="flex-end">
+                        <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
+                            <MonitorIcon /> {pedidosActivos}
+                        </Typography>
+                        <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                            Pedidos Activos
+                        </Typography>
+                    </Stack>
+                </Box>
+            </Box>
+
             <Box ml={3} mb={3} mr={3}>
                 <Typography variant='h5'></Typography>
-                <TableContainer component={Paper} style={{ maxHeight: '400px', marginBottom: '10px', marginTop: '20px' }}>
+                <TableContainer component={Paper} style={{ flex: "1", marginBottom: '10px', marginTop: '20px', backgroundColor: "#c5c5c5", borderRadius: "20px" }}>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -27,35 +109,28 @@ function PedidosList() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map((pedido) => (
-                                <TableRow key={pedido.id}>
-                                    <TableCell align="center">{pedido.fecha}</TableCell>
-                                    <TableCell align="center">{pedido.horaEstimada}</TableCell>
-                                    <TableCell align="center">{pedido.precioTotal}</TableCell>
-                                    <TableCell align="center">{pedido.medioPago}</TableCell>
-                                    <TableCell align="center">{pedido.tipoEnvio}</TableCell>
-                                    <TableCell align="center">{pedido.estado}</TableCell>
-                                    <TableCell align="center">
-                                        <ProtectedComponent roles={["cajero"]}>
-                                        <Button variant="contained" color="warning" size="small" sx={{ m: 0.5 }}>A Cocina</Button>
-                                        <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }}>Cancelar</Button>
-                                        <Button variant="contained" color="primary" size="small" sx={{ m: 0.5 }}>Facturar</Button>
-                                        </ProtectedComponent>
-                                        <ProtectedComponent roles={["cocinero"]}>
-                                        <Button variant="contained" color="info" size="small" sx={{ m: 0.5 }}>Preparado</Button>
-                                        </ProtectedComponent>
-                                        <ProtectedComponent roles={["delivery"]}>
-                                        <Button variant="contained" color="success" size="small" sx={{ m: 0.5 }}>Entregado</Button>
-                                        </ProtectedComponent>
-                                        <ProtectedComponent roles={["administrador", "cajero"]}>
-                                        <Button variant="contained" color="secondary" size="small" sx={{ m: 0.5 }}>Detalles</Button>
-                                        </ProtectedComponent>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                            {filteredPedidos
+                                .sort((a, b) => {
+                                    const dateA = new Date(a.fechaPedido).getTime();
+                                    const dateB = new Date(b.fechaPedido).getTime();
+                                    return dateB - dateA;
+                                })
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((pedido) => (
+                                    <PedidosTable pedido={pedido} onClose={handleClose} />
+                                ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5]}
+                    component="div"
+                    count={filteredPedidos.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </Box>
         </>
     );
