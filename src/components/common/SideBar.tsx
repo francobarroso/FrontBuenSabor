@@ -52,15 +52,15 @@ function SideBar() {
                         </Stack>
                     </Toolbar>
 
-                    <ProtectedComponent roles={["administrador"]}>
-                    <ListItemButton component={Link} to={"/estadisticas/" + idEmpresa + "/" + idSucursal}>
-                        <ListItemIcon sx={{
-                            color: colorConfigs.sidebar.color
-                        }}>
-                            <StackedBarChartIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Estadisticas" />
-                    </ListItemButton>
+                    <ProtectedComponent roles={["administrador", "superadmin"]}>
+                        <ListItemButton component={Link} to={"/estadisticas/" + idEmpresa + "/" + idSucursal}>
+                            <ListItemIcon sx={{
+                                color: colorConfigs.sidebar.color
+                            }}>
+                                <StackedBarChartIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Estadisticas" />
+                        </ListItemButton>
                     </ProtectedComponent>
 
                     <ListItemButton onClick={handleProductsClick}>
@@ -108,14 +108,16 @@ function SideBar() {
                         </ListItemIcon>
                         <ListItemText primary="Promociones" />
                     </ListItemButton>
-                    <ListItemButton component={Link} to={"/empleados/" + idEmpresa + "/" + idSucursal}>
-                        <ListItemIcon sx={{
-                            color: colorConfigs.sidebar.color
-                        }}>
-                            <PeopleAltIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Empleados" />
-                    </ListItemButton>
+                    <ProtectedComponent roles={["superadmin"]}>
+                        <ListItemButton component={Link} to={"/empleados/" + idEmpresa + "/" + idSucursal}>
+                            <ListItemIcon sx={{
+                                color: colorConfigs.sidebar.color
+                            }}>
+                                <PeopleAltIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Empleados" />
+                        </ListItemButton>
+                    </ProtectedComponent>
                     <ListItemButton component={Link} to={"/unidad-medida/" + idEmpresa + "/" + idSucursal}>
                         <ListItemIcon sx={{
                             color: colorConfigs.sidebar.color

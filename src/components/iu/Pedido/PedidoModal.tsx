@@ -46,19 +46,21 @@ const PedidoModal: React.FC<PromocionProps> = ({ pedido, open, onClose }) => {
                     <Typography variant="h5" gutterBottom align="center">
                         Pedido N° {currentPedido.id}
                     </Typography>
-                    <Typography variant="h5" gutterBottom align="center">
-                        Fecha: {new Date(pedido.fechaPedido).toLocaleDateString('es-ES', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric',
-                        })}
-                    </Typography>
-                    <Typography variant="h5" gutterBottom align="center">
-                        Hora: {pedido.horaEstimadaFinalizacion
-                            ? pedido.horaEstimadaFinalizacion.slice(0, 5)
-                            : 'Hora no disponible'}
-                    </Typography>
-                    <Typography mt={1} variant="h6" gutterBottom align="left">
+                    <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
+                        <Typography variant="h6">
+                            Fecha: {new Date(pedido.fechaPedido).toLocaleDateString('es-ES', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                            })}
+                        </Typography>
+                        <Typography variant="h6">
+                            Hora: {pedido.horaEstimadaFinalizacion
+                                ? pedido.horaEstimadaFinalizacion.slice(0, 5)
+                                : 'Hora no disponible'}
+                        </Typography>
+                    </Box>
+                    <Typography mt={3} variant="h6" gutterBottom align="left">
                         Detalles del Pedido:
                     </Typography>
                     {detalles.map((detalle) => (
