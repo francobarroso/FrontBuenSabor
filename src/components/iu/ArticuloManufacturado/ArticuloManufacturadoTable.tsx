@@ -14,6 +14,7 @@ import ArticuloManufacturadoAddModal from "./ArticuloManufacturadoAddModal";
 import DesactivarComponent from "../Advertencias/DesactivarComponent";
 import ActivarComponent from "../Advertencias/ActivarComponent";
 import { toast } from "react-toastify";
+import ProtectedComponent from "../../auth0/ProtectedComponent";
 
 interface ArticuloManufacturadoTableProps {
     onClose: () => void;
@@ -207,21 +208,28 @@ const ArticuloManufacturadoTable: React.FC<ArticuloManufacturadoTableProps> = ({
                 {
                     articulo.habilitado === true ?
                         <TableCell align="center">
-                            <Tooltip title="Editar" arrow>
-                                <IconButton aria-label="edit" onClick={() => handleOpenEditModal(articulo)} color="primary">
-                                    <EditIcon />
-                                </IconButton>
-                            </Tooltip>
+                            <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                <Tooltip title="Editar" arrow>
+                                    <IconButton aria-label="edit" onClick={() => handleOpenEditModal(articulo)} color="primary">
+                                        <EditIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </ProtectedComponent>
+
                             <Tooltip title="Ver Manufacturado" arrow>
                                 <IconButton aria-label="view" onClick={() => handleView(articulo)} color="secondary">
                                     <VisibilityIcon />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title="Deshabilitar" arrow>
-                                <IconButton aria-label="baja" onClick={handleOpenBaja} color="error">
-                                    <RemoveCircleOutlineIcon />
-                                </IconButton>
-                            </Tooltip>
+
+                            <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                <Tooltip title="Deshabilitar" arrow>
+                                    <IconButton aria-label="baja" onClick={handleOpenBaja} color="error">
+                                        <RemoveCircleOutlineIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </ProtectedComponent>
+
                         </TableCell>
                         :
                         <TableCell align="center">
@@ -230,11 +238,14 @@ const ArticuloManufacturadoTable: React.FC<ArticuloManufacturadoTableProps> = ({
                                     <VisibilityIcon />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title="Habilitar" arrow>
-                                <IconButton aria-label="alta" onClick={handleOpenAlta} color="success">
-                                    <KeyboardDoubleArrowUpIcon />
-                                </IconButton>
-                            </Tooltip>
+
+                            <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                <Tooltip title="Habilitar" arrow>
+                                    <IconButton aria-label="alta" onClick={handleOpenAlta} color="success">
+                                        <KeyboardDoubleArrowUpIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </ProtectedComponent>
                         </TableCell>
                 }
             </TableRow>

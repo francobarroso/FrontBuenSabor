@@ -10,6 +10,7 @@ import { EmpleadoGetBySucursal } from "../services/EmpleadoService";
 import EmpleadoAddModal from "../components/iu/Empleado/EmpleadoAddModal";
 import { toast, ToastContainer } from "react-toastify";
 import colorConfigs from "../configs/colorConfig";
+import ProtectedComponent from "../components/auth0/ProtectedComponent";
 
 const emptyEmpleado: Empleado = {
     id: null,
@@ -113,9 +114,13 @@ function EmpleadosList() {
             <Box p={0} ml={3} mr={3}>
                 <Typography variant="h5" gutterBottom fontWeight={'bold'} paddingBottom={'10px'}>
                 </Typography>
-                <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()} sx={{ mb: 2, ...colorConfigs.buttonStyles }}>
-                    Agregar Empleado
-                </Button>
+                
+                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                    <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()} sx={{ mb: 2, ...colorConfigs.buttonStyles }}>
+                        Agregar Empleado
+                    </Button>
+                </ProtectedComponent>
+
                 <TableContainer component={Paper} style={{ maxHeight: '400px', marginBottom: '10px', marginTop: '20px' }}>
                     <Table >
                         <TableHead >
@@ -147,7 +152,7 @@ function EmpleadosList() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Box>
-            <EmpleadoAddModal open={open} onClose={handleClose} empleado={empleado} success={handleSuccess} error={handleError}/>
+            <EmpleadoAddModal open={open} onClose={handleClose} empleado={empleado} success={handleSuccess} error={handleError} />
             <ToastContainer />
         </>
     )

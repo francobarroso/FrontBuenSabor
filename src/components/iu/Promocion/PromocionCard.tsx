@@ -14,6 +14,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import DesactivarComponent from '../Advertencias/DesactivarComponent';
 import ActivarComponent from '../Advertencias/ActivarComponent';
 import { toast } from 'react-toastify';
+import ProtectedComponent from '../../auth0/ProtectedComponent';
 
 interface PromocionCardProps {
     onClose: () => void;
@@ -235,19 +236,23 @@ const PromocionCard: React.FC<PromocionCardProps> = ({ onClose, promocion }) => 
                     {
                         promocion.habilitado ?
                             <>
-                                <Tooltip title="Editar" arrow>
-                                    <IconButton aria-label="edit" color='primary' size="small" onClick={handleEdit}>
-                                        <EditIcon fontSize="small" />
-                                    </IconButton>
-                                </Tooltip>
+                                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                    <Tooltip title="Editar" arrow>
+                                        <IconButton aria-label="edit" color='primary' size="small" onClick={handleEdit}>
+                                            <EditIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+
+                                    <Tooltip title="Deshabilitar" arrow>
+                                        <IconButton aria-label="baja" color='error' size="small" onClick={handleOpenBaja}>
+                                            <RemoveCircleOutlineIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+                                </ProtectedComponent>
+
                                 <Tooltip title="Ver Promoción" arrow>
                                     <IconButton aria-label="view" color='secondary' size="small" onClick={handleView}>
                                         <Visibility />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Deshabilitar" arrow>
-                                    <IconButton aria-label="baja" color='error' size="small" onClick={handleOpenBaja}>
-                                        <RemoveCircleOutlineIcon fontSize="small" />
                                     </IconButton>
                                 </Tooltip>
                             </>
@@ -258,11 +263,13 @@ const PromocionCard: React.FC<PromocionCardProps> = ({ onClose, promocion }) => 
                                         <Visibility />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Habilitar" arrow>
-                                    <IconButton aria-label="alta" color='success' size="small" onClick={handleOpenAlta}>
-                                        <KeyboardDoubleArrowUpIcon fontSize="small" />
-                                    </IconButton>
-                                </Tooltip>
+                                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                    <Tooltip title="Habilitar" arrow>
+                                        <IconButton aria-label="alta" color='success' size="small" onClick={handleOpenAlta}>
+                                            <KeyboardDoubleArrowUpIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+                                </ProtectedComponent>
                             </>
                     }
                 </CardContent>

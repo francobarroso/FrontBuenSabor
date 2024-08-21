@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SideBar from "../components/common/SideBar";
 import UnidadMedida from "../types/UnidadMedida";
 import { UnidadMedidaGetAll } from "../services/UnidadMedidaService";
-import {Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, Box, TablePagination, Stack } from "@mui/material";
+import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Button, Box, TablePagination, Stack } from "@mui/material";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth0 } from "@auth0/auth0-react";
@@ -11,6 +11,7 @@ import UnidadMedidaTable from "../components/iu/UnidadMedida/UnidadMedidaTable";
 import AddIcon from "@mui/icons-material/Add";
 import UnidadMedidaAddModal from "../components/iu/UnidadMedida/UnidadMedidaModal";
 import colorConfigs from "../configs/colorConfig";
+import ProtectedComponent from "../components/auth0/ProtectedComponent";
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 
@@ -110,14 +111,17 @@ function UnidadMedidaList() {
                     }}
                 >
                     <Box display="flex" alignItems="center" mb={2}>
-                        <Button
-                            variant="contained"
-                            startIcon={<AddIcon />}
-                            onClick={handleOpen}
-                            sx={{ ...colorConfigs.buttonStyles }}
-                        >
-                            Agregar Unidad de Medida
-                        </Button>
+                        <ProtectedComponent roles={['administrador', 'superadmin']}>
+                            <Button
+                                variant="contained"
+                                startIcon={<AddIcon />}
+                                onClick={handleOpen}
+                                sx={{ ...colorConfigs.buttonStyles }}
+                            >
+                                Agregar Unidad de Medida
+                            </Button>
+                        </ProtectedComponent>
+
                     </Box>
                     <TextField
                         variant="outlined"
@@ -165,7 +169,7 @@ function UnidadMedidaList() {
                 />
             </Box>
 
-            <UnidadMedidaAddModal open={open} onClose={handleClose} unidad={currentUnidadMedida} success={handleSuccess} error={handleError}/>
+            <UnidadMedidaAddModal open={open} onClose={handleClose} unidad={currentUnidadMedida} success={handleSuccess} error={handleError} />
             <ToastContainer />
         </>
     );

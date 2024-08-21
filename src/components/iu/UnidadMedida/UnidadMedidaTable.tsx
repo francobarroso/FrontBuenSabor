@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { UnidadMedidaDelete } from "../../../services/UnidadMedidaService";
 import UnidadMedidaAddModal from "./UnidadMedidaModal";
 import EliminarComponent from "../Advertencias/EliminarComponent";
+import ProtectedComponent from "../../auth0/ProtectedComponent";
 
 interface UnidadMedidaTableProps {
     onClose: () => void;
@@ -20,13 +21,13 @@ const UnidadMedidaTable: React.FC<UnidadMedidaTableProps> = ({ onClose, unidad }
     const { getAccessTokenSilently } = useAuth0();
 
     const deleteUnidadMedida = async () => {
-            const token = await getAccessTokenSilently({
-                authorizationParams: {
-                    audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-                },
-            });
-            return UnidadMedidaDelete(unidad.id, token);
-            
+        const token = await getAccessTokenSilently({
+            authorizationParams: {
+                audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+            },
+        });
+        return UnidadMedidaDelete(unidad.id, token);
+
     };
 
     const handleEdit = () => {
@@ -113,20 +114,22 @@ const UnidadMedidaTable: React.FC<UnidadMedidaTableProps> = ({ onClose, unidad }
             <TableRow key={unidad.id}>
                 <TableCell>{unidad.denominacion}</TableCell>
                 <TableCell>
-                    <Tooltip title="Editar" arrow>
-                        <IconButton onClick={handleEdit} color="primary">
-                            <EditIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Eliminar" arrow>
-                        <IconButton onClick={handleOpenDelete} color="error">
-                            <DeleteIcon />
-                        </IconButton>
-                    </Tooltip>
+                    <ProtectedComponent roles={['administrador', 'superadmin']}>
+                        <Tooltip title="Editar" arrow>
+                            <IconButton onClick={handleEdit} color="primary">
+                                <EditIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Eliminar" arrow>
+                            <IconButton onClick={handleOpenDelete} color="error">
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </ProtectedComponent>
                 </TableCell>
             </TableRow>
-            <UnidadMedidaAddModal open={open} onClose={handleClose} unidad={unidad} success={handleSuccess} error={handleError}/>
-            <EliminarComponent openDialog={openDelete} onConfirm={handleDelete} onClose={handleCloseDialog} tipo="la unidad de medida" entidad={unidad}/>
+            <UnidadMedidaAddModal open={open} onClose={handleClose} unidad={unidad} success={handleSuccess} error={handleError} />
+            <EliminarComponent openDialog={openDelete} onConfirm={handleDelete} onClose={handleCloseDialog} tipo="la unidad de medida" entidad={unidad} />
         </>
     )
 };

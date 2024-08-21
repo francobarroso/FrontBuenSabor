@@ -27,22 +27,29 @@ function App() {
     <Routes>
       <Route path="/" element={<Ingreso />}></Route>
       <Route element={<PreLayout />}>
-        <Route element={<ProtectedRoute roles={['administrador']} />}>
+        <Route element={<ProtectedRoute roles={['administrador', 'superadmin']} />}>
           <Route path="/empresa" element={<Empresa />} />
           <Route path="empresa/:idEmpresa" element={<Sucursal />} />
         </Route>
       </Route>
       <Route element={<MainLayout />}>
-        <Route element={<ProtectedRoute roles={['administrador']} />}>
+        <Route element={<ProtectedRoute roles={['superadmin', 'administrador']} />}>
           <Route path="estadisticas/:idEmpresa/:idSucursal" element={<Dashboard />} />
+        </Route>
+        <Route element={<ProtectedRoute roles={['superadmin']} />}>
           <Route path="empleados/:idEmpresa/:idSucursal" element={<Empleado />} />
         </Route>
-        <Route path="manufacturados/:idEmpresa/:idSucursal" element={<ArticuloManufacturado />} />
-        <Route path="categorias/:idEmpresa/:idSucursal" element={<Categoria />} />
-        <Route path="promociones/:idEmpresa/:idSucursal" element={<Promocion />} />
-        <Route path="insumos/:idEmpresa/:idSucursal" element={<ArticuloInsumo />} />
-        <Route path="unidad-medida/:idEmpresa/:idSucursal" element={<UnidadMedida />} />
-        <Route path="pedidos/:idEmpresa/:idSucursal" element={<PedidosList />} />
+        <Route element={<ProtectedRoute roles={['superadmin', 'administrador', 'cocinero']} />}>
+          <Route path="manufacturados/:idEmpresa/:idSucursal" element={<ArticuloManufacturado />} />
+          <Route path="categorias/:idEmpresa/:idSucursal" element={<Categoria />} />
+          <Route path="promociones/:idEmpresa/:idSucursal" element={<Promocion />} />
+          <Route path="insumos/:idEmpresa/:idSucursal" element={<ArticuloInsumo />} />
+          <Route path="unidad-medida/:idEmpresa/:idSucursal" element={<UnidadMedida />} />
+        </Route >
+
+        <Route element={<ProtectedRoute roles={['administrador', 'superadmin', 'cocinero', 'delivery', 'cajero']} />}>
+          <Route path="pedidos/:idEmpresa/:idSucursal" element={<PedidosList />} />
+        </Route>
       </Route>
     </Routes>
   );

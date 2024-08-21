@@ -11,6 +11,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { toast, ToastContainer } from 'react-toastify';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import colorConfigs from "../configs/colorConfig";
+import ProtectedComponent from '../components/auth0/ProtectedComponent';
 
 const emptyPromocion: Promocion = {
     id: null,
@@ -105,9 +106,12 @@ function PromocionList() {
                         justifyContent: 'space-between'
                     }}
                 >
-                    <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenModal} sx={{ ...colorConfigs.buttonStyles }}>
-                        Agregar Promoción
-                    </Button>
+                    <ProtectedComponent roles={['administrador', 'superadmin']}>
+                        <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenModal} sx={{ ...colorConfigs.buttonStyles }}>
+                            Agregar Promoción
+                        </Button>
+                    </ProtectedComponent>
+
                     <Stack direction="column" alignItems="flex-end">
                         <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
                             <AttachMoneyIcon /> {promocionCount}
@@ -117,7 +121,7 @@ function PromocionList() {
                         </Typography>
                     </Stack>
                 </Box>
-                
+
                 <Grid container spacing={3} mt={2}>
                     {promociones.filter(promocion => !promocion.eliminado).map((promocion) => (
                         <Grid item xs={12} sm={6} md={4} key={promocion.id}>

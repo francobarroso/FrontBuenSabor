@@ -12,6 +12,7 @@ import CategoriaModal from "../components/iu/Categoria/CategoriaModal";
 import { toast, ToastContainer } from "react-toastify";
 import CategoryIcon from "@mui/icons-material/Category";
 import colorConfigs from "../configs/colorConfig";
+import ProtectedComponent from "../components/auth0/ProtectedComponent";
 
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
 
@@ -124,15 +125,18 @@ function CategoriaList() {
                         justifyContent: 'space-between'
                     }}
                 >
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddIcon />}
-                        onClick={handleOpen}
-                        sx={{...colorConfigs.buttonStyles}}
-                    >
-                        Agregar Categoría
-                    </Button>
+                    <ProtectedComponent roles={['administrador', 'superadmin']}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            startIcon={<AddIcon />}
+                            onClick={handleOpen}
+                            sx={{ ...colorConfigs.buttonStyles }}
+                        >
+                            Agregar Categoría
+                        </Button>
+                    </ProtectedComponent>
+
                     <TextField
                         variant="outlined"
                         placeholder="Buscar por nombre"
@@ -162,7 +166,7 @@ function CategoriaList() {
                 </Box>
 
                 <TableContainer component={Paper} style={{ flex: "1", marginBottom: '10px', marginTop: '20px', backgroundColor: "#c5c5c5", borderRadius: "20px" }}>
-                    <Table sx={{minHeight: "0"}}>
+                    <Table sx={{ minHeight: "0" }}>
                         <TableHead>
                             <TableRow>
                                 <TableCell style={{ color: 'black', fontWeight: 'bold' }}>Nombre</TableCell>

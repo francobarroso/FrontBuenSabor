@@ -13,6 +13,7 @@ import ArticuloInsumoAddModal from "./ArticuloInusmoAddModal";
 import DesactivarComponent from "../Advertencias/DesactivarComponent";
 import ActivarComponent from "../Advertencias/ActivarComponent";
 import { toast } from "react-toastify";
+import ProtectedComponent from "../../auth0/ProtectedComponent";
 
 interface ArticuloInsumoTableProps {
     onClose: () => void;
@@ -209,21 +210,27 @@ const ArticuloInsumoTable: React.FC<ArticuloInsumoTableProps> = ({ onClose, arti
                     {
                         articulo.habilitado === true ?
                             <Box>
-                                <Tooltip title="Editar" arrow>
-                                    <IconButton aria-label="edit" onClick={() => handleEdit(articulo)} color="primary">
-                                        <Edit />
-                                    </IconButton>
-                                </Tooltip>
+                                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                    <Tooltip title="Editar" arrow>
+                                        <IconButton aria-label="edit" onClick={() => handleEdit(articulo)} color="primary">
+                                            <Edit />
+                                        </IconButton>
+                                    </Tooltip>
+                                </ProtectedComponent>
+
                                 <Tooltip title="Ver Insumo" arrow>
                                     <IconButton aria-label="view" onClick={() => handleView(articulo)} color="secondary">
                                         <Visibility />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Deshabilitar" arrow>
-                                    <IconButton aria-label="delete" onClick={handleOpenBaja} color="error">
-                                        <RemoveCircleOutlineIcon />
-                                    </IconButton>
-                                </Tooltip>
+
+                                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                    <Tooltip title="Deshabilitar" arrow>
+                                        <IconButton aria-label="delete" onClick={handleOpenBaja} color="error">
+                                            <RemoveCircleOutlineIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </ProtectedComponent>
                             </Box>
                             :
                             <Box>
@@ -232,11 +239,14 @@ const ArticuloInsumoTable: React.FC<ArticuloInsumoTableProps> = ({ onClose, arti
                                         <Visibility />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Habilitar" arrow>
-                                    <IconButton aria-label="alta" onClick={handleOpenAlta} color="success">
-                                        <KeyboardDoubleArrowUpIcon />
-                                    </IconButton>
-                                </Tooltip>
+
+                                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                    <Tooltip title="Habilitar" arrow>
+                                        <IconButton aria-label="alta" onClick={handleOpenAlta} color="success">
+                                            <KeyboardDoubleArrowUpIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </ProtectedComponent>
                             </Box>
                     }
                 </TableCell>

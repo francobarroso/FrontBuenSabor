@@ -50,18 +50,18 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
                     />
                 </TableCell>
                 <TableCell align="center">
-                    <ProtectedComponent roles={["cajero"]}>
+                    <ProtectedComponent roles={["superadmin", "cajero"]}>
                         <Button variant="contained" color="warning" size="small" sx={{ m: 0.5 }}>A Cocina</Button>
                         <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }}>Cancelar</Button>
                         <Button variant="contained" color="primary" size="small" sx={{ m: 0.5 }}>Facturar</Button>
                     </ProtectedComponent>
-                    <ProtectedComponent roles={["cocinero"]}>
+                    <ProtectedComponent roles={["superadmin", "cocinero"]}>
                         <Button variant="contained" color="info" size="small" sx={{ m: 0.5 }}>Preparado</Button>
                     </ProtectedComponent>
-                    <ProtectedComponent roles={["delivery"]}>
+                    <ProtectedComponent roles={["superadmin", "delivery"]}>
                         <Button variant="contained" color="success" size="small" sx={{ m: 0.5 }}>Entregado</Button>
                     </ProtectedComponent>
-                    <ProtectedComponent roles={["administrador", "cajero"]}>
+                    <ProtectedComponent roles={["superadmin", "administrador", "cajero", "cocinero", "delivery"]}>
                         <Button variant="contained" color="secondary" size="small" sx={{ m: 0.5 }} onClick={handleDetalles}>Detalles</Button>
                     </ProtectedComponent>
                 </TableCell>

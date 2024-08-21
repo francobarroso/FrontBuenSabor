@@ -12,6 +12,7 @@ import ArticuloInsumoAddModal from "../components/iu/ArticuloInsumo/ArticuloInus
 import { ToastContainer, toast } from "react-toastify";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import colorConfigs from "../configs/colorConfig"
+import ProtectedComponent from "../components/auth0/ProtectedComponent";
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
@@ -131,15 +132,18 @@ function ArticuloInsumoList() {
                         justifyContent: 'space-between'
                     }}
                 >
+                    <ProtectedComponent roles={['administrador', 'superadmin']}>
                     <Button
                         variant="contained"
                         color="primary"
                         startIcon={<AddIcon />}
                         onClick={handleOpen}
-                        sx={{...colorConfigs.buttonStyles}}
+                        sx={{ ...colorConfigs.buttonStyles }}
                     >
                         Agregar Insumo
                     </Button>
+                    </ProtectedComponent>
+                
                     <TextField
                         variant="outlined"
                         placeholder="Buscar por nombre"
@@ -169,7 +173,7 @@ function ArticuloInsumoList() {
                 </Box>
 
                 <TableContainer component={Paper} style={{ flex: "1", marginBottom: '10px', marginTop: '20px', backgroundColor: "#c5c5c5", borderRadius: "20px" }}>
-                    <Table sx={{minHeight: "0"}}>
+                    <Table sx={{ minHeight: "0" }}>
                         <TableHead >
                             <TableRow>
                                 <TableCell style={{ color: 'black', fontWeight: 'bold' }} align="center">Nombre</TableCell>

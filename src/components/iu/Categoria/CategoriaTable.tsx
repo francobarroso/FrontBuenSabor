@@ -13,6 +13,7 @@ import CategoriaModal from './CategoriaModal';
 import EliminarComponent from '../Advertencias/EliminarComponent';
 import BajaSucursalComponent from '../Advertencias/BajaSucursal';
 import { toast } from 'react-toastify';
+import ProtectedComponent from '../../auth0/ProtectedComponent';
 
 interface CategoriaTableProps {
     onClose: () => void;
@@ -198,15 +199,19 @@ const CategoriaTable: React.FC<CategoriaTableProps> = ({ onClose, categoria }) =
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Typography>{subCategoria.denominacion}</Typography>
                         <Box sx={{ marginLeft: 'auto' }}>
-                            <Tooltip title="Editar" arrow>
-                                <IconButton onClick={() => handleEdit(subCategoria)} color="primary"><EditIcon /></IconButton>
-                            </Tooltip>
-                            <Tooltip title="Dar de Baja" arrow>
-                                <IconButton onClick={handleOpenBajaSubDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
-                            </Tooltip>
-                            <Tooltip title="Eliminar" arrow>
-                                <IconButton onClick={handleOpenEliminarSubDialog} color="error"><DeleteIcon /></IconButton>
-                            </Tooltip>
+                            <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                <Tooltip title="Editar" arrow>
+                                    <IconButton onClick={() => handleEdit(subCategoria)} color="primary"><EditIcon /></IconButton>
+                                </Tooltip>
+                            
+                                <Tooltip title="Dar de Baja" arrow>
+                                    <IconButton onClick={handleOpenBajaSubDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
+                                </Tooltip>
+                            
+                                <Tooltip title="Eliminar" arrow>
+                                    <IconButton onClick={handleOpenEliminarSubDialog} color="error"><DeleteIcon /></IconButton>
+                                </Tooltip>
+                            </ProtectedComponent>
                         </Box>
                     </AccordionSummary>
                     <EliminarComponent openDialog={openEliminarSub} onClose={handleCloseDialog} onConfirm={() => handleDelete(subCategoria)} tipo='la categoría' entidad={subCategoria} />

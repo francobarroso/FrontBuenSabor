@@ -21,6 +21,7 @@ import ArticuloManufacturadoAddModal from "../components/iu/ArticuloManufacturad
 import { toast, ToastContainer } from "react-toastify";
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import colorConfigs from "../configs/colorConfig";
+import ProtectedComponent from "../components/auth0/ProtectedComponent";
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
@@ -147,14 +148,17 @@ function ArticuloManufacturadoList() {
                         justifyContent: 'space-between'
                     }}
                 >
-                    <Button
-                        variant="contained"
-                        startIcon={<AddIcon />}
-                        onClick={handleOpenModal}
-                        sx={{...colorConfigs.buttonStyles}}
-                    >
-                        Agregar Manufacturado
-                    </Button>
+                    <ProtectedComponent roles={['administrador', 'superadmin']}>
+                        <Button
+                            variant="contained"
+                            startIcon={<AddIcon />}
+                            onClick={handleOpenModal}
+                            sx={{ ...colorConfigs.buttonStyles }}
+                        >
+                            Agregar Manufacturado
+                        </Button>
+                    </ProtectedComponent>
+
                     <TextField
                         variant="outlined"
                         placeholder="Buscar por nombre"
@@ -177,13 +181,13 @@ function ArticuloManufacturadoList() {
                         <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
                             <FastfoodIcon /> {activeManufacturadoCount}
                         </Typography>
-                        <Typography variant="h6" sx={{fontSize: "18px"}}>
+                        <Typography variant="h6" sx={{ fontSize: "18px" }}>
                             Manufacturados Activos
                         </Typography>
                     </Stack>
                 </Box>
                 <TableContainer component={Paper} style={{ flex: "1", marginBottom: '10px', marginTop: '20px', backgroundColor: "#c5c5c5", borderRadius: "20px" }}>
-                    <Table sx={{minHeight: "0"}}>
+                    <Table sx={{ minHeight: "0" }}>
                         <TableHead>
                             <TableRow>
                                 <TableCell style={{ color: 'black', fontWeight: 'bold' }} align="center">Nombre</TableCell>
@@ -212,7 +216,7 @@ function ArticuloManufacturadoList() {
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
-                    sx={{ alignSelf: 'flex-end'}}
+                    sx={{ alignSelf: 'flex-end' }}
                 />
             </Box>
 
