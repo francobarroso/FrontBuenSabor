@@ -31,6 +31,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
                         day: '2-digit',
                         month: '2-digit',
                         year: 'numeric',
+                        timeZone: 'UTC'
                     })}
                 </TableCell>
                 <TableCell align="center">
