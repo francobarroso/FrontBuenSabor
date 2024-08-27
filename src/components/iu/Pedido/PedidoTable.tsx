@@ -5,6 +5,16 @@ import { FormaPago } from "../../../types/enums/FormaPago";
 import { TipoEnvio } from "../../../types/enums/TipoEnvio";
 import PedidoModal from "./PedidoModal";
 import { useState } from "react";
+import { Estado } from "../../../types/enums/Estado";
+
+const estadoColores: Record<Estado, string> = {
+    [Estado.PENDIENTE]: '#efa91e',
+    [Estado.PREPARACION]: '#ef471e',
+    [Estado.FACTURADO]: '#1e5aef',
+    [Estado.DELIVERY]: '#931eef',
+    [Estado.CANCELADO]: 'red',
+    [Estado.ENTREGADO]: 'green'
+};
 
 interface PedidosTableProps {
     onClose: () => void;
@@ -40,15 +50,32 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
                         : 'Hora no disponible'}
                 </TableCell>
                 <TableCell align="center">${pedido.total}</TableCell>
-                <TableCell align="center">{pedido.formaPago === FormaPago.MERCADO_PAGO ? "Mercado Pago" : "Efectivo"}</TableCell>
-                <TableCell align="center">{pedido.tipoEnvio === TipoEnvio.DELIVERY ? "Delivery" : "Take Away"}</TableCell>
-                <TableCell align="center">
+                <TableCell align="center">{pedido.formaPago === FormaPago.MERCADO_PAGO ?
+                    <Chip
+                        size="small"
+                        color="primary"
+                        sx={{ ml: 1 }}
+                        label="Mercado Pago"
+                    />
+                    :
                     <Chip
                         size="small"
                         color="success"
                         sx={{ ml: 1 }}
-                        label={pedido.estado}
+                        label="Efectivo"
                     />
+                }</TableCell>
+                <TableCell align="center">{pedido.tipoEnvio === TipoEnvio.DELIVERY ? "Delivery" : "Take Away"}</TableCell>
+                <TableCell align="center">
+                    {
+                        pedido.estado !== null && (
+                            <Chip
+                                size="small"
+                                sx={{ ml: 1, color: "white", backgroundColor: estadoColores[pedido.estado] }}
+                                label={pedido.estado}
+                            />
+                        )
+                    }
                 </TableCell>
                 <TableCell align="center">
                     <ProtectedComponent roles={["superadmin", "cajero"]}>

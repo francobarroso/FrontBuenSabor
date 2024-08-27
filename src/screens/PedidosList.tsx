@@ -113,7 +113,16 @@ function PedidosList() {
                                 .sort((a, b) => {
                                     const dateA = new Date(a.fechaPedido).getTime();
                                     const dateB = new Date(b.fechaPedido).getTime();
-                                    return dateB - dateA;
+                            
+                                    if (dateB !== dateA) {
+                                        return dateB - dateA;
+                                    }
+                            
+                                    const now = new Date().getTime();
+                                    const timeA = new Date(`${a.fechaPedido}T${a.horaEstimadaFinalizacion}`).getTime();
+                                    const timeB = new Date(`${b.fechaPedido}T${b.horaEstimadaFinalizacion}`).getTime();
+                            
+                                    return Math.abs(timeA - now) - Math.abs(timeB - now);
                                 })
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((pedido) => (
