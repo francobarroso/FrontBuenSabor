@@ -6,6 +6,7 @@ import { TipoEnvio } from "../../../types/enums/TipoEnvio";
 import PedidoModal from "./PedidoModal";
 import { useState } from "react";
 import { Estado } from "../../../types/enums/Estado";
+import { PedidoUpdate } from "../../../services/PedidoService";
 
 const estadoColores: Record<Estado, string> = {
     [Estado.PENDIENTE]: '#efa91e',
@@ -31,6 +32,13 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
 
     const handleDetalles = () => {
         setOpen(true);
+    }
+
+    const handlePdf = () => {
+        if(pedido.id){
+            pedido.estado = Estado.PREPARACION;
+            PedidoUpdate(pedido);
+        }
     }
 
     return (
@@ -92,6 +100,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
                     <ProtectedComponent roles={["superadmin", "administrador", "cajero", "cocinero", "delivery"]}>
                         <Button variant="contained" color="secondary" size="small" sx={{ m: 0.5 }} onClick={handleDetalles}>Detalles</Button>
                     </ProtectedComponent>
+                    <Button color="error" variant="contained" onClick={handlePdf}>Pdf</Button>
                 </TableCell>
             </TableRow>
             <PedidoModal pedido={pedido} open={open} onClose={handleClose} />

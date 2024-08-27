@@ -47,3 +47,21 @@ export async function TotalGetByFecha(startDate: string, endDate: string){
 	});
 	return await response.json() as number;
 }
+
+export async function PedidoUpdate(pedido: Pedido){
+	const urlServer = 'http://localhost:8080/pedido/' + pedido.id;
+	const response = await fetch(urlServer, {
+		method: 'PUT',
+		body: JSON.stringify(pedido),
+        headers: {
+			'Content-type': 'application/json'
+		},
+        mode: 'cors'
+	});
+	const responseData = await response.json();
+	const status = response.status;
+	return {
+		status,
+		responseData
+	};
+}
