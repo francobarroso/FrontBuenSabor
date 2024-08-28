@@ -14,7 +14,8 @@ const estadoColores: Record<Estado, string> = {
     [Estado.FACTURADO]: '#1e5aef',
     [Estado.DELIVERY]: '#931eef',
     [Estado.CANCELADO]: 'red',
-    [Estado.ENTREGADO]: 'green'
+    [Estado.ENTREGADO]: 'green',
+    [Estado.PREPARADO]: 'pink',
 };
 
 interface PedidosTableProps {
@@ -24,6 +25,7 @@ interface PedidosTableProps {
 
 const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
     const [open, setOpen] = useState(false);
+    const [renderKey, setRenderKey] = useState(0);
 
     const handleClose = () => {
         setOpen(false);
@@ -34,16 +36,53 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
         setOpen(true);
     }
 
-    const handlePdf = () => {
+    const refreshGrid = () => {
+        setRenderKey(prevKey => prevKey + 1); // Incrementa la clave para forzar un re-render
+    }
+
+    const handleACocina = () => {
         if(pedido.id){
             pedido.estado = Estado.PREPARACION;
             PedidoUpdate(pedido);
+            refreshGrid();
+        }
+    }
+
+    const handleCancelar = () => {
+        if(pedido.id){
+            pedido.estado = Estado.CANCELADO;
+            PedidoUpdate(pedido);
+            refreshGrid();
+        }
+    }
+
+    const handleFacturar = () => {
+        if(pedido.id){
+            pedido.estado = Estado.FACTURADO;
+            PedidoUpdate(pedido);
+            refreshGrid();
+        }
+    }
+
+    const handlePreparado = () => {
+        if(pedido.id){
+            pedido.estado = pedido.tipoEnvio === TipoEnvio.DELIVERY ? Estado.DELIVERY : Estado.PREPARADO;
+            PedidoUpdate(pedido);
+            refreshGrid();
+        }
+    }
+
+    const handleEntregado = () => {
+        if(pedido.id){
+            pedido.estado = Estado.ENTREGADO;
+            PedidoUpdate(pedido);
+            refreshGrid();
         }
     }
 
     return (
         <>
-            <TableRow key={pedido.id}>
+            <TableRow key={`${pedido.id}-${renderKey}`}>
                 <TableCell align="center">
                     {new Date(pedido.fechaPedido).toLocaleDateString('es-ES', {
                         day: '2-digit',
@@ -87,20 +126,19 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
                 </TableCell>
                 <TableCell align="center">
                     <ProtectedComponent roles={["superadmin", "cajero"]}>
-                        <Button variant="contained" color="warning" size="small" sx={{ m: 0.5 }}>A Cocina</Button>
-                        <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }}>Cancelar</Button>
-                        <Button variant="contained" color="primary" size="small" sx={{ m: 0.5 }}>Facturar</Button>
+                        <Button variant="contained" color="warning" size="small" sx={{ m: 0.5 }} onClick={handleACocina} hidden={pedido.estado!==Estado.FACTURADO}>A Cocina</Button>
+                        <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }} onClick={handleCancelar} hidden={pedido.estado===Estado.ENTREGADO || pedido.estado===Estado.CANCELADO}>Cancelar</Button>
+                        <Button variant="contained" color="primary" size="small" sx={{ m: 0.5 }} onClick={handleFacturar} hidden={pedido.estado!==Estado.PENDIENTE}>Facturar</Button>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "cocinero"]}>
-                        <Button variant="contained" color="info" size="small" sx={{ m: 0.5 }}>Preparado</Button>
+                        <Button variant="contained" color="info" size="small" sx={{ m: 0.5 }} onClick={handlePreparado} hidden={pedido.estado!==Estado.PREPARACION}>Preparado</Button>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "delivery"]}>
-                        <Button variant="contained" color="success" size="small" sx={{ m: 0.5 }}>Entregado</Button>
+                        <Button variant="contained" color="success" size="small" sx={{ m: 0.5 }} onClick={handleEntregado} hidden={pedido.estado!==Estado.PREPARADO}>Entregado</Button>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "administrador", "cajero", "cocinero", "delivery"]}>
                         <Button variant="contained" color="secondary" size="small" sx={{ m: 0.5 }} onClick={handleDetalles}>Detalles</Button>
                     </ProtectedComponent>
-                    <Button color="error" variant="contained" onClick={handlePdf}>Pdf</Button>
                 </TableCell>
             </TableRow>
             <PedidoModal pedido={pedido} open={open} onClose={handleClose} />
