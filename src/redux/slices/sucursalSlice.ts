@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+/*import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Sucursal from "../../types/Sucursal";
 
 const DEFAULT_STATE = {
@@ -29,4 +29,4 @@ export const sucursalSlice = createSlice({
 });
 
 export const {setSucursal} = sucursalSlice.actions;
-export default sucursalSlice.reducer;
+export default sucursalSlice.reducer;*/

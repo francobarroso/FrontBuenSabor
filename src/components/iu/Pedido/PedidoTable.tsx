@@ -7,6 +7,8 @@ import PedidoModal from "./PedidoModal";
 import { useState } from "react";
 import { Estado } from "../../../types/enums/Estado";
 import { PedidoUpdate } from "../../../services/PedidoService";
+import { useAuth0 } from "@auth0/auth0-react";
+import { EmpleadoGetByEmail } from "../../../services/EmpleadoService";
 
 const estadoColores: Record<Estado, string> = {
     [Estado.PENDIENTE]: '#efa91e',
@@ -26,6 +28,21 @@ interface PedidosTableProps {
 const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
     const [open, setOpen] = useState(false);
     const [renderKey, setRenderKey] = useState(0);
+    const { getAccessTokenSilently, user } = useAuth0();
+
+    const empleadFindByEmail = async () => {
+        const token = await getAccessTokenSilently({
+            authorizationParams: {
+                audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+            },
+        });
+
+        if(user?.email){
+            //const email = user.email;
+            const email = "admin@mail.com";
+            return EmpleadoGetByEmail(email, token);
+        }
+    }
 
     const handleClose = () => {
         setOpen(false);
@@ -48,17 +65,21 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
         }
     }
 
-    const handleCancelar = () => {
+    const handleCancelar = async () => {
         if(pedido.id){
             pedido.estado = Estado.CANCELADO;
+            const data = await empleadFindByEmail();
+            pedido.empleado = data?.data;
             PedidoUpdate(pedido);
             refreshGrid();
         }
     }
 
-    const handleFacturar = () => {
+    const handleFacturar = async () => {
         if(pedido.id){
             pedido.estado = Estado.FACTURADO;
+            const data = await empleadFindByEmail();
+            pedido.empleado = data?.data;
             PedidoUpdate(pedido);
             refreshGrid();
         }
@@ -127,7 +148,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
                 <TableCell align="center">
                     <ProtectedComponent roles={["superadmin", "cajero"]}>
                         <Button variant="contained" color="warning" size="small" sx={{ m: 0.5 }} onClick={handleACocina} hidden={pedido.estado!==Estado.FACTURADO}>A Cocina</Button>
-                        <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }} onClick={handleCancelar} hidden={pedido.estado===Estado.ENTREGADO || pedido.estado===Estado.CANCELADO}>Cancelar</Button>
+                        <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }} onClick={handleCancelar} hidden={pedido.estado===Estado.ENTREGADO || pedido.estado===Estado.CANCELADO || pedido.estado===Estado.FACTURADO || pedido.estado===Estado.PREPARACION}>Cancelar</Button>
                         <Button variant="contained" color="primary" size="small" sx={{ m: 0.5 }} onClick={handleFacturar} hidden={pedido.estado!==Estado.PENDIENTE}>Facturar</Button>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "cocinero"]}>

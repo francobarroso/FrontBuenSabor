@@ -94,3 +94,19 @@ export async function EmpleadoDelete(id: number, token: string){
 
     return { status, data };
 }
+
+export async function EmpleadoGetByEmail(email: string, token: string){
+	const urlServer = 'http://localhost:8080/empleado/findByEmail?email=' + email;
+	const response = await fetch(urlServer, {
+		method: 'GET',
+        headers: {
+			'Authorization': `Bearer ${token}`,
+			'Content-type': 'application/json',
+		},
+        mode: 'cors'
+	});
+	const status = response.status;
+    const data = await response.json() as Empleado;
+
+    return { status, data };
+}

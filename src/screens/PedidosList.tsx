@@ -126,7 +126,7 @@ function PedidosList() {
                                 })
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((pedido) => (
-                                    <PedidosTable pedido={pedido} onClose={handleClose} />
+                                    <PedidosTable key={pedido.id} pedido={pedido} onClose={handleClose} />
                                 ))}
                         </TableBody>
                     </Table>

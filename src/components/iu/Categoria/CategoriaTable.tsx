@@ -203,11 +203,11 @@ const CategoriaTable: React.FC<CategoriaTableProps> = ({ onClose, categoria }) =
                                 <Tooltip title="Editar" arrow>
                                     <IconButton onClick={() => handleEdit(subCategoria)} color="primary"><EditIcon /></IconButton>
                                 </Tooltip>
-                            
+
                                 <Tooltip title="Dar de Baja" arrow>
                                     <IconButton onClick={handleOpenBajaSubDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
                                 </Tooltip>
-                            
+
                                 <Tooltip title="Eliminar" arrow>
                                     <IconButton onClick={handleOpenEliminarSubDialog} color="error"><DeleteIcon /></IconButton>
                                 </Tooltip>
@@ -237,15 +237,21 @@ const CategoriaTable: React.FC<CategoriaTableProps> = ({ onClose, categoria }) =
                                     <Chip label="Manufacturado" size="small" color="error" sx={{ ml: 1 }} />
                             }</Typography>
                             <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
-                                <Tooltip title="Editar" arrow>
-                                    <IconButton onClick={() => handleEdit(categoria)} color="primary">{categoria.sucursales !== null && <EditIcon />}</IconButton>
-                                </Tooltip>
-                                <Tooltip title="Dar de Baja" arrow>
-                                    <IconButton onClick={handleOpenBajaDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
-                                </Tooltip>
-                                <Tooltip title="Eliminar" arrow>
-                                    <IconButton onClick={handleOpenEliminarDialog} color="error"><DeleteIcon /></IconButton>
-                                </Tooltip>
+                                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                    <Tooltip title="Editar" arrow>
+                                        <IconButton onClick={() => handleEdit(categoria)} color="primary">{categoria.sucursales !== null && <EditIcon />}</IconButton>
+                                    </Tooltip>
+                                </ProtectedComponent>
+                                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                    <Tooltip title="Dar de Baja" arrow>
+                                        <IconButton onClick={handleOpenBajaDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
+                                    </Tooltip>
+                                </ProtectedComponent>
+                                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                    <Tooltip title="Eliminar" arrow>
+                                        <IconButton onClick={handleOpenEliminarDialog} color="error"><DeleteIcon /></IconButton>
+                                    </Tooltip>
+                                </ProtectedComponent>
                             </Box>
                         </AccordionSummary>
                         <EliminarComponent openDialog={openEliminar} onClose={handleCloseDialog} onConfirm={() => handleDelete(categoria)} tipo='la categoría' entidad={categoria} />

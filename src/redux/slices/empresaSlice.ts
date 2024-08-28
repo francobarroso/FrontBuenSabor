@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+/*import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Empresa from "../../types/Empresa";
 
 const DEFAULT_STATE = {
@@ -29,4 +29,4 @@ export const empresaSlice = createSlice({
 });
 
 export const {setEmpresa} = empresaSlice.actions;
-export default empresaSlice.reducer;
+export default empresaSlice.reducer;*/

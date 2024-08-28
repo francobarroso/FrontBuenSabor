@@ -170,7 +170,9 @@ function CategoriaList() {
                         <TableHead>
                             <TableRow>
                                 <TableCell style={{ color: 'black', fontWeight: 'bold' }}>Nombre</TableCell>
-                                <TableCell style={{ color: 'black', fontWeight: 'bold', textAlign: 'right' }}>Acciones</TableCell>
+                                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                    <TableCell style={{ color: 'black', fontWeight: 'bold', textAlign: 'right' }}>Acciones</TableCell>
+                                </ProtectedComponent>
                             </TableRow>
                         </TableHead>
                         <TableBody>
