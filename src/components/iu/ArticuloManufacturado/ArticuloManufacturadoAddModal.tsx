@@ -7,7 +7,6 @@ import { CategoriaByEmpresaGetAll } from "../../../services/CategoriaService";
 import Categoria from "../../../types/Categoria";
 import UnidadMedida from "../../../types/UnidadMedida";
 import { UnidadMedidaGetAll } from "../../../services/UnidadMedidaService";
-import { useParams } from "react-router-dom";
 import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 import { Delete } from "@mui/icons-material";
 import { CloudinaryDelete, CloudinaryUpload } from "../../../services/CloudinaryService";
@@ -18,6 +17,7 @@ import { ArticuloInsumoFindBySucursal } from "../../../services/ArticuloInsumoSe
 import { ArticuloManufacturadoCreate, ArticuloManufacturadoUpdate } from "../../../services/ArticuloManufacturadoService";
 import LoadingModal from "../Loading/LoadingModal";
 import colorConfigs from "../../../configs/colorConfig"
+import { useAppSelector } from "../../../redux/hook";
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -54,7 +54,8 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
     const [images, setImages] = useState<string[]>(imagenes);
     const [articuloImages, setArticuloImages] = useState<Imagen[]>(articuloImagenes);
     const [search, setSearch] = useState("");
-    const { idEmpresa, idSucursal } = useParams();
+    const sucursalRedux = useAppSelector((state) => state.sucursal.sucursal);
+    const empresaRedux = useAppSelector((state) => state.empresa.empresa);
     const [modalStep, setModalStep] = useState(1);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [loading, setLoading] = useState(false);
@@ -87,8 +88,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
             },
         });
 
-        const articulosInsumo: ArticuloInsumo[] = await ArticuloInsumoFindBySucursal(Number(idSucursal), token);
-        setInsumos(articulosInsumo);
+        if (sucursalRedux) {
+            const articulosInsumo: ArticuloInsumo[] = await ArticuloInsumoFindBySucursal(sucursalRedux.id, token);
+            setInsumos(articulosInsumo);
+        }
     };
 
     const getAllCategoriaByEmpresa = async () => {
@@ -97,8 +100,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        const categorias: Categoria[] = await CategoriaByEmpresaGetAll(Number(idEmpresa), token);
-        setCategorias(categorias);
+        if (empresaRedux) {
+            const categorias: Categoria[] = await CategoriaByEmpresaGetAll(empresaRedux.id, token);
+            setCategorias(categorias);
+        }
     };
 
     const getAllUnidadMedida = async () => {
@@ -607,10 +612,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                     </Grid>
                                 </Grid>
                                 <Box mt={2} display="flex" justifyContent="space-between">
-                                    <Button disabled onClick={handlePreviousStep} color="secondary" variant="contained" sx={{...colorConfigs.backButtonStyles}}>
+                                    <Button disabled onClick={handlePreviousStep} color="secondary" variant="contained" sx={{ ...colorConfigs.backButtonStyles }}>
                                         Atrás
                                     </Button>
-                                    <Button onClick={handleNextStep} color="primary" variant="contained" sx={{...colorConfigs.buttonStyles}}>
+                                    <Button onClick={handleNextStep} color="primary" variant="contained" sx={{ ...colorConfigs.buttonStyles }}>
                                         Siguiente
                                     </Button>
                                 </Box>
@@ -645,10 +650,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                 {errors.preparacion && <FormHelperText>{errors.preparacion}</FormHelperText>}
                             </FormControl>
                             <Box mt={2} display="flex" justifyContent="space-between">
-                                <Button onClick={handlePreviousStep} color="secondary" variant="contained"  sx={{...colorConfigs.backButtonStyles}}>
+                                <Button onClick={handlePreviousStep} color="secondary" variant="contained" sx={{ ...colorConfigs.backButtonStyles }}>
                                     Atrás
                                 </Button>
-                                <Button onClick={handleNextStep} color="primary" variant="contained" sx={{...colorConfigs.buttonStyles}}>
+                                <Button onClick={handleNextStep} color="primary" variant="contained" sx={{ ...colorConfigs.buttonStyles }}>
                                     Siguiente
                                 </Button>
                             </Box>
@@ -725,10 +730,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                 ))}
                             </Grid>
                             <Box mt={2} display="flex" justifyContent="space-between">
-                                <Button onClick={handlePreviousStep} color="secondary" variant="contained" sx={{...colorConfigs.backButtonStyles}}>
+                                <Button onClick={handlePreviousStep} color="secondary" variant="contained" sx={{ ...colorConfigs.backButtonStyles }}>
                                     Atrás
                                 </Button>
-                                <Button onClick={handleSubmit} color="primary" variant="contained" sx={{...colorConfigs.buttonStyles}}>
+                                <Button onClick={handleSubmit} color="primary" variant="contained" sx={{ ...colorConfigs.buttonStyles }}>
                                     {currentArticuloManufacturado.id !== null && currentArticuloManufacturado.id > 0 ? "Actualizar Manufacturado" : "Crear Manufacturado"}
                                 </Button>
                                 <LoadingModal open={loading} msj={"Manufacturado"} accion={accionLoading} />

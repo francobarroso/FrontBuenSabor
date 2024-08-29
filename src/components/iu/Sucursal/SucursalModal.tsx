@@ -12,7 +12,7 @@ import { PaisGetAll } from "../../../services/PaisService";
 import Pais from "../../../types/Pais";
 import { EmpresaGetById } from "../../../services/EmpresaService";
 import Empresa from "../../../types/Empresa";
-import { useParams } from "react-router-dom";
+import { useAppSelector } from "../../../redux/hook";
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -48,7 +48,7 @@ const SucursalModal: React.FC<EmpresaCardProps> = ({ open, onClose, sucursal, su
     const [selectedLocalidad, setSelectedLocalidad] = useState<number | null>(null);
     const [estado, setEstado] = useState(currentSucursal.esCasaMatriz);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const { idEmpresa } = useParams();
+    const empresaRedux = useAppSelector((state) => state.empresa.empresa);
 
     const { getAccessTokenSilently } = useAuth0();
 
@@ -110,8 +110,10 @@ const SucursalModal: React.FC<EmpresaCardProps> = ({ open, onClose, sucursal, su
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        const empresa: Empresa = await EmpresaGetById(Number(idEmpresa), token);
-        setCurrentEmpresa(empresa);
+        if (empresaRedux) {
+            const empresa: Empresa = await EmpresaGetById(empresaRedux.id, token);
+            setCurrentEmpresa(empresa);
+        }
     }
 
     useEffect(() => {
@@ -294,7 +296,7 @@ const SucursalModal: React.FC<EmpresaCardProps> = ({ open, onClose, sucursal, su
         if (currentSucursal.id > 0) {
             try {
                 const data = await updateSucursal(currentSucursal);
-                if(data.status !== 200){
+                if (data.status !== 200) {
                     error();
                     return;
                 }
@@ -305,7 +307,7 @@ const SucursalModal: React.FC<EmpresaCardProps> = ({ open, onClose, sucursal, su
             try {
                 currentSucursal.empresa = currentEmpresa ?? null;
                 const data = await createSucursal(currentSucursal);
-                if(data.status !== 200){
+                if (data.status !== 200) {
                     error();
                     return;
                 }

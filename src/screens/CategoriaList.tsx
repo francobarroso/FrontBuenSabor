@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { Typography, Box, Button, TableCell, TableBody, Table, TableContainer, TableRow, TableHead, Paper, TablePagination, SelectChangeEvent, Select, MenuItem, TextField, Stack } from "@mui/material";
 import SideBar from "../components/common/SideBar";
 import CategoriaGetDto from "../types/CategoriaGetDto";
@@ -13,12 +12,12 @@ import { toast, ToastContainer } from "react-toastify";
 import CategoryIcon from "@mui/icons-material/Category";
 import colorConfigs from "../configs/colorConfig";
 import ProtectedComponent from "../components/auth0/ProtectedComponent";
+import { useAppSelector } from "../redux/hook";
 
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
 
 function CategoriaList() {
     const [categorias, setCategorias] = useState<CategoriaGetDto[]>([]);
-    const { idSucursal } = useParams();
     const [currentCategoria, setCurrentCategoria] = useState<Categoria>({ ...emptyCategoria });
     const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
@@ -26,6 +25,7 @@ function CategoriaList() {
     const [filter, setFilter] = useState("Todos");
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const { getAccessTokenSilently } = useAuth0();
+    const sucursalRedux = useAppSelector((state) => state.sucursal.sucursal);
 
     const getAllCategoriaBySucursal = async () => {
         const token = await getAccessTokenSilently({
@@ -33,13 +33,15 @@ function CategoriaList() {
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        const categorias: CategoriaGetDto[] = await CategoriaByEmpresaGetAll(Number(idSucursal), token);
-        setCategorias(categorias);
+        if (sucursalRedux) {
+            const categorias: CategoriaGetDto[] = await CategoriaByEmpresaGetAll(sucursalRedux.id, token);
+            setCategorias(categorias);
+        }
     };
 
     useEffect(() => {
         getAllCategoriaBySucursal();
-    }, [idSucursal]);
+    }, [sucursalRedux]);
 
     const handleOpen = () => {
         setCurrentCategoria(emptyCategoria);

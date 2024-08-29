@@ -3,17 +3,17 @@ import SideBar from "../components/common/SideBar";
 import PedidosTable from '../components/iu/Pedido/PedidoTable';
 import { useEffect, useState } from 'react';
 import Pedido from '../types/Pedido';
-import { useParams } from 'react-router-dom';
 import { PedidoGetBySucursal } from '../services/PedidoService';
 import MonitorIcon from '@mui/icons-material/Monitor';
 import { Estado } from '../types/enums/Estado';
+import { useAppSelector } from '../redux/hook';
 
 function PedidosList() {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [filter, setFilter] = useState("Todos");
-    const { idSucursal } = useParams();
+    const sucursalRedux = useAppSelector((state) => state.sucursal.sucursal);
     const pedidosActivos = filter === "Todos"
         ? pedidos.length
         : pedidos.filter(pedido => pedido.estado === filter).length;
@@ -26,8 +26,10 @@ function PedidosList() {
     });
 
     const getPedidos = async () => {
-        const pedidos: Pedido[] = await PedidoGetBySucursal(Number(idSucursal));
-        setPedidos(pedidos);
+        if (sucursalRedux) {
+            const pedidos: Pedido[] = await PedidoGetBySucursal(sucursalRedux?.id);
+            setPedidos(pedidos);
+        }
     }
 
     const handleFilterChange = (event: SelectChangeEvent<string>) => {
@@ -44,13 +46,9 @@ function PedidosList() {
         setPage(0);
     };
 
-    const handleClose = () => {
-
-    }
-
     useEffect(() => {
         getPedidos();
-    }, []);
+    }, [sucursalRedux]);
 
     return (
         <>
@@ -113,20 +111,20 @@ function PedidosList() {
                                 .sort((a, b) => {
                                     const dateA = new Date(a.fechaPedido).getTime();
                                     const dateB = new Date(b.fechaPedido).getTime();
-                            
+
                                     if (dateB !== dateA) {
                                         return dateB - dateA;
                                     }
-                            
+
                                     const now = new Date().getTime();
                                     const timeA = new Date(`${a.fechaPedido}T${a.horaEstimadaFinalizacion}`).getTime();
                                     const timeB = new Date(`${b.fechaPedido}T${b.horaEstimadaFinalizacion}`).getTime();
-                            
+
                                     return Math.abs(timeA - now) - Math.abs(timeB - now);
                                 })
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((pedido) => (
-                                    <PedidosTable key={pedido.id} pedido={pedido} onClose={handleClose} />
+                                    <PedidosTable key={pedido.id} pedido={pedido} />
                                 ))}
                         </TableBody>
                     </Table>

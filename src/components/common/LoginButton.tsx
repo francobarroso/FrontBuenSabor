@@ -12,13 +12,13 @@ const LoginButton = () => {
       onClick={() =>
         loginWithRedirect({
           appState: {
-            returnTo: '/empresa',
+            returnTo: '/',
           },
         })
       }
-      sx={{...colorConfigs.buttonIngresar}}
+      sx={{ ...colorConfigs.buttonIngresar }}
     >
-     <AccountCircleIcon/> Ingresar
+      <AccountCircleIcon /> Iniciar Sesión
     </Button>
   );
 };

@@ -15,32 +15,35 @@ import UnidadMedidaList from "../screens/UnidadMedidaList";
 import PedidosList from "../screens/PedidosList";
 
 export const AppRoutes: React.FC = () => {
+
     return (
         <Routes>
             <Route path="/" element={<Ingreso />}></Route>
             <Route element={<PreLayout />}>
-                <Route element={<ProtectedRoute roles={['administrador', 'superadmin']} />}>
-                    <Route path="/empresa" element={<Empresa />} />
-                    <Route path="empresa/:idEmpresa" element={<Sucursal />} />
+                <Route element={<ProtectedRoute roles={['superadmin']} />}>
+                    <Route path="/empresas" element={<Empresa />} />
                 </Route>
+                <Route element={<ProtectedRoute roles={['administrador', 'superadmin']} />}>
+                        <Route path="/sucursales" element={<Sucursal />} />
+                    </Route>
             </Route>
             <Route element={<MainLayout />}>
                 <Route element={<ProtectedRoute roles={['superadmin', 'administrador']} />}>
-                    <Route path="estadisticas/:idEmpresa/:idSucursal" element={<Dashboard />} />
+                    <Route path="/estadisticas" element={<Dashboard />} />
                 </Route>
                 <Route element={<ProtectedRoute roles={['superadmin']} />}>
-                    <Route path="empleados/:idEmpresa/:idSucursal" element={<EmpleadosList />} />
+                    <Route path="/empleados" element={<EmpleadosList />} />
                 </Route>
                 <Route element={<ProtectedRoute roles={['superadmin', 'administrador', 'cocinero']} />}>
-                    <Route path="manufacturados/:idEmpresa/:idSucursal" element={<ArticuloManufacturadoList />} />
-                    <Route path="categorias/:idEmpresa/:idSucursal" element={<CategoriaList />} />
-                    <Route path="promociones/:idEmpresa/:idSucursal" element={<PromocionList />} />
-                    <Route path="insumos/:idEmpresa/:idSucursal" element={<ArticuloInsumoList />} />
-                    <Route path="unidad-medida/:idEmpresa/:idSucursal" element={<UnidadMedidaList />} />
+                    <Route path="/manufacturados" element={<ArticuloManufacturadoList />} />
+                    <Route path="/categorias" element={<CategoriaList />} />
+                    <Route path="/promociones" element={<PromocionList />} />
+                    <Route path="/insumos" element={<ArticuloInsumoList />} />
+                    <Route path="/unidad-medida" element={<UnidadMedidaList />} />
                 </Route >
 
                 <Route element={<ProtectedRoute roles={['administrador', 'superadmin', 'cocinero', 'delivery', 'cajero']} />}>
-                    <Route path="pedidos/:idEmpresa/:idSucursal" element={<PedidosList />} />
+                    <Route path="/pedidos" element={<PedidosList />} />
                 </Route>
             </Route>
         </Routes>

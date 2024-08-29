@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { SucursalGetByEmpresaId } from "../services/SucursalService";
 import Sucursal from "../types/Sucursal";
-import { useParams } from "react-router-dom";
 import { Button, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { useAuth0 } from "@auth0/auth0-react";
 import SucursalCard from "../components/iu/Sucursal/SucursalCard";
 import SucursalModal from "../components/iu/Sucursal/SucursalModal";
 import { toast, ToastContainer } from "react-toastify";
+import { useAppSelector } from "../redux/hook";
 
 const emptyEmpresa = { id: 0, eliminado: false, nombre: '', razonSocial: '', cuil: 0 };
 
@@ -26,9 +26,9 @@ function SucursalList() {
     const [sucursales, setSucursales] = useState<Sucursal[]>([]);
     const [open, setOpen] = useState(false);
     const [currentSucursal, setCurrentSucursal] = useState<Sucursal>({ ...emptySucursal });
-    const { idEmpresa } = useParams();
     const [hasCasaMatriz, setHasCasaMatriz] = useState(false);
     const { getAccessTokenSilently } = useAuth0();
+    const empresaRedux = useAppSelector((state) => state.empresa.empresa);
 
     const getAllSucursal = async () => {
         const token = await getAccessTokenSilently({
@@ -37,8 +37,10 @@ function SucursalList() {
             },
         });
 
-        const sucursales: Sucursal[] = await SucursalGetByEmpresaId(Number(idEmpresa), token);
-        setSucursales(sucursales);
+        if(empresaRedux){
+            const sucursales: Sucursal[] = await SucursalGetByEmpresaId(Number(empresaRedux.id), token);
+            setSucursales(sucursales);
+        }
     };
 
     useEffect(() => {

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Box,
     TablePagination,
@@ -22,6 +21,7 @@ import { toast, ToastContainer } from "react-toastify";
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import colorConfigs from "../configs/colorConfig";
 import ProtectedComponent from "../components/auth0/ProtectedComponent";
+import { useAppSelector } from "../redux/hook";
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
@@ -33,7 +33,7 @@ function ArticuloManufacturadoList() {
     const [articulosManufacturados, setArticulosManufacturados] = useState<ArticuloManufacturado[]>([]);
     const [currentArticuloManufacturado, setCurrentArticuloManufacturado] = useState<ArticuloManufacturado>({ ...emptyArticuloManufacturado });
     const [images, setImages] = useState<string[]>([]);
-    const { idSucursal, idEmpresa } = useParams();
+    const sucursalRedux = useAppSelector((state) => state.sucursal.sucursal);
     const [openModal, setOpenModal] = useState(false);
     const [detalles, setDetalles] = useState<ArticuloManufacturadoDetalle[]>([]);
     const [articuloImages, setArticuloImages] = useState<Imagen[]>([]);
@@ -50,13 +50,15 @@ function ArticuloManufacturadoList() {
             },
         });
 
-        const articulosManufacturados: ArticuloManufacturado[] = await ArticuloManufacturadoFindBySucursal(Number(idSucursal), token);
-        setArticulosManufacturados(articulosManufacturados);
+        if (sucursalRedux) {
+            const articulosManufacturados: ArticuloManufacturado[] = await ArticuloManufacturadoFindBySucursal(sucursalRedux.id, token);
+            setArticulosManufacturados(articulosManufacturados);
+        }
     };
 
     useEffect(() => {
         getAllArticuloManufacturadoBySucursal();
-    }, [idSucursal, idEmpresa]);
+    }, [sucursalRedux]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);

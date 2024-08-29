@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Avatar, Collapse, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -19,8 +19,6 @@ import ProtectedComponent from "../auth0/ProtectedComponent";
 
 function SideBar() {
     const [openProducts, setOpenProducts] = useState(false);
-    const { idSucursal } = useParams();
-    const { idEmpresa } = useParams();
 
     const handleProductsClick = () => {
         setOpenProducts(!openProducts);
@@ -53,7 +51,7 @@ function SideBar() {
                     </Toolbar>
 
                     <ProtectedComponent roles={["administrador", "superadmin"]}>
-                        <ListItemButton component={Link} to={"/estadisticas/" + idEmpresa + "/" + idSucursal}>
+                        <ListItemButton component={Link} to={"/estadisticas"}>
                             <ListItemIcon sx={{
                                 color: colorConfigs.sidebar.color
                             }}>
@@ -74,7 +72,7 @@ function SideBar() {
                         </ListItemButton>
                         <Collapse in={openProducts} timeout="auto" unmountOnExit>
                             <List component="div" disablePadding>
-                                <ListItemButton component={Link} to={"/manufacturados/" + idEmpresa + "/" + idSucursal} sx={{ pl: 4 }}>
+                                <ListItemButton component={Link} to={"/manufacturados"} sx={{ pl: 4 }}>
                                     <ListItemIcon sx={{
                                         color: colorConfigs.sidebar.color
                                     }}>
@@ -82,7 +80,7 @@ function SideBar() {
                                     </ListItemIcon>
                                     <ListItemText primary="Manufacturados" />
                                 </ListItemButton>
-                                <ListItemButton component={Link} to={"/insumos/" + idEmpresa + "/" + idSucursal} sx={{ pl: 4 }}>
+                                <ListItemButton component={Link} to={"/insumos"} sx={{ pl: 4 }}>
                                     <ListItemIcon sx={{
                                         color: colorConfigs.sidebar.color
                                     }}>
@@ -94,7 +92,7 @@ function SideBar() {
                         </Collapse>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "admin", "cocinero", "cajero"]}>
-                        <ListItemButton component={Link} to={"/categorias/" + idEmpresa + "/" + idSucursal}>
+                        <ListItemButton component={Link} to={"/categorias"}>
                             <ListItemIcon sx={{
                                 color: colorConfigs.sidebar.color
                             }}>
@@ -104,7 +102,7 @@ function SideBar() {
                         </ListItemButton>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "admin", "cocinero", "cajero"]}>
-                        <ListItemButton component={Link} to={"/promociones/" + idEmpresa + "/" + idSucursal}>
+                        <ListItemButton component={Link} to={"/promociones"}>
                             <ListItemIcon sx={{
                                 color: colorConfigs.sidebar.color
                             }}>
@@ -114,7 +112,7 @@ function SideBar() {
                         </ListItemButton>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin"]}>
-                        <ListItemButton component={Link} to={"/empleados/" + idEmpresa + "/" + idSucursal}>
+                        <ListItemButton component={Link} to={"/empleados"}>
                             <ListItemIcon sx={{
                                 color: colorConfigs.sidebar.color
                             }}>
@@ -124,7 +122,7 @@ function SideBar() {
                         </ListItemButton>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "admin", "cocinero"]}>
-                        <ListItemButton component={Link} to={"/unidad-medida/" + idEmpresa + "/" + idSucursal}>
+                        <ListItemButton component={Link} to={"/unidad-medida"}>
                             <ListItemIcon sx={{
                                 color: colorConfigs.sidebar.color
                             }}>
@@ -133,7 +131,7 @@ function SideBar() {
                             <ListItemText primary="Unidad de Medida" />
                         </ListItemButton>
                     </ProtectedComponent>
-                    <ListItemButton component={Link} to={"/pedidos/" + idEmpresa + "/" + idSucursal}>
+                    <ListItemButton component={Link} to={"/pedidos"}>
                         <ListItemIcon sx={{
                             color: colorConfigs.sidebar.color
                         }}>

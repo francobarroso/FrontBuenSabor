@@ -4,9 +4,9 @@ import Empleado from "../../../types/Empleado";
 import { Rol } from '../../../types/enums/Rol';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useParams } from 'react-router-dom';
 import { EmpleadoCreate, EmpleadoUpdate } from '../../../services/EmpleadoService';
 import colorConfigs from "../../../configs/colorConfig"
+import { useAppSelector } from '../../../redux/hook';
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -30,7 +30,7 @@ interface EmpleadoTableProps {
 const EmpleadoAddModal: React.FC<EmpleadoTableProps> = ({ open, onClose, empleado, success, error }) => {
     const [step, setStep] = useState(1);
     const [currentEmpleado, setCurrentEmpleado] = useState<Empleado>(empleado);
-    const { idSucursal } = useParams();
+    const sucursalRedux = useAppSelector((state) => state.sucursal.sucursal);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const { getAccessTokenSilently } = useAuth0();
 
@@ -147,8 +147,8 @@ const EmpleadoAddModal: React.FC<EmpleadoTableProps> = ({ open, onClose, emplead
             return;
         }
 
-        if (currentEmpleado.sucursal !== null) {
-            currentEmpleado.sucursal.id = Number(idSucursal);
+        if (currentEmpleado.sucursal !== null && sucursalRedux) {
+            currentEmpleado.sucursal.id = sucursalRedux.id;
         }
         if (currentEmpleado.id !== null && currentEmpleado.id > 0) {
             try {

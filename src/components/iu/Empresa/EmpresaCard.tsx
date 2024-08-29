@@ -6,6 +6,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from "react-router-dom";
 import EmpresaModal from "./EmpresaModal";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "../../../redux/hook";
+import { setEmpresa } from "../../../redux/slices/empresaSlice";
 
 interface EmpresaCardProps {
     onClose: () => void;
@@ -15,9 +17,11 @@ interface EmpresaCardProps {
 const EmpresaCard: React.FC<EmpresaCardProps> = ({ onClose, empresa }) => {
     const [editOpen, setEditOpen] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
-    const redirectSucursal = (id: number) => {
-        navigate('/empresa/' + id);
+    const redirectSucursal = () => {
+        dispatch(setEmpresa(empresa));
+        navigate('/sucursales');
     };
 
     const handleOpen = () => {
@@ -82,7 +86,7 @@ const EmpresaCard: React.FC<EmpresaCardProps> = ({ onClose, empresa }) => {
                                     backgroundColor: '#253b5c',
                                 },
                             }}
-                            onClick={() => redirectSucursal(empresa.id)}
+                            onClick={redirectSucursal}
                         >
                             <VisibilityIcon /> Ver Sucursales
                         </Button>

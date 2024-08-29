@@ -2,12 +2,12 @@ import { Box, Button, Checkbox, FormControl, FormControlLabel, FormHelperText, G
 import Categoria from "../../../types/Categoria";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import Sucursal from "../../../types/Sucursal";
 import { useAuth0 } from "@auth0/auth0-react";
 import { SucursalGetByEmpresaId } from "../../../services/SucursalService";
 import { CategoriaCreate, CategoriaUpdate } from "../../../services/CategoriaService";
 import colorConfigs from "../../../configs/colorConfig"
+import { useAppSelector } from "../../../redux/hook";
 
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
 
@@ -21,7 +21,7 @@ interface CategoriaModalProps {
 
 const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categoria, success, error }) => {
     const [currentCategoria, setCurrentCategoria] = useState<Categoria>(categoria);
-    const { idEmpresa } = useParams();
+    const empresaRedux = useAppSelector((state) => state.empresa.empresa);
     const [sucursales, setSucursales] = useState<Sucursal[]>([]);
     const { getAccessTokenSilently } = useAuth0();
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -32,8 +32,10 @@ const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categori
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        const sucursales: Sucursal[] = await SucursalGetByEmpresaId(Number(idEmpresa), token);
-        setSucursales(sucursales);
+        if (empresaRedux) {
+            const sucursales: Sucursal[] = await SucursalGetByEmpresaId(empresaRedux.id, token);
+            setSucursales(sucursales);
+        }
     };
 
     const createCategoria = async (categoria: Categoria) => {
@@ -58,7 +60,7 @@ const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categori
 
     useEffect(() => {
         getAllSucursal();
-    }, [idEmpresa]);
+    }, [empresaRedux]);
 
     const handleCategoriaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

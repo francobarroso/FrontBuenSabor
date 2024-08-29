@@ -6,7 +6,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CategoriaGetDto from '../../../types/CategoriaGetDto';
-import { useParams } from 'react-router-dom';
 import Categoria from '../../../types/Categoria';
 import { CategoriaBaja, CategoriaDelete } from '../../../services/CategoriaService';
 import CategoriaModal from './CategoriaModal';
@@ -14,6 +13,7 @@ import EliminarComponent from '../Advertencias/EliminarComponent';
 import BajaSucursalComponent from '../Advertencias/BajaSucursal';
 import { toast } from 'react-toastify';
 import ProtectedComponent from '../../auth0/ProtectedComponent';
+import { useAppSelector } from '../../../redux/hook';
 
 interface CategoriaTableProps {
     onClose: () => void;
@@ -22,7 +22,7 @@ interface CategoriaTableProps {
 
 const CategoriaTable: React.FC<CategoriaTableProps> = ({ onClose, categoria }) => {
     const { getAccessTokenSilently } = useAuth0();
-    const { idSucursal } = useParams();
+    const sucursalRedux = useAppSelector((state) => state.sucursal.sucursal);
     const [open, setOpen] = useState(false);
     const [openEliminar, setOpenEliminar] = useState(false);
     const [openEliminarSub, setOpenEliminarSub] = useState(false);
@@ -36,7 +36,10 @@ const CategoriaTable: React.FC<CategoriaTableProps> = ({ onClose, categoria }) =
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        return CategoriaBaja(idCategoria, Number(idSucursal), token);
+
+        if (sucursalRedux) {
+            return CategoriaBaja(idCategoria, sucursalRedux?.id, token);
+        }
     };
 
     const deleteCategoria = async (idCategoria: number) => {
@@ -101,7 +104,7 @@ const CategoriaTable: React.FC<CategoriaTableProps> = ({ onClose, categoria }) =
         if (categoria.id !== null) {
             try {
                 const data = await bajaCategoria(categoria.id);
-                if (data.status !== 200) {
+                if (data && data.status !== 200) {
                     toast.error(data.data.message, {
                         position: "top-right",
                         autoClose: 5000, // Tiempo en milisegundos antes de que se cierre automáticamente
@@ -192,37 +195,38 @@ const CategoriaTable: React.FC<CategoriaTableProps> = ({ onClose, categoria }) =
     };
 
     const renderSubCategorias = (subCategorias: CategoriaGetDto[] | null) => {
-        const filteredSubCategorias = filterSubCategoriasBySucursal(subCategorias, Number(idSucursal));
-        return filteredSubCategorias.filter(subCategoria => !subCategoria.eliminado).map((subCategoria) => (
-            <Box key={subCategoria.id} sx={{ paddingLeft: 1 }}>
-                <Accordion style={{ backgroundColor: "#c5c5c5" }}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography>{subCategoria.denominacion}</Typography>
-                        <Box sx={{ marginLeft: 'auto' }}>
-                            <ProtectedComponent roles={['administrador', 'superadmin']}>
-                                <Tooltip title="Editar" arrow>
-                                    <IconButton onClick={() => handleEdit(subCategoria)} color="primary"><EditIcon /></IconButton>
-                                </Tooltip>
+        if (sucursalRedux) {
+            const filteredSubCategorias = filterSubCategoriasBySucursal(subCategorias, sucursalRedux.id);
+            return filteredSubCategorias.filter(subCategoria => !subCategoria.eliminado).map((subCategoria) => (
+                <Box key={subCategoria.id} sx={{ paddingLeft: 1 }}>
+                    <Accordion style={{ backgroundColor: "#c5c5c5" }}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography>{subCategoria.denominacion}</Typography>
+                            <Box sx={{ marginLeft: 'auto' }}>
+                                <ProtectedComponent roles={['administrador', 'superadmin']}>
+                                    <Tooltip title="Editar" arrow>
+                                        <IconButton onClick={() => handleEdit(subCategoria)} color="primary"><EditIcon /></IconButton>
+                                    </Tooltip>
 
-                                <Tooltip title="Dar de Baja" arrow>
-                                    <IconButton onClick={handleOpenBajaSubDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
-                                </Tooltip>
+                                    <Tooltip title="Dar de Baja" arrow>
+                                        <IconButton onClick={handleOpenBajaSubDialog} color="secondary"><ArrowCircleDownIcon /></IconButton>
+                                    </Tooltip>
 
-                                <Tooltip title="Eliminar" arrow>
-                                    <IconButton onClick={handleOpenEliminarSubDialog} color="error"><DeleteIcon /></IconButton>
-                                </Tooltip>
-                            </ProtectedComponent>
-                        </Box>
-                    </AccordionSummary>
-                    <EliminarComponent openDialog={openEliminarSub} onClose={handleCloseDialog} onConfirm={() => handleDelete(subCategoria)} tipo='la categoría' entidad={subCategoria} />
-                    <BajaSucursalComponent openDialog={openBajaSub} onClose={handleCloseDialog} onConfirm={() => handleBaja(subCategoria)} tipo='la categoría' entidad={subCategoria} />
-                    <AccordionDetails>
-                        {renderSubCategorias(subCategoria.subCategorias)}
-                    </AccordionDetails>
-                </Accordion>
-            </Box>
-
-        ));
+                                    <Tooltip title="Eliminar" arrow>
+                                        <IconButton onClick={handleOpenEliminarSubDialog} color="error"><DeleteIcon /></IconButton>
+                                    </Tooltip>
+                                </ProtectedComponent>
+                            </Box>
+                        </AccordionSummary>
+                        <EliminarComponent openDialog={openEliminarSub} onClose={handleCloseDialog} onConfirm={() => handleDelete(subCategoria)} tipo='la categoría' entidad={subCategoria} />
+                        <BajaSucursalComponent openDialog={openBajaSub} onClose={handleCloseDialog} onConfirm={() => handleBaja(subCategoria)} tipo='la categoría' entidad={subCategoria} />
+                        <AccordionDetails>
+                            {renderSubCategorias(subCategoria.subCategorias)}
+                        </AccordionDetails>
+                    </Accordion>
+                </Box>
+            ));
+        }
     };
 
     return (

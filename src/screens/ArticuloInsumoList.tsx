@@ -3,7 +3,6 @@ import { Button, Box, Typography, Table, TableHead, TableRow, TableCell, TableBo
 import SideBar from "../components/common/SideBar";
 import ArticuloInsumo from "../types/ArticuloInsumo";
 import { ArticuloInsumoFindBySucursal } from "../services/ArticuloInsumoService";
-import { useParams } from "react-router-dom";
 import Imagen from "../types/Imagen";
 import AddIcon from "@mui/icons-material/Add";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -13,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import colorConfigs from "../configs/colorConfig"
 import ProtectedComponent from "../components/auth0/ProtectedComponent";
+import { useAppSelector } from "../redux/hook";
 
 const emptyUnidadMedida = { id: 0, eliminado: false, denominacion: '' };
 const emptyCategoria = { id: null, eliminado: false, denominacion: '', esInsumo: false, sucursales: [], subCategorias: [] };
@@ -23,7 +23,7 @@ const emptyArticuloInsumo = {
 function ArticuloInsumoList() {
     const [articulosInsumo, setArticulosInsumo] = useState<ArticuloInsumo[]>([]);
     const [currentArticuloInsumo, setCurrentArticuloInsumo] = useState<ArticuloInsumo>({ ...emptyArticuloInsumo });
-    const { idSucursal } = useParams();
+    const sucursalRedux = useAppSelector((state) => state.sucursal.sucursal);
     const [open, setOpen] = useState(false);
     const [images, setImages] = useState<string[]>([]);
     const [articuloImages, setArticuloImages] = useState<Imagen[]>([]);
@@ -40,8 +40,10 @@ function ArticuloInsumoList() {
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        const articulosInsumo: ArticuloInsumo[] = await ArticuloInsumoFindBySucursal(Number(idSucursal), token);
-        setArticulosInsumo(articulosInsumo);
+        if (sucursalRedux) {
+            const articulosInsumo: ArticuloInsumo[] = await ArticuloInsumoFindBySucursal(sucursalRedux.id, token);
+            setArticulosInsumo(articulosInsumo);
+        }
     };
 
     const handleOpen = () => {
@@ -58,7 +60,7 @@ function ArticuloInsumoList() {
 
     useEffect(() => {
         getAllArticuloInsumoBySucursal();
-    }, []);
+    }, [sucursalRedux]);
 
     const handleSuccess = () => {
         toast.success("Se creo correctamente", {
@@ -133,17 +135,17 @@ function ArticuloInsumoList() {
                     }}
                 >
                     <ProtectedComponent roles={['administrador', 'superadmin']}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddIcon />}
-                        onClick={handleOpen}
-                        sx={{ ...colorConfigs.buttonStyles }}
-                    >
-                        Agregar Insumo
-                    </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            startIcon={<AddIcon />}
+                            onClick={handleOpen}
+                            sx={{ ...colorConfigs.buttonStyles }}
+                        >
+                            Agregar Insumo
+                        </Button>
                     </ProtectedComponent>
-                
+
                     <TextField
                         variant="outlined"
                         placeholder="Buscar por nombre"

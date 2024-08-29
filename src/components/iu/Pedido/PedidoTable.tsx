@@ -21,11 +21,10 @@ const estadoColores: Record<Estado, string> = {
 };
 
 interface PedidosTableProps {
-    onClose: () => void;
     pedido: Pedido;
 }
 
-const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
+const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
     const [open, setOpen] = useState(false);
     const [renderKey, setRenderKey] = useState(0);
     const { getAccessTokenSilently, user } = useAuth0();
@@ -46,7 +45,6 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ onClose, pedido }) => {
 
     const handleClose = () => {
         setOpen(false);
-        onClose();
     }
 
     const handleDetalles = () => {

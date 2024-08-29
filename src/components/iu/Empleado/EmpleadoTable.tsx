@@ -102,7 +102,7 @@ const EmpleadoTable: React.FC<EmpleadoTableProps> = ({ onClose, empleado }) => {
 
     return (
         <>
-            <TableRow sx={{ backgroundColor: !empleado.eliminado ? "none" : "#B0B0B0" }}>
+            <TableRow sx={{ backgroundColor: !empleado.eliminado ? "none" : "#788293" }} key={empleado.id}>
                 <TableCell align="center">{empleado.nombre}</TableCell>
                 <TableCell align="center">{empleado.apellido}</TableCell>
                 <TableCell align="center">{empleado.usuario.rol}</TableCell>

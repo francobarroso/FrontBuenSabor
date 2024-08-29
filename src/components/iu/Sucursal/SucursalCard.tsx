@@ -2,7 +2,7 @@ import { Button, Card, CardActions, CardHeader, IconButton, Tooltip } from "@mui
 import { useEffect, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SucursalModal from "./SucursalModal";
 import Sucursal from "../../../types/Sucursal";
 import CheckIcon from '@mui/icons-material/Check';
@@ -10,6 +10,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { toast } from "react-toastify";
 import { useAuth0 } from "@auth0/auth0-react";
 import { SucursalGetByEmpresaId } from "../../../services/SucursalService";
+import { useDispatch } from "react-redux";
+import { setSucursal } from "../../../redux/slices/sucursalSlice";
+import { useAppSelector } from "../../../redux/hook";
 
 interface EmpresaCardProps {
     onClose: () => void;
@@ -21,9 +24,10 @@ const SucursalCard: React.FC<EmpresaCardProps> = ({ onClose, sucursal }) => {
     const navigate = useNavigate();
     const [sucursales, setSucursales] = useState<Sucursal[]>([]);
     const [hasCasaMatriz, setHasCasaMatriz] = useState(false);
-    const { idEmpresa } = useParams();
     const { getAccessTokenSilently } = useAuth0();
     const estaInicio = location.pathname.includes('inicio');
+    const dispatch = useDispatch();
+    const empresaRedux = useAppSelector((state) => state.empresa.empresa);
 
     const getAllSucursal = async () => {
         const token = await getAccessTokenSilently({
@@ -31,12 +35,15 @@ const SucursalCard: React.FC<EmpresaCardProps> = ({ onClose, sucursal }) => {
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        const sucursales: Sucursal[] = await SucursalGetByEmpresaId(Number(idEmpresa), token);
-        setSucursales(sucursales);
+        if(empresaRedux){
+            const sucursales: Sucursal[] = await SucursalGetByEmpresaId(empresaRedux.id, token);
+            setSucursales(sucursales);
+        }
     };
 
-    const redirectDashboard = (id: number) => {
-        navigate('/estadisticas/' + idEmpresa + "/" + id);
+    const redirectDashboard = () => {
+        dispatch(setSucursal(sucursal));
+        navigate('/estadisticas');
     }
 
     const handleOpen = () => {
@@ -103,7 +110,7 @@ const SucursalCard: React.FC<EmpresaCardProps> = ({ onClose, sucursal }) => {
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="Ver">
-                                <Button variant="contained" color="success" sx={{ height: "30px", width: "90px" }} onClick={() => redirectDashboard(sucursal.id)}>
+                                <Button variant="contained" color="success" sx={{ height: "30px", width: "90px" }} onClick={redirectDashboard}>
                                     <VisibilityIcon /> Ver
                                 </Button>
                             </Tooltip>

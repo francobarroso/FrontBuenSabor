@@ -1,47 +1,21 @@
-import { AppBar, Toolbar, Typography, Box, Select, MenuItem, FormControl, SelectChangeEvent, Avatar, Stack } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, Avatar, Stack } from "@mui/material";
 import colorConfigs from "../../configs/colorConfig";
 import sizeConfigs from "../../configs/sizeConfig";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import Sucursal from "../../types/Sucursal";
-import { SucursalGetByEmpresaId } from "../../services/SucursalService";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import avatarImage from '../../assets/images/logo.png';
+import SucursalDdl from "../iu/Sucursal/SucursalDdl";
+import ProtectedComponent from "../auth0/ProtectedComponent";
 
 const Topbar = () => {
   const { isAuthenticated } = useAuth0();
-  const [sucursales, setSucursales] = useState<Sucursal[]>([]);
-  const { idEmpresa, idSucursal } = useParams();
-  const navigate = useNavigate();
   const location = useLocation();
-  const { getAccessTokenSilently } = useAuth0();
   const [title, setTitle] = useState("");
 
-  const getAllSucursal = async () => {
-    const token = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-      },
-    });
-
-    const sucursales: Sucursal[] = await SucursalGetByEmpresaId(Number(idEmpresa), token);
-    setSucursales(sucursales);
-  };
-
-  const handleChange = (event: SelectChangeEvent) => {
-    const newSucursalId = event.target.value;
-    const currentPath = window.location.pathname;
-    const pathSegments = currentPath.split("/");
-    pathSegments[pathSegments.length - 1] = newSucursalId;
-    const newPath = pathSegments.join("/");
-    navigate(newPath);
-  };
-
-  useEffect(() => {
-    getAllSucursal();
-  }, []);
+  const isSucursalOrEmpresa = location.pathname.includes('empresas') || location.pathname.includes('sucursales');
 
   useEffect(() => {
     const path = location.pathname;
@@ -55,8 +29,6 @@ const Topbar = () => {
     else if (path.includes("pedidos")) setTitle("Pedidos");
     else setTitle("");
   }, [location.pathname]);
-
-  const isSucursalOrEmpresa = location.pathname.includes('empresa');
 
   return (
     <AppBar
@@ -90,32 +62,9 @@ const Topbar = () => {
 
         {
           !isSucursalOrEmpresa && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                position: "absolute",
-                left: "50%",
-                transform: "translateX(-50%)"
-              }}
-            >
-              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                <Select
-                  sx={{ backgroundColor: 'white' }}
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  value={idSucursal || ''}
-                  onChange={handleChange}
-                >
-                  {sucursales.filter(sucursal => !sucursal.eliminado).map((sucursal) => (
-                    <MenuItem key={sucursal.id} value={sucursal.id}>
-                      {sucursal.nombre}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
+            <ProtectedComponent roles={["administrador", "superadmin"]}>
+              <SucursalDdl />
+            </ProtectedComponent>
           )
         }
         <Box

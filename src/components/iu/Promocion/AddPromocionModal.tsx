@@ -8,7 +8,6 @@ import { Delete } from "@mui/icons-material";
 import Imagen from '../../../types/Imagen';
 import { CloudinaryPromocionUpload, CloudinaryPromocionDelete } from '../../../services/ImagenPromocionService';
 import ImageSearchIcon from '@mui/icons-material/ImageSearch';
-import { useParams } from 'react-router-dom';
 import Articulo from '../../../types/Articulo';
 import { ArticuloManufacturadoFindBySucursal } from '../../../services/ArticuloManufacturadoService';
 import { ArticuloInsumoGetAllParaVender } from '../../../services/ArticuloInsumoService';
@@ -20,6 +19,7 @@ import SucursalShortDto from '../../../types/SucursalShortDto';
 import { useAuth0 } from '@auth0/auth0-react';
 import LoadingModal from '../Loading/LoadingModal';
 import colorConfigs from "../../../configs/colorConfig"
+import { useAppSelector } from '../../../redux/hook';
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -46,7 +46,8 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
     const [files, setFiles] = useState<File[]>([]);
     const [images, setImages] = useState<string[]>([]);
     const [articuloImages, setArticuloImages] = useState<Imagen[]>([]);
-    const { idSucursal, idEmpresa } = useParams();
+    const sucursalRedux = useAppSelector((state) => state.sucursal.sucursal);
+    const empresaRedux = useAppSelector((state) => state.empresa.empresa);
     const [search, setSearch] = useState("");
     const [manufacturados, setManufacturados] = useState<ArticuloManufacturado[]>([]);
     const [insumos, setInsumos] = useState<ArticuloInsumo[]>([]);
@@ -86,8 +87,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
             },
         });
 
-        const insumos: ArticuloInsumo[] = await ArticuloInsumoGetAllParaVender(Number(idSucursal), token);
-        setInsumos(insumos);
+        if (sucursalRedux) {
+            const insumos: ArticuloInsumo[] = await ArticuloInsumoGetAllParaVender(sucursalRedux.id, token);
+            setInsumos(insumos);
+        }
     };
 
     const getAllArticuloManufacturadoBySucursal = async () => {
@@ -97,8 +100,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
             },
         });
 
-        const manufacturados: ArticuloManufacturado[] = await ArticuloManufacturadoFindBySucursal(Number(idSucursal), token);
-        setManufacturados(manufacturados);
+        if (sucursalRedux) {
+            const manufacturados: ArticuloManufacturado[] = await ArticuloManufacturadoFindBySucursal(sucursalRedux.id, token);
+            setManufacturados(manufacturados);
+        }
     };
 
     const getAllSucursales = async () => {
@@ -107,8 +112,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        const sucursales: SucursalShortDto[] = await SucursalGetByEmpresaId(Number(idEmpresa), token);
-        setSucursales(sucursales);
+        if (empresaRedux) {
+            const sucursales: SucursalShortDto[] = await SucursalGetByEmpresaId(empresaRedux.id, token);
+            setSucursales(sucursales);
+        }
     }
 
     const searcher = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,7 +236,7 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
 
             setTotal(newTotal);
         }
-    }, [idSucursal, idEmpresa, total]);
+    }, [sucursalRedux, empresaRedux, total]);
 
     useEffect(() => {
         setArticulos([...insumos, ...manufacturados]);
@@ -594,10 +601,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             </Grid>
                         </Grid>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button disabled onClick={handleBack} variant="contained" sx={{...colorConfigs.backButtonStyles}}>
+                            <Button disabled onClick={handleBack} variant="contained" sx={{ ...colorConfigs.backButtonStyles }}>
                                 Atrás
                             </Button>
-                            <Button onClick={handleNext} variant="contained" sx={{...colorConfigs.buttonStyles}}>
+                            <Button onClick={handleNext} variant="contained" sx={{ ...colorConfigs.buttonStyles }}>
                                 Siguiente
                             </Button>
                         </Box>
@@ -669,10 +676,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             }
                         </Box>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button variant="contained" onClick={handleBack} sx={{...colorConfigs.backButtonStyles}}>
+                            <Button variant="contained" onClick={handleBack} sx={{ ...colorConfigs.backButtonStyles }}>
                                 Atrás
                             </Button>
-                            <Button variant="contained" onClick={handleNext} sx={{...colorConfigs.buttonStyles}}>
+                            <Button variant="contained" onClick={handleNext} sx={{ ...colorConfigs.buttonStyles }}>
                                 Siguiente
                             </Button>
                         </Box>
@@ -778,10 +785,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             </Grid>
                         </Box>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button variant="contained" onClick={handleBack} sx={{...colorConfigs.backButtonStyles}}>
+                            <Button variant="contained" onClick={handleBack} sx={{ ...colorConfigs.backButtonStyles }}>
                                 Atrás
                             </Button>
-                            <Button variant="contained" onClick={handleNext} sx={{...colorConfigs.buttonStyles}}>
+                            <Button variant="contained" onClick={handleNext} sx={{ ...colorConfigs.buttonStyles }}>
                                 Siguiente
                             </Button>
                         </Box>
@@ -815,19 +822,19 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             </FormControl>
                         </Box>
                         <Box mt={2} display="flex" justifyContent="space-between">
-                            <Button variant="contained" onClick={handleBack} sx={{...colorConfigs.backButtonStyles}}>
+                            <Button variant="contained" onClick={handleBack} sx={{ ...colorConfigs.backButtonStyles }}>
                                 Atrás
                             </Button>
                             {promocion.id !== null && promocion.id > 0 ?
-                                <Button variant="contained" onClick={() => { handleSubmit(); }} sx={{...colorConfigs.buttonStyles}}>
+                                <Button variant="contained" onClick={() => { handleSubmit(); }} sx={{ ...colorConfigs.buttonStyles }}>
                                     Actualizar Promoción
                                 </Button>
                                 :
-                                <Button variant="contained" onClick={() => { handleSubmit(); }} sx={{...colorConfigs.buttonStyles}}>
+                                <Button variant="contained" onClick={() => { handleSubmit(); }} sx={{ ...colorConfigs.buttonStyles }}>
                                     Crear Promoción
                                 </Button>
                             }
-                            <LoadingModal open={loading} msj={"Manufacturado"} accion={accionLoading}/>
+                            <LoadingModal open={loading} msj={"Manufacturado"} accion={accionLoading} />
                         </Box>
                     </>
                 )}

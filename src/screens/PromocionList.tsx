@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Box, Typography, Grid, Button, Stack } from '@mui/material';
 import SideBar from '../components/common/SideBar';
 import Promocion from '../types/Promocion';
@@ -12,6 +11,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import colorConfigs from "../configs/colorConfig";
 import ProtectedComponent from '../components/auth0/ProtectedComponent';
+import { useAppSelector } from '../redux/hook';
 
 const emptyPromocion: Promocion = {
     id: null,
@@ -32,7 +32,7 @@ const emptyPromocion: Promocion = {
 
 function PromocionList() {
     const [promociones, setPromociones] = useState<Promocion[]>([]);
-    const { idSucursal } = useParams();
+    const sucursalRedux = useAppSelector((state) => state.sucursal.sucursal);
     const [open, setOpen] = useState(false);
     const [currentPromocion, setCurrentPromocion] = useState<Promocion>({ ...emptyPromocion });
     const { getAccessTokenSilently } = useAuth0();
@@ -43,13 +43,15 @@ function PromocionList() {
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        const promociones: Promocion[] = await PromocionFindBySucursal(Number(idSucursal), token);
-        setPromociones(promociones);
+        if(sucursalRedux){
+            const promociones: Promocion[] = await PromocionFindBySucursal(sucursalRedux.id, token);
+            setPromociones(promociones);
+        }
     }
 
     useEffect(() => {
         getAllPromocionesBySucursal();
-    }, [idSucursal]);
+    }, [sucursalRedux]);
 
     const handleOpenModal = () => {
         setCurrentPromocion({ ...emptyPromocion });

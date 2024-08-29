@@ -7,7 +7,6 @@ import { CategoriaByEmpresaGetAll } from "../../../services/CategoriaService";
 import Categoria from "../../../types/Categoria";
 import UnidadMedida from "../../../types/UnidadMedida";
 import { UnidadMedidaGetAll } from "../../../services/UnidadMedidaService";
-import { useParams } from "react-router-dom";
 import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 import { Delete } from "@mui/icons-material";
 import { CloudinaryDelete, CloudinaryUpload } from "../../../services/CloudinaryService";
@@ -15,6 +14,7 @@ import { ArticuloInsumoCreate, ArticuloInsumoUpdate } from "../../../services/Ar
 import CloseIcon from '@mui/icons-material/Close';
 import LoadingModal from "../Loading/LoadingModal";
 import colorConfigs from "../../../configs/colorConfig"
+import { useAppSelector } from "../../../redux/hook";
 
 
 const modalStyle = {
@@ -48,7 +48,7 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
     const [files, setFiles] = useState<File[]>([]);
     const [images, setImages] = useState<string[]>(imagenes);
     const [articuloImages, setArticuloImages] = useState<Imagen[]>(articuloImagenes);
-    const { idEmpresa } = useParams();
+    const empresaRedux = useAppSelector((state) => state.empresa.empresa);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [modalStep, setModalStep] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -80,8 +80,10 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        const categorias: Categoria[] = await CategoriaByEmpresaGetAll(Number(idEmpresa), token);
-        setCategorias(categorias);
+        if (empresaRedux) {
+            const categorias: Categoria[] = await CategoriaByEmpresaGetAll(empresaRedux.id, token);
+            setCategorias(categorias);
+        }
     };
 
     const getAllUnidadMedida = async () => {
@@ -349,7 +351,7 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
 
             } catch (error) {
                 console.log("Error al crear un articulo insumo");
-            }finally {
+            } finally {
                 setLoading(false);
             }
 
@@ -504,10 +506,10 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
                                     }
                                 </Box>
                                 <Box mt={2} display="flex" justifyContent="space-between">
-                                    <Button disabled onClick={handlePreviousStep} variant="contained" sx={{...colorConfigs.backButtonStyles}}>
+                                    <Button disabled onClick={handlePreviousStep} variant="contained" sx={{ ...colorConfigs.backButtonStyles }}>
                                         Atrás
                                     </Button>
-                                    <Button onClick={handleNextStep} variant="contained" sx={{...colorConfigs.buttonStyles}}>
+                                    <Button onClick={handleNextStep} variant="contained" sx={{ ...colorConfigs.buttonStyles }}>
                                         Siguiente
                                     </Button>
                                 </Box>
@@ -665,13 +667,13 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
                                     </Grid>
                                 </Grid>
                                 <Box mt={2} display="flex" justifyContent="space-between">
-                                    <Button onClick={handlePreviousStep} variant="contained" sx={{...colorConfigs.backButtonStyles}}>
+                                    <Button onClick={handlePreviousStep} variant="contained" sx={{ ...colorConfigs.backButtonStyles }}>
                                         Atrás
                                     </Button>
-                                    <Button onClick={handleSubmit} variant="contained" sx={{...colorConfigs.buttonStyles}}>
+                                    <Button onClick={handleSubmit} variant="contained" sx={{ ...colorConfigs.buttonStyles }}>
                                         {currentArticuloInsumo.id !== null && currentArticuloInsumo.id > 0 ? "Actualizar Insumo" : "Crear Insumo"}
                                     </Button>
-                                    <LoadingModal open={loading} msj={"Insumo"} accion={accionLoading}/>
+                                    <LoadingModal open={loading} msj={"Insumo"} accion={accionLoading} />
                                 </Box>
                             </>
                         )
