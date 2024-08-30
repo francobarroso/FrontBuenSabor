@@ -1,12 +1,13 @@
 import SideBar from "../components/common/SideBar";
 import { Chart } from 'react-google-charts';
 import { GananciaGetByFecha, ProductosGetByFecha, TotalGetByFecha } from "../services/PedidoService";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import colorConfigs from "../configs/colorConfig";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { useAppSelector } from "../redux/hook";
 
 export const getStartOfYear = () => {
     const now = new Date();
@@ -26,27 +27,39 @@ function Dashboard() {
     const [totalHoy, setTotalHoy] = useState(0);
     const [totalSemana, setTotalSemana] = useState(0);
     const [totalMes, setTotalMes] = useState(0);
+    const sucursalRedux = useAppSelector((state) => state.sucursal.sucursal);
 
     const getGanancias = async (startDate: string, endDate: string) => {
-        const data: Object[] = await GananciaGetByFecha(startDate, endDate);
-        const formatedData: Object[] = [];
-        formatedData.push(["", "Ganancia Mensual"]);
-        formatedData.push(...data);
-        setGanancia(formatedData);
+        if (sucursalRedux) {
+            const data: Object[] = await GananciaGetByFecha(startDate, endDate, sucursalRedux.id);
+            const formatedData: Object[] = [];
+            formatedData.push(["", "Ganancia Mensual"]);
+            formatedData.push(...data);
+            setGanancia(formatedData);
+        }
     }
 
     const getProductos = async (startDate: string, endDate: string) => {
-        const data: Object[] = await ProductosGetByFecha(startDate, endDate);
-        const formatedData: Object[] = [];
-        formatedData.push(["", ""]);
-        formatedData.push(...data);
-        setProductos(formatedData);
+        if (sucursalRedux) {
+            const data: Object[] = await ProductosGetByFecha(startDate, endDate, sucursalRedux.id);
+            const formatedData: Object[] = [];
+            formatedData.push(["", ""]);
+            formatedData.push(...data);
+            setProductos(formatedData);
+        }
     }
 
-    const getTotal = async (startDate: string, endDate: string, setTotal: (value: number) => void) => {
-        const value: number= await TotalGetByFecha(startDate, endDate);
-        setTotal(value);
-    }
+    const getTotal = useCallback(async (startDate: string, endDate: string, setTotal: (value: number) => void) => {
+        if (sucursalRedux) {
+            try {
+                const value: number = await TotalGetByFecha(startDate, endDate, sucursalRedux.id);
+                setTotal(value);
+            } catch (error) {
+                console.error("Failed to fetch total:", error);
+                setTotal(0); // Establece un valor predeterminado o muestra un mensaje de error
+            }
+        }
+    }, [sucursalRedux]);
 
     const handleStartChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setStartDate(event.target.value);
@@ -79,8 +92,8 @@ function Dashboard() {
 
         getTotal(today.toISOString().split('T')[0], today.toISOString().split('T')[0], setTotalHoy);
         getTotal(weekStart.toISOString().split('T')[0], weekEnd.toISOString().split('T')[0], setTotalSemana);
-        getTotal(monthStart.toISOString().split('T')[0], monthEnd.toISOString().split('T')[0], setTotalMes)
-    }, []);
+        getTotal(monthStart.toISOString().split('T')[0], monthEnd.toISOString().split('T')[0], setTotalMes);
+    }, [sucursalRedux]);
 
     return (
         <>

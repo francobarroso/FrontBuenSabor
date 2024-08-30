@@ -33,9 +33,6 @@ const SucursalDdl: React.FC = () => {
         const sucursal = sucursales.find(sucursal => sucursal.id === Number(newSucursalId));
         if(sucursal) dispatch(setSucursal(sucursal));
         const currentPath = window.location.pathname;
-        //const pathSegments = currentPath.split("/");
-        //pathSegments[pathSegments.length - 1] = newSucursalId;
-        //const newPath = pathSegments.join("/");
         navigate(currentPath);
       };
 

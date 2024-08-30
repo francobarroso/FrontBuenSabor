@@ -18,7 +18,7 @@ const initialState: initialStateEntity = (()=>{
 })();
 
 export const userSlice = createSlice({
-    name: "sucursal",
+    name: "user",
     initialState,
     reducers: {
         setUser: (state, action: PayloadAction<Empleado>) => {
