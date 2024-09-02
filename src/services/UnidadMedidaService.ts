@@ -1,7 +1,8 @@
 import UnidadMedida from "../types/UnidadMedida";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function UnidadMedidaCreate(unidadMedida: UnidadMedida, token: string) {
-	const urlServer = 'http://localhost:8080/unidadMedida';
+	const urlServer = `${apiUrl}/unidadMedida`;
 	const response = await fetch(urlServer, {
 		method: 'POST',
 		body: JSON.stringify(unidadMedida),
@@ -20,7 +21,7 @@ export async function UnidadMedidaCreate(unidadMedida: UnidadMedida, token: stri
 }
 
 export async function UnidadMedidaGetAll(token: string) {
-	const urlServer = 'http://localhost:8080/unidadMedida';
+	const urlServer = `${apiUrl}/unidadMedida`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
 		headers: {
@@ -33,7 +34,7 @@ export async function UnidadMedidaGetAll(token: string) {
 }
 
 export async function UnidadMedidaGetById(id: number, token: string) {
-	const urlServer = 'http://localhost:8080/unidadMedida/' + id;
+	const urlServer = `${apiUrl}/unidadMedida/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
 		headers: {
@@ -46,7 +47,7 @@ export async function UnidadMedidaGetById(id: number, token: string) {
 }
 
 export async function UnidadMedidaUpdate(unidadMedida: UnidadMedida, token: string) {
-	const urlServer = 'http://localhost:8080/unidadMedida/' + unidadMedida.id;
+	const urlServer = `${apiUrl}/unidadMedida/${unidadMedida.id}`;
 	const response = await fetch(urlServer, {
 		method: 'PUT',
 		body: JSON.stringify(unidadMedida),
@@ -65,7 +66,7 @@ export async function UnidadMedidaUpdate(unidadMedida: UnidadMedida, token: stri
 }
 
 export async function UnidadMedidaDelete(id: number, token: string) {
-	const urlServer = 'http://localhost:8080/unidadMedida/' + id;
+	const urlServer = `${apiUrl}/unidadMedida/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'DELETE',
 		headers: {

@@ -1,7 +1,8 @@
 import ArticuloInsumo from "../types/ArticuloInsumo";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function ArticuloInsumoCreate(articuloInsumo: ArticuloInsumo, token: string){
-	const urlServer = 'http://localhost:8080/articuloInsumo';
+	const urlServer = `${apiUrl}/articuloInsumo`;
 	const response = await fetch(urlServer, {
 		method: 'POST',
 		body: JSON.stringify(articuloInsumo),
@@ -20,7 +21,7 @@ export async function ArticuloInsumoCreate(articuloInsumo: ArticuloInsumo, token
 }
 
 export async function ArticuloInsumoFindBySucursal(id: number, token: string){
-	const urlServer = 'http://localhost:8080/articuloInsumo/findBySucursal/' + id;
+	const urlServer = `${apiUrl}/articuloInsumo/findBySucursal/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -33,7 +34,7 @@ export async function ArticuloInsumoFindBySucursal(id: number, token: string){
 }
 
 export async function ArticuloInsumoGetAll(token: string){
-	const urlServer = 'http://localhost:8080/articuloInsumo';
+	const urlServer = `${apiUrl}/articuloInsumo`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -46,7 +47,7 @@ export async function ArticuloInsumoGetAll(token: string){
 }
 
 export async function ArticuloInsumoGetAllParaVender(id: number, token: string){
-	const urlServer = 'http://localhost:8080/articuloInsumo/paraVenta/' + id;
+	const urlServer = `${apiUrl}/articuloInsumo/paraVenta/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -59,7 +60,7 @@ export async function ArticuloInsumoGetAllParaVender(id: number, token: string){
 }
 
 export async function ArticuloInsumoGetById(id: number, token: string){
-	const urlServer = 'http://localhost:8080/articuloInsumo/' + id;
+	const urlServer = `${apiUrl}/articuloInsumo/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -72,7 +73,7 @@ export async function ArticuloInsumoGetById(id: number, token: string){
 }
 
 export async function ArticuloInsumoUpdate(articuloInsumo: ArticuloInsumo, token: string){
-	const urlServer = 'http://localhost:8080/articuloInsumo/' + articuloInsumo.id;
+	const urlServer = `${apiUrl}/articuloInsumo/${articuloInsumo.id}`;
 	const response = await fetch(urlServer, {
 		method: 'PUT',
 		body: JSON.stringify(articuloInsumo),
@@ -91,7 +92,7 @@ export async function ArticuloInsumoUpdate(articuloInsumo: ArticuloInsumo, token
 }
 
 export async function ArticuloInsumoDelete(id: number, token: string){
-	const urlServer = 'http://localhost:8080/articuloInsumo/' + id;
+	const urlServer = `${apiUrl}/articuloInsumo/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'DELETE',
         headers: {

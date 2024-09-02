@@ -35,9 +35,6 @@ const EmpleadoViewModal: React.FC<ViewPromocionModalProps> = ({ open, onClose, e
                     Rol: {empleado.usuario.rol}
                 </Typography>
                 <Typography id="modal-title" variant="h6" component="h2">
-                    Username: {empleado.usuario.userName}
-                </Typography>
-                <Typography id="modal-title" variant="h6" component="h2">
                     Email: {empleado.usuario.email}
                 </Typography>
             </Box>

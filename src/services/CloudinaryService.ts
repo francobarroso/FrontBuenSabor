@@ -1,7 +1,8 @@
 import Imagen from "../types/Imagen";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function CloudinaryUpload(file: File, token: string) {
-    const urlServer = 'http://localhost:8080/imagen/articulo/upload';
+    const urlServer = `${apiUrl}/imagen/articulo/upload`;
     const formData = new FormData();
 
     formData.append('uploads', file);
@@ -25,7 +26,7 @@ export async function CloudinaryUpload(file: File, token: string) {
 }
 
 export async function CloudinaryDelete(publicId: string, id: string, token: string) {
-    const urlServer = `http://localhost:8080/imagen/articulo/deleteImg?publicId=${publicId}&id=${id}`;
+    const urlServer = `${apiUrl}/imagen/articulo/deleteImg?publicId=${publicId}&id=${id}`;
 
     const response = await fetch(urlServer, {
         method: 'POST',

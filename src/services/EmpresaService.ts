@@ -1,7 +1,8 @@
 import Empresa from "../types/Empresa";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function EmpresaCreate(empresa: Empresa, token: string){
-	const urlServer = 'http://localhost:8080/empresa';
+	const urlServer = `${apiUrl}/empresa`;
 	const response = await fetch(urlServer, {
 		method: 'POST',
 		body: JSON.stringify(empresa),
@@ -20,7 +21,7 @@ export async function EmpresaCreate(empresa: Empresa, token: string){
 }
 
 export async function EmpresaGetAll(token: string){
-	const urlServer = 'http://localhost:8080/empresa';
+	const urlServer = `${apiUrl}/empresa`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -33,7 +34,7 @@ export async function EmpresaGetAll(token: string){
 }
 
 export async function EmpresaGetById(id: number, token: string){
-	const urlServer = 'http://localhost:8080/empresa/' + id;
+	const urlServer = `${apiUrl}/empresa/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -46,7 +47,7 @@ export async function EmpresaGetById(id: number, token: string){
 }
 
 export async function EmpresaUpdate(empresa: Empresa, token: string){
-	const urlServer = 'http://localhost:8080/empresa/' + empresa.id;
+	const urlServer = `${apiUrl}/empresa/${empresa.id}`;
 	const response = await fetch(urlServer, {
 		method: 'PUT',
 		body: JSON.stringify(empresa),
@@ -65,7 +66,7 @@ export async function EmpresaUpdate(empresa: Empresa, token: string){
 }
 
 export async function EmpresaGetBySucursal(id: number, token: string){
-	const urlServer = 'http://localhost:8080/empresa/findBySucursal/' + id;
+	const urlServer = `${apiUrl}/empresa/findBySucursal/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {

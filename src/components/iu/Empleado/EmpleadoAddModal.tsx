@@ -128,11 +128,8 @@ const EmpleadoAddModal: React.FC<EmpleadoTableProps> = ({ open, onClose, emplead
         }
         if (!currentEmpleado.usuario.email) {
             newErrors.email = 'El email es obligatorio.';
-        }else if(!currentEmpleado.usuario.email.includes('@' && '.')){
+        } else if (!currentEmpleado.usuario.email.includes('@' && '.')) {
             newErrors.email = 'El email tiene un formato incorrecto.';
-        }
-        if (!currentEmpleado.usuario.userName) {
-            newErrors.userName = 'El username es obligatorio.';
         }
         if (!currentEmpleado.usuario.rol) {
             newErrors.rol = 'El rol es obligatorio.';
@@ -280,42 +277,29 @@ const EmpleadoAddModal: React.FC<EmpleadoTableProps> = ({ open, onClose, emplead
                             </Grid>
 
                             <Box mt={2} display="flex" justifyContent="space-between">
-                                <Button disabled onClick={handleBack} variant="contained" sx={{...colorConfigs.backButtonStyles}}>
+                                <Button disabled onClick={handleBack} variant="contained" sx={{ ...colorConfigs.backButtonStyles }}>
                                     Atrás
                                 </Button>
-                                <Button onClick={handleNext} variant="contained" sx={{...colorConfigs.buttonStyles}}>
+                                <Button onClick={handleNext} variant="contained" sx={{ ...colorConfigs.buttonStyles }}>
                                     Siguiente
                                 </Button>
                             </Box>
                         </>
                     ) : (
                         <>
-                            <FormControl fullWidth error={!!errors.email}>
-                                <TextField
-                                    label="Email"
-                                    name="email"
-                                    value={currentEmpleado.usuario.email}
-                                    fullWidth
-                                    margin="normal"
-                                    variant="outlined"
-                                    onChange={handleUsuarioChange}
-                                />
-                                {errors.email && <FormHelperText>{errors.email}</FormHelperText>}
-                            </FormControl>
-
                             <Grid container spacing={2} mb={2}>
                                 <Grid item xs={6}>
-                                    <FormControl fullWidth error={!!errors.userName}>
+                                    <FormControl fullWidth error={!!errors.email}>
                                         <TextField
-                                            label="Username"
-                                            name="userName"
-                                            value={currentEmpleado.usuario.userName}
+                                            label="Email"
+                                            name="email"
+                                            value={currentEmpleado.usuario.email}
                                             fullWidth
                                             margin="normal"
                                             variant="outlined"
                                             onChange={handleUsuarioChange}
                                         />
-                                        {errors.userName && <FormHelperText>{errors.userName}</FormHelperText>}
+                                        {errors.email && <FormHelperText>{errors.email}</FormHelperText>}
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -352,10 +336,10 @@ const EmpleadoAddModal: React.FC<EmpleadoTableProps> = ({ open, onClose, emplead
                             </Grid>
 
                             <Box mt={2} display="flex" justifyContent="space-between">
-                                <Button onClick={handleBack} variant="contained" sx={{...colorConfigs.backButtonStyles}}>
+                                <Button onClick={handleBack} variant="contained" sx={{ ...colorConfigs.backButtonStyles }}>
                                     Atrás
                                 </Button>
-                                <Button onClick={handleSubmit} variant="contained" sx={{...colorConfigs.buttonStyles}}>
+                                <Button onClick={handleSubmit} variant="contained" sx={{ ...colorConfigs.buttonStyles }}>
                                     {empleado.id !== null && empleado.id > 0 ? "Actualizar Empleado" : "Crear Empleado"}
                                 </Button>
                             </Box>

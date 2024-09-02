@@ -1,7 +1,8 @@
 import Pedido from "../types/Pedido";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function PedidoGetBySucursal(id: number){
-	const urlServer = 'http://localhost:8080/pedido/findBySucursal/' + id;
+    const urlServer = `${apiUrl}/pedido/findBySucursal/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -13,7 +14,7 @@ export async function PedidoGetBySucursal(id: number){
 }
 
 export async function GananciaGetByFecha(startDate: string, endDate: string, id: number){
-	const urlServer = `http://localhost:8080/pedido/gananciaByFecha?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&idSucursal=${id}`;
+	const urlServer = `${apiUrl}/pedido/gananciaByFecha?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&idSucursal=${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -25,7 +26,7 @@ export async function GananciaGetByFecha(startDate: string, endDate: string, id:
 }
 
 export async function ProductosGetByFecha(startDate: string, endDate: string, id: number){
-	const urlServer = `http://localhost:8080/pedido/productosByFecha?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&idSucursal=${id}`;
+	const urlServer = `${apiUrl}/pedido/productosByFecha?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&idSucursal=${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -37,7 +38,7 @@ export async function ProductosGetByFecha(startDate: string, endDate: string, id
 }
 
 export async function TotalGetByFecha(startDate: string, endDate: string, id: number): Promise<number> {
-    const urlServer = `http://localhost:8080/pedido/totalByFecha?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&idSucursal=${id}`;
+    const urlServer = `${apiUrl}/pedido/totalByFecha?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&idSucursal=${id}`;
 
     try {
         const response = await fetch(urlServer, {
@@ -78,7 +79,7 @@ export async function TotalGetByFecha(startDate: string, endDate: string, id: nu
 }
 
 export async function PedidoUpdate(pedido: Pedido){
-	const urlServer = 'http://localhost:8080/pedido/' + pedido.id;
+    const urlServer = `${apiUrl}/pedido/${pedido.id}`;
 	const response = await fetch(urlServer, {
 		method: 'PUT',
 		body: JSON.stringify(pedido),

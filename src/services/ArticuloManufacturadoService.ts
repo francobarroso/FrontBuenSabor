@@ -1,7 +1,8 @@
 import ArticuloManufacturado from "../types/ArticuloManufacturado";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function ArticuloManufacturadoCreate(articuloManufacturado: ArticuloManufacturado, token: string){
-	const urlServer = 'http://localhost:8080/articuloManufacturado';
+	const urlServer = `${apiUrl}/articuloManufacturado`;
 	const response = await fetch(urlServer, {
 		method: 'POST',
 		body: JSON.stringify(articuloManufacturado),
@@ -21,7 +22,7 @@ export async function ArticuloManufacturadoCreate(articuloManufacturado: Articul
 }
 
 export async function ArticuloManufacturadoFindBySucursal(id: number, token: string){
-	const urlServer = 'http://localhost:8080/articuloManufacturado/findBySucursal/' + id;
+	const urlServer = `${apiUrl}/articuloManufacturado/findBySucursal/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -34,7 +35,7 @@ export async function ArticuloManufacturadoFindBySucursal(id: number, token: str
 }
 
 export async function ArticuloManufacturadoGetAll(token: string){
-	const urlServer = 'http://localhost:8080/articuloManufacturado';
+	const urlServer = `${apiUrl}/articuloManufacturado`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -47,7 +48,7 @@ export async function ArticuloManufacturadoGetAll(token: string){
 }
 
 export async function ArticuloManufacturadoGetById(id: number, token: string){
-	const urlServer = 'http://localhost:8080/articuloManufacturado/' + id;
+	const urlServer = `${apiUrl}/articuloManufacturado/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -60,7 +61,7 @@ export async function ArticuloManufacturadoGetById(id: number, token: string){
 }
 
 export async function ArticuloManufacturadoUpdate(articuloManufacturado: ArticuloManufacturado, token: string){
-	const urlServer = 'http://localhost:8080/articuloManufacturado/' + articuloManufacturado.id;
+	const urlServer = `${apiUrl}/articuloManufacturado/${articuloManufacturado.id}`;
 	const response = await fetch(urlServer, {
 		method: 'PUT',
 		body: JSON.stringify(articuloManufacturado),
@@ -80,7 +81,7 @@ export async function ArticuloManufacturadoUpdate(articuloManufacturado: Articul
 }
 
 export async function ArticuloManufacturadoDelete(id: number, token: string){
-	const urlServer = 'http://localhost:8080/articuloManufacturado/' + id;
+	const urlServer = `${apiUrl}/articuloManufacturado/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'DELETE',
         headers: {

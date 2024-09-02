@@ -1,7 +1,8 @@
 import Pais from "../types/Pais";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function PaisGetAll(token: string){
-	const urlServer = 'http://localhost:8080/pais';
+	const urlServer = `${apiUrl}/pais`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {

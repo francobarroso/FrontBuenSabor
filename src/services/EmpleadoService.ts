@@ -1,7 +1,8 @@
 import Empleado from "../types/Empleado";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function EmpleadoCreate(empleado: Empleado, token: string){
-	const urlServer = 'http://localhost:8080/empleado';
+	const urlServer = `${apiUrl}/empleado`;
 	const response = await fetch(urlServer, {
 		method: 'POST',
 		body: JSON.stringify(empleado),
@@ -21,7 +22,7 @@ export async function EmpleadoCreate(empleado: Empleado, token: string){
 }
 
 export async function EmpleadoGetBySucursal(id: number, token: string){
-	const urlServer = 'http://localhost:8080/empleado/findBySucursal/' + id;
+	const urlServer = `${apiUrl}/empleado/findBySucursal/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -34,7 +35,7 @@ export async function EmpleadoGetBySucursal(id: number, token: string){
 }
 
 export async function EmpleadoGetAll(token: string){
-	const urlServer = 'http://localhost:8080/empleado';
+	const urlServer = `${apiUrl}/empleado`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -47,7 +48,7 @@ export async function EmpleadoGetAll(token: string){
 }
 
 export async function EmpleadoGetById(id: number, token: string){
-	const urlServer = 'http://localhost:8080/empleado/' + id;
+	const urlServer = `${apiUrl}/empleado/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -60,7 +61,7 @@ export async function EmpleadoGetById(id: number, token: string){
 }
 
 export async function EmpleadoUpdate(empleado: Empleado, token: string){
-	const urlServer = 'http://localhost:8080/empleado/' + empleado.id;
+	const urlServer = `${apiUrl}/empleado/${empleado.id}`;
 	const response = await fetch(urlServer, {
 		method: 'PUT',
 		body: JSON.stringify(empleado),
@@ -80,7 +81,7 @@ export async function EmpleadoUpdate(empleado: Empleado, token: string){
 }
 
 export async function EmpleadoDelete(id: number, token: string){
-	const urlServer = 'http://localhost:8080/empleado/' + id;
+	const urlServer = `${apiUrl}/empleado/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'DELETE',
         headers: {
@@ -96,7 +97,7 @@ export async function EmpleadoDelete(id: number, token: string){
 }
 
 export async function EmpleadoGetByEmail(email: string, token: string){
-	const urlServer = 'http://localhost:8080/empleado/findByEmail?email=' + email;
+	const urlServer = `${apiUrl}/empleado/findByEmail?email=${email}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {

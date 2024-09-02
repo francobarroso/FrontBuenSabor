@@ -1,7 +1,8 @@
 import Provincia from "../types/Provincia";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function ProvinciaGetAll(token: string){
-	const urlServer = 'http://localhost:8080/provincia';
+	const urlServer = `${apiUrl}/provincia`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {

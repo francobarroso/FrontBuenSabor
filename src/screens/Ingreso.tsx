@@ -46,6 +46,9 @@ const Ingreso = () => {
 
   const handleIngresar = () => {
     switch (empleado?.usuario.rol) {
+      case "SUPERADMIN":
+        navigate('/empresas');
+        break;
       case "ADMIN":
         navigate('/sucursales');
         break;
@@ -59,7 +62,7 @@ const Ingreso = () => {
         navigate('/pedidos');
         break;
       default:
-        navigate('/empresas');
+        navigate('/unauthorized');
         break;
     }
   }

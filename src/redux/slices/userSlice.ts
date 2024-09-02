@@ -5,7 +5,7 @@ const DEFAULT_STATE = {
     user: null
 }
 
-interface initialStateEntity {
+export interface initialStateEntity {
     user: Empleado | null
 };
 

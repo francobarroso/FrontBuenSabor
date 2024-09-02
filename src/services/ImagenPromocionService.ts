@@ -1,7 +1,8 @@
 import Imagen from "../types/Imagen";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function CloudinaryPromocionUpload(file: File, token: string) {
-    const urlServer = 'http://localhost:8080/imagen/promocion/upload';
+    const urlServer = `${apiUrl}/imagen/promocion/upload`;
     const formData = new FormData();
 
     formData.append('uploads', file);
@@ -25,7 +26,7 @@ export async function CloudinaryPromocionUpload(file: File, token: string) {
 }
 
 export async function CloudinaryPromocionDelete(publicId: string, id: string, token: string) {
-    const urlServer = `http://localhost:8080/imagen/promocion/deleteImg?publicId=${publicId}&id=${id}`;
+    const urlServer = `${apiUrl}/imagen/promocion/deleteImg?publicId=${publicId}&id=${id}`;
 
     const response = await fetch(urlServer, {
         method: 'POST',

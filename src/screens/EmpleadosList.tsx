@@ -29,7 +29,6 @@ const emptyEmpleado: Empleado = {
         id: null,
         eliminado: false,
         email: "",
-        userName: "",
         rol: null
     },
 }

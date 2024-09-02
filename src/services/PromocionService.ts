@@ -1,7 +1,8 @@
 import Promocion from "../types/Promocion";
+const apiUrl = import.meta.env.VITE_API_SERVER_URL;
 
 export async function PromocionCreate(promocion: Promocion, token: string){
-	const urlServer = 'http://localhost:8080/promocion';
+	const urlServer = `${apiUrl}/promocion`;
 	const response = await fetch(urlServer, {
 		method: 'POST',
 		body: JSON.stringify(promocion),
@@ -21,7 +22,7 @@ export async function PromocionCreate(promocion: Promocion, token: string){
 }
 
 export async function PromocionFindBySucursal(id: number, token: string){
-	const urlServer = 'http://localhost:8080/promocion/findBySucursal/' + id;
+	const urlServer = `${apiUrl}/promocion/findBySucursal/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -34,7 +35,7 @@ export async function PromocionFindBySucursal(id: number, token: string){
 }
 
 export async function PromocionGetAll(token: string){
-	const urlServer = 'http://localhost:8080/promocion';
+	const urlServer = `${apiUrl}/promocion`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -47,7 +48,7 @@ export async function PromocionGetAll(token: string){
 }
 
 export async function PromocionGetById(id: number, token: string){
-	const urlServer = 'http://localhost:8080/promocion/' + id;
+	const urlServer = `${apiUrl}/promocion/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'GET',
         headers: {
@@ -60,7 +61,7 @@ export async function PromocionGetById(id: number, token: string){
 }
 
 export async function PromocionUpdate(promocion: Promocion, token: string){
-	const urlServer = 'http://localhost:8080/promocion/' + promocion.id;
+	const urlServer = `${apiUrl}/promocion/${promocion.id}`;
 	const response = await fetch(urlServer, {
 		method: 'PUT',
 		body: JSON.stringify(promocion),
@@ -80,7 +81,7 @@ export async function PromocionUpdate(promocion: Promocion, token: string){
 }
 
 export async function PromocionDelete(id: number, token: string){
-	const urlServer = 'http://localhost:8080/promocion/' + id;
+	const urlServer = `${apiUrl}/promocion/${id}`;
 	const response = await fetch(urlServer, {
 		method: 'DELETE',
         headers: {

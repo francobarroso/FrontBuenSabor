@@ -112,7 +112,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
                 </TableCell>
                 <TableCell align="center">
                     {pedido.horaEstimadaFinalizacion
-                        ? pedido.horaEstimadaFinalizacion.slice(0, 5)
+                        ? `${pedido.horaEstimadaFinalizacion.slice(0, 5)}hs`
                         : 'Hora no disponible'}
                 </TableCell>
                 <TableCell align="center">${pedido.total}</TableCell>
@@ -146,14 +146,14 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
                 <TableCell align="center">
                     <ProtectedComponent roles={["superadmin", "cajero"]}>
                         <Button variant="contained" color="warning" size="small" sx={{ m: 0.5 }} onClick={handleACocina} hidden={pedido.estado!==Estado.FACTURADO}>A Cocina</Button>
-                        <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }} onClick={handleCancelar} hidden={pedido.estado===Estado.ENTREGADO || pedido.estado===Estado.CANCELADO || pedido.estado===Estado.FACTURADO || pedido.estado===Estado.PREPARACION}>Cancelar</Button>
+                        <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }} onClick={handleCancelar} hidden={pedido.estado!==Estado.PENDIENTE}>Cancelar</Button>
                         <Button variant="contained" color="primary" size="small" sx={{ m: 0.5 }} onClick={handleFacturar} hidden={pedido.estado!==Estado.PENDIENTE}>Facturar</Button>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "cocinero"]}>
                         <Button variant="contained" color="info" size="small" sx={{ m: 0.5 }} onClick={handlePreparado} hidden={pedido.estado!==Estado.PREPARACION}>Preparado</Button>
                     </ProtectedComponent>
-                    <ProtectedComponent roles={["superadmin", "delivery"]}>
-                        <Button variant="contained" color="success" size="small" sx={{ m: 0.5 }} onClick={handleEntregado} hidden={pedido.estado!==Estado.PREPARADO}>Entregado</Button>
+                    <ProtectedComponent roles={["superadmin", "delivery", "cajero"]}>
+                        <Button variant="contained" color="success" size="small" sx={{ m: 0.5 }} onClick={handleEntregado} hidden={pedido.estado===Estado.FACTURADO || pedido.estado===Estado.CANCELADO || pedido.estado===Estado.PENDIENTE || pedido.estado===Estado.PREPARACION || pedido.estado===Estado.ENTREGADO}>Entregado</Button>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "administrador", "cajero", "cocinero", "delivery"]}>
                         <Button variant="contained" color="secondary" size="small" sx={{ m: 0.5 }} onClick={handleDetalles}>Detalles</Button>
