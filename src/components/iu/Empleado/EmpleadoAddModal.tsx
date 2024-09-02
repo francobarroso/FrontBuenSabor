@@ -330,16 +330,19 @@ const EmpleadoAddModal: React.FC<EmpleadoTableProps> = ({ open, onClose, emplead
                                             select
                                             onChange={handleUsuarioChange}
                                         >
-                                            <MenuItem key={1} value={Rol.ADMIN}>
+                                            <MenuItem key={1} value={Rol.SUPERADMIN}>
+                                                Super Administrador
+                                            </MenuItem>
+                                            <MenuItem key={2} value={Rol.ADMIN}>
                                                 Administrador
                                             </MenuItem>
-                                            <MenuItem key={2} value={Rol.CAJERO}>
+                                            <MenuItem key={3} value={Rol.CAJERO}>
                                                 Cajero
                                             </MenuItem>
-                                            <MenuItem key={3} value={Rol.COCINERO}>
+                                            <MenuItem key={4} value={Rol.COCINERO}>
                                                 Cocinero
                                             </MenuItem>
-                                            <MenuItem key={4} value={Rol.DELIVERY}>
+                                            <MenuItem key={5} value={Rol.DELIVERY}>
                                                 Delivery
                                             </MenuItem>
                                         </TextField>
