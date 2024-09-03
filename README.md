@@ -1,11 +1,11 @@
 # Dashboard del Buen Sabor
 
-##¿Como usarlo?
-1.Clonar el repositorio.
-2.Abrir el proyecto y ejecutar 'npm install' en una terminal.
-3.Ejecutar el proyecto con el comando 'npm run dev'.
+## ¿Como usarlo?
+_1.Clonar el repositorio._
+_2.Abrir el proyecto y ejecutar 'npm install' en una terminal._
+_3.Ejecutar el proyecto con el comando 'npm run dev'._
 
-##Usuarios que se pueden usar en el sistema:
+## Usuarios que se pueden usar en el sistema:
 ```
 (SUPERADMIN)
 Correo: superadmin@mail.com
