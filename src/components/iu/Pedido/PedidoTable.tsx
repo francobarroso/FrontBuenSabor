@@ -9,6 +9,8 @@ import { Estado } from "../../../types/enums/Estado";
 import { PedidoUpdate } from "../../../services/PedidoService";
 import { useAuth0 } from "@auth0/auth0-react";
 import { EmpleadoGetByEmail } from "../../../services/EmpleadoService";
+import { useAppSelector } from "../../../redux/hook";
+import { Rol } from "../../../types/enums/Rol";
 
 const estadoColores: Record<Estado, string> = {
     [Estado.PENDIENTE]: '#efa91e',
@@ -17,7 +19,7 @@ const estadoColores: Record<Estado, string> = {
     [Estado.DELIVERY]: '#931eef',
     [Estado.CANCELADO]: 'red',
     [Estado.ENTREGADO]: 'green',
-    [Estado.PREPARADO]: 'pink',
+    [Estado.PREPARADO]: '#1ba380',
 };
 
 interface PedidosTableProps {
@@ -28,6 +30,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
     const [open, setOpen] = useState(false);
     const [renderKey, setRenderKey] = useState(0);
     const { getAccessTokenSilently, user } = useAuth0();
+    const empleadoRedux = useAppSelector((state) => state.user.user);
 
     const empleadFindByEmail = async () => {
         const token = await getAccessTokenSilently({
@@ -36,7 +39,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
             },
         });
 
-        if(user?.email){
+        if (user?.email) {
             //const email = user.email;
             const email = "admin@mail.com";
             return EmpleadoGetByEmail(email, token);
@@ -56,7 +59,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
     }
 
     const handleACocina = () => {
-        if(pedido.id){
+        if (pedido.id) {
             pedido.estado = Estado.PREPARACION;
             PedidoUpdate(pedido);
             refreshGrid();
@@ -64,7 +67,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
     }
 
     const handleCancelar = async () => {
-        if(pedido.id){
+        if (pedido.id) {
             pedido.estado = Estado.CANCELADO;
             const data = await empleadFindByEmail();
             pedido.empleado = data?.data;
@@ -74,7 +77,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
     }
 
     const handleFacturar = async () => {
-        if(pedido.id){
+        if (pedido.id) {
             pedido.estado = Estado.FACTURADO;
             const data = await empleadFindByEmail();
             pedido.empleado = data?.data;
@@ -84,7 +87,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
     }
 
     const handlePreparado = () => {
-        if(pedido.id){
+        if (pedido.id) {
             pedido.estado = pedido.tipoEnvio === TipoEnvio.DELIVERY ? Estado.DELIVERY : Estado.PREPARADO;
             PedidoUpdate(pedido);
             refreshGrid();
@@ -92,7 +95,7 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
     }
 
     const handleEntregado = () => {
-        if(pedido.id){
+        if (pedido.id) {
             pedido.estado = Estado.ENTREGADO;
             PedidoUpdate(pedido);
             refreshGrid();
@@ -145,15 +148,21 @@ const PedidosTable: React.FC<PedidosTableProps> = ({ pedido }) => {
                 </TableCell>
                 <TableCell align="center">
                     <ProtectedComponent roles={["superadmin", "cajero"]}>
-                        <Button variant="contained" color="warning" size="small" sx={{ m: 0.5 }} onClick={handleACocina} hidden={pedido.estado!==Estado.FACTURADO}>A Cocina</Button>
-                        <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }} onClick={handleCancelar} hidden={pedido.estado!==Estado.PENDIENTE}>Cancelar</Button>
-                        <Button variant="contained" color="primary" size="small" sx={{ m: 0.5 }} onClick={handleFacturar} hidden={pedido.estado!==Estado.PENDIENTE}>Facturar</Button>
+                        <Button variant="contained" color="warning" size="small" sx={{ m: 0.5 }} onClick={handleACocina} hidden={pedido.estado !== Estado.FACTURADO}>A Cocina</Button>
+                        <Button variant="contained" color="error" size="small" sx={{ m: 0.5 }} onClick={handleCancelar} hidden={pedido.estado !== Estado.PENDIENTE}>Cancelar</Button>
+                        <Button variant="contained" color="primary" size="small" sx={{ m: 0.5 }} onClick={handleFacturar} hidden={pedido.estado !== Estado.PENDIENTE}>Facturar</Button>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "cocinero"]}>
-                        <Button variant="contained" color="info" size="small" sx={{ m: 0.5 }} onClick={handlePreparado} hidden={pedido.estado!==Estado.PREPARACION}>Preparado</Button>
+                        <Button variant="contained" color="info" size="small" sx={{ m: 0.5 }} onClick={handlePreparado} hidden={pedido.estado !== Estado.PREPARACION}>Preparado</Button>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "delivery", "cajero"]}>
-                        <Button variant="contained" color="success" size="small" sx={{ m: 0.5 }} onClick={handleEntregado} hidden={pedido.estado===Estado.FACTURADO || pedido.estado===Estado.CANCELADO || pedido.estado===Estado.PENDIENTE || pedido.estado===Estado.PREPARACION || pedido.estado===Estado.ENTREGADO}>Entregado</Button>
+                        <Button variant="contained" color="success" size="small" sx={{ m: 0.5 }} onClick={handleEntregado} hidden={
+                            (pedido.estado === Estado.FACTURADO || pedido.estado === Estado.CANCELADO || pedido.estado === Estado.PENDIENTE || pedido.estado === Estado.PREPARACION || pedido.estado === Estado.ENTREGADO)
+                            || (empleadoRedux?.usuario.rol === Rol.CAJERO && pedido.estado === Estado.DELIVERY)
+                            || (empleadoRedux?.usuario.rol === Rol.DELIVERY && pedido.estado === Estado.PREPARADO)}
+                        >
+                            Entregado
+                        </Button>
                     </ProtectedComponent>
                     <ProtectedComponent roles={["superadmin", "administrador", "cajero", "cocinero", "delivery"]}>
                         <Button variant="contained" color="secondary" size="small" sx={{ m: 0.5 }} onClick={handleDetalles}>Detalles</Button>
