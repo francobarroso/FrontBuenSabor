@@ -301,8 +301,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
         const cantidadAnterior = nuevosDetalles[index].cantidad;
         nuevosDetalles[index].cantidad = nuevaCantidad;
         const diferencia = nuevaCantidad - cantidadAnterior;
-        if (nuevosDetalles[index].articulo.precioVenta !== null) {
-            handleTotal(nuevosDetalles[index].articulo.precioVenta, diferencia);
+        const precioVenta = nuevosDetalles[index].articulo.precioVenta;
+
+        if (precioVenta !== null) {
+            handleTotal(precioVenta, diferencia);
         }
 
         setDetalles(nuevosDetalles);
@@ -312,8 +314,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
         const nuevosDetalles = detalles.filter((_, i) => i !== index);
         const details = [...detalles];
 
-        if (details[index].articulo.precioVenta !== null) {
-            handleTotal(details[index].articulo.precioVenta, -details[index].cantidad);
+        const precioVenta = nuevosDetalles[index].articulo.precioVenta;
+
+        if (precioVenta !== null) {
+            handleTotal(precioVenta, -details[index].cantidad);
         }
 
         setDetalles(nuevosDetalles);
