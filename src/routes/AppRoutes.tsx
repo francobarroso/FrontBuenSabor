@@ -34,7 +34,7 @@ export const AppRoutes: React.FC = () => {
                 <Route element={<ProtectedRoute roles={['superadmin']} />}>
                     <Route path="/empleados" element={<EmpleadosList />} />
                 </Route>
-                <Route element={<ProtectedRoute roles={['superadmin', 'administrador', 'cocinero']} />}>
+                <Route element={<ProtectedRoute roles={['superadmin', 'administrador', 'cocinero', 'cajero']} />}>
                     <Route path="/manufacturados" element={<ArticuloManufacturadoList />} />
                     <Route path="/categorias" element={<CategoriaList />} />
                     <Route path="/promociones" element={<PromocionList />} />
