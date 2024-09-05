@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Box, Typography, TextField, Button, IconButton, Grid, TableContainer, Table, TableBody, TableRow, TableCell, Paper, Card, CardContent, CardActions, FormControlLabel, Checkbox, MenuItem, FormControl, FormHelperText } from '@mui/material';
+import { Modal, Box, Typography, TextField, Button, IconButton, Grid, TableContainer, Table, TableBody, TableRow, TableCell, Paper, Card, CardContent, CardActions, FormControlLabel, Checkbox, MenuItem, FormControl, FormHelperText, Tooltip } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { TipoPromocion } from '../../../types/enums/TipoPromocion';
 import Promocion from '../../../types/Promocion';
@@ -242,6 +242,21 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
         setArticulos([...insumos, ...manufacturados]);
     }, [insumos, manufacturados]);
 
+    const calcularTotal = () => {
+        if (promocion.id !== null) {
+            let newTotal = 0;
+            detalles.forEach(detalle => {
+                if (detalle.articulo.precioVenta !== null) {
+                    newTotal += detalle.articulo.precioVenta * detalle.cantidad;
+                }
+            });
+
+            return newTotal;
+        }
+
+        return 0;
+    }
+
     const handleSucursalChange = (id: number) => {
         const sucursalesSeleccionadas = promocion.sucursales || [];
         const sucursalExistenteIndex = sucursalesSeleccionadas.findIndex(s => s.id === id);
@@ -311,15 +326,19 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
     };
 
     const handleEliminar = (index: number) => {
+        // Captura el precio y cantidad antes de filtrar el array
+        const precioVenta = detalles[index].articulo.precioVenta;
+        const cantidad = detalles[index].cantidad;
+
+        // Filtra los detalles, excluyendo el elemento en 'index'
         const nuevosDetalles = detalles.filter((_, i) => i !== index);
-        const details = [...detalles];
 
-        const precioVenta = nuevosDetalles[index].articulo.precioVenta;
-
+        // Actualiza el total solo si precioVenta no es null
         if (precioVenta !== null) {
-            handleTotal(precioVenta, -details[index].cantidad);
+            handleTotal(precioVenta, -cantidad);
         }
 
+        // Actualiza el estado con los nuevos detalles
         setDetalles(nuevosDetalles);
     };
 
@@ -715,7 +734,29 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                                                     <Typography variant="body1">{articulo.denominacion}</Typography>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Button variant="contained" color="success" onClick={() => handleAgregar(articulo)}>Agregar</Button>
+                                                    {Boolean(detalles.find(detalle => detalle.articulo.id === articulo.id)) ? (
+                                                        <Tooltip title="Articulo ya agregado" arrow>
+                                                            <span>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    color="success"
+                                                                    disabled={true}
+                                                                    onClick={() => handleAgregar(articulo)}
+                                                                >
+                                                                    Agregar
+                                                                </Button>
+                                                            </span>
+                                                        </Tooltip>
+                                                    ) : (
+                                                        <Button
+                                                            variant="contained"
+                                                            color="success"
+                                                            disabled={false}
+                                                            onClick={() => handleAgregar(articulo)}
+                                                        >
+                                                            Agregar
+                                                        </Button>
+                                                    )}
                                                 </TableCell>
                                             </TableRow>
                                         ))}
@@ -723,7 +764,11 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
                             </Table>
                         </TableContainer>
                         <Typography variant="body1" gutterBottom sx={{ mt: 3 }}>
-                            Precio neto: ${total}
+                            Precio neto: ${promocion.id !== null ? (
+                                calcularTotal()
+                            ) : (
+                                total
+                            )}
                         </Typography>
                         <Box>
                             <FormControl fullWidth error={!!errors.precioPromocional}>

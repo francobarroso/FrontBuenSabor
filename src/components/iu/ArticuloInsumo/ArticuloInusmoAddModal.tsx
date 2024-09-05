@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, MenuItem, Modal, Switch, TextField, Tooltip, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, Modal, Switch, TextField, Tooltip, Typography } from "@mui/material";
 import ArticuloInsumo from "../../../types/ArticuloInsumo";
 import { useEffect, useState } from "react";
 import Imagen from "../../../types/Imagen";
@@ -203,7 +203,14 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
     };
 
 
-    const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>, name: string) => {
+    type CustomChangeEvent = {
+        target: {
+            name: string;
+            value: unknown;
+        };
+    };
+
+    const handleSelectChange = (e: CustomChangeEvent, name: string) => {
         const value = e.target.value as number; // Asumiendo que el valor es un número (id)
 
         if (name === 'unidadMedida') {
@@ -396,28 +403,29 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
                                         {errors.denominacion && <FormHelperText>{errors.denominacion}</FormHelperText>}
                                     </FormControl>
                                 </Box>
-                                <Grid container spacing={2}>
+                                <Grid container spacing={2} alignItems="center">
                                     <Grid item xs={4}>
                                         <FormControl fullWidth error={!!errors.unidadMedida}>
-                                            <TextField
-                                                select
-                                                label="Unidad de Medida"
-                                                name="unidadMedida"
-                                                fullWidth
-                                                value={currentArticuloInsumo.unidadMedida.id || ''}
-                                                onChange={(e) => handleSelectChange(e, 'unidadMedida')}
-                                                style={{ flex: 1, marginRight: 8 }}
-                                            >
-                                                {unidadMedidas.filter(unidad => !unidad.eliminado).map((unidad) => (
-                                                    <MenuItem key={unidad.id} value={unidad.id}>
-                                                        {unidad.denominacion}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
+                                            <Autocomplete
+                                                options={unidadMedidas.filter(unidad => !unidad.eliminado)}
+                                                getOptionLabel={(option) => option.denominacion}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        label="Unidad de Medida"
+                                                        margin="normal"
+                                                        fullWidth
+                                                        style={{ flex: 1, marginRight: 8 }}
+                                                    />
+                                                )}
+                                                value={currentArticuloInsumo.unidadMedida || null}
+                                                onChange={(_, newValue) => handleSelectChange({ target: { name: 'unidadMedidaId', value: newValue?.id || '' } }, 'unidadMedida')}
+                                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                            />
                                             {errors.unidadMedida && <FormHelperText>{errors.unidadMedida}</FormHelperText>}
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={4} style={{ display: 'flex', alignItems: 'center' }}>
                                         <FormControlLabel
                                             control={
                                                 <Switch
@@ -427,33 +435,32 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
                                                 />
                                             }
                                             label="¿Es para elaborar?"
-                                            style={{ marginRight: 8, marginLeft: 'auto' }}
+                                            style={{ marginRight: 'auto', marginLeft: 'auto' }}
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
                                         <FormControl fullWidth error={!!errors.categoria}>
-                                            <TextField
-                                                select
-                                                label="Categoría"
-                                                name="categoria"
-                                                fullWidth
-                                                value={currentArticuloInsumo.categoria?.id || ''}
-                                                onChange={(e) => handleSelectChange(e, 'categoria')}
-                                                style={{ flex: 1 }}
-                                            >
-                                                {categorias
-                                                    .filter(categoria => currentArticuloInsumo.esParaElaborar ? categoria.esInsumo : true)
-                                                    .filter(categoria => !categoria.eliminado)
-                                                    .map((categoria) => (
-                                                        <MenuItem key={categoria.id} value={categoria.id !== null ? Number(categoria.id) : 0}>
-                                                            {categoria.denominacion}
-                                                        </MenuItem>
-                                                    ))}
-                                            </TextField>
+                                            <Autocomplete
+                                                options={categorias.filter(categoria => categoria.esInsumo && !categoria.eliminado)}
+                                                getOptionLabel={(option) => option.denominacion}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        label="Categoria"
+                                                        margin="normal"
+                                                        fullWidth
+                                                        style={{ marginRight: 'auto', marginLeft: 'auto' }}
+                                                    />
+                                                )}
+                                                value={currentArticuloInsumo.categoria || null}
+                                                onChange={(_, newValue) => handleSelectChange({ target: { name: 'categoriaId', value: newValue?.id || '' } }, 'categoria')}
+                                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                            />
                                             {errors.categoria && <FormHelperText>{errors.categoria}</FormHelperText>}
                                         </FormControl>
                                     </Grid>
                                 </Grid>
+
                                 <Box mt={3} mb={3}>
                                     <FormControl fullWidth error={!!errors.files}>
                                         <Box display="flex" alignItems="center">

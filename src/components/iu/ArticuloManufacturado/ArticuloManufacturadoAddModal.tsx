@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, FormControl, FormHelperText, Grid, IconButton, MenuItem, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CardActions, CardContent, FormControl, FormHelperText, Grid, IconButton, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import ArticuloInsumo from "../../../types/ArticuloInsumo";
 import { useEffect, useState } from "react";
 import Imagen from "../../../types/Imagen";
@@ -276,7 +276,14 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
         setModalStep(modalStep - 1);
     };
 
-    const handleSelectChange = (e: React.ChangeEvent<{ value: unknown }>, name: string) => {
+    type CustomChangeEvent = {
+        target: {
+            name: string;
+            value: unknown;
+        };
+    };
+
+    const handleSelectChange = (e: CustomChangeEvent, name: string) => {
         const value = e.target.value as number; // Asumiendo que el valor es un número (id)
 
         if (name === 'unidadMedida') {
@@ -470,44 +477,41 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                     <Grid container spacing={2}>
                                         <Grid item xs={6}>
                                             <FormControl fullWidth error={!!errors.unidadMedida}>
-                                                <TextField
-                                                    select
-                                                    name="unidadMedidaId"
-                                                    label="Unidad de Medida"
-                                                    fullWidth
-                                                    margin="normal"
-                                                    value={currentArticuloManufacturado.unidadMedida?.id || ''}
-                                                    onChange={(e) => handleSelectChange(e, 'unidadMedida')}
-                                                >
-                                                    {unidadMedidas.filter(unidad => !unidad.eliminado)
-                                                        .map((unidad) => (
-                                                            <MenuItem key={unidad.id} value={unidad.id}>
-                                                                {unidad.denominacion}
-                                                            </MenuItem>
-                                                        ))}
-                                                </TextField>
+                                                <Autocomplete
+                                                    options={unidadMedidas.filter(unidad => !unidad.eliminado)}
+                                                    getOptionLabel={(option) => option.denominacion}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            label="Unidad de Medida"
+                                                            margin="normal"
+                                                            fullWidth
+                                                        />
+                                                    )}
+                                                    value={currentArticuloManufacturado.unidadMedida || null}
+                                                    onChange={(_, newValue) => handleSelectChange({ target: { name: 'unidadMedidaId', value: newValue?.id || '' } }, 'unidadMedida')}
+                                                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                                                />
                                                 {errors.unidadMedida && <FormHelperText>{errors.unidadMedida}</FormHelperText>}
                                             </FormControl>
                                         </Grid>
                                         <Grid item xs={6}>
                                             <FormControl fullWidth error={!!errors.categoria}>
-                                                <TextField
-                                                    select
-                                                    name="categoriaId"
-                                                    label="Categoria"
-                                                    fullWidth
-                                                    margin="normal"
-                                                    value={currentArticuloManufacturado.categoria?.id || ''}
-                                                    onChange={(e) => handleSelectChange(e, 'categoria')}
-                                                >
-                                                    {categorias.filter(categoria => !categoria.esInsumo)
-                                                        .filter(categoria => !categoria.eliminado)
-                                                        .map((categoria) => (
-                                                            <MenuItem key={categoria.id} value={categoria.id ?? ''}>
-                                                                {categoria.denominacion}
-                                                            </MenuItem>
-                                                        ))}
-                                                </TextField>
+                                                <Autocomplete
+                                                    options={categorias.filter(categoria => !categoria.esInsumo && !categoria.eliminado)}
+                                                    getOptionLabel={(option) => option.denominacion}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            label="Categoria"
+                                                            margin="normal"
+                                                            fullWidth
+                                                        />
+                                                    )}
+                                                    value={currentArticuloManufacturado.categoria || null}
+                                                    onChange={(_, newValue) => handleSelectChange({ target: { name: 'categoriaId', value: newValue?.id || '' } }, 'categoria')}
+                                                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                                                />
                                                 {errors.categoria && <FormHelperText>{errors.categoria}</FormHelperText>}
                                             </FormControl>
                                         </Grid>
@@ -685,7 +689,29 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                                         <Typography variant="body1">{insumo.denominacion}</Typography>
                                                     </TableCell>
                                                     <TableCell>
-                                                        <Button variant="contained" color="success" onClick={() => handleAgregar(insumo)}>Agregar</Button>
+                                                        {Boolean(detalles.find(detalle => detalle.articuloInsumo.id === insumo.id)) ? (
+                                                            <Tooltip title="Insumo ya agregado" arrow>
+                                                                <span>
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        color="success"
+                                                                        disabled={true}
+                                                                        onClick={() => handleAgregar(insumo)}
+                                                                    >
+                                                                        Agregar
+                                                                    </Button>
+                                                                </span>
+                                                            </Tooltip>
+                                                        ) : (
+                                                            <Button
+                                                                variant="contained"
+                                                                color="success"
+                                                                disabled={false}
+                                                                onClick={() => handleAgregar(insumo)}
+                                                            >
+                                                                Agregar
+                                                            </Button>
+                                                        )}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}

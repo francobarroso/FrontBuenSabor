@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, MenuItem, Modal, Select, SelectChangeEvent, TextField, Tooltip, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, Modal, TextField, Tooltip, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth0 } from "@auth0/auth0-react";
@@ -13,6 +13,7 @@ import Pais from "../../../types/Pais";
 import { EmpresaGetById } from "../../../services/EmpresaService";
 import Empresa from "../../../types/Empresa";
 import { useAppSelector } from "../../../redux/hook";
+import colorConfigs from "../../../configs/colorConfig";
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -138,7 +139,13 @@ const SucursalModal: React.FC<EmpresaCardProps> = ({ open, onClose, sucursal, su
         fetchData();
     }, []);
 
-    const handlePaisChange = async (e: SelectChangeEvent<number>) => {
+    type CustomChangeEvent = {
+        target: {
+            value: unknown;
+        };
+    };
+
+    const handlePaisChange = async (e: CustomChangeEvent) => {
         const paisId = e.target.value as number;
         setSelectedPais(paisId);
         setSelectedProvincia(null);
@@ -164,7 +171,7 @@ const SucursalModal: React.FC<EmpresaCardProps> = ({ open, onClose, sucursal, su
         }
     };
 
-    const handleProvinciaChange = async (e: SelectChangeEvent<number>) => {
+    const handleProvinciaChange = async (e: CustomChangeEvent) => {
         const provinciaId = e.target.value as number;
         setSelectedProvincia(provinciaId);
         setSelectedLocalidad(null);
@@ -187,7 +194,7 @@ const SucursalModal: React.FC<EmpresaCardProps> = ({ open, onClose, sucursal, su
         }
     };
 
-    const handleLocalidadChange = (e: SelectChangeEvent<number>) => {
+    const handleLocalidadChange = (e: CustomChangeEvent) => {
         const localidadId = e.target.value as number;
         const localidad = localidades.find(l => l.id === localidadId) || null;
         setSelectedLocalidad(localidadId);
@@ -513,65 +520,77 @@ const SucursalModal: React.FC<EmpresaCardProps> = ({ open, onClose, sucursal, su
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.pais}>
-                                <Select
-                                    fullWidth
-                                    value={selectedPais || ''}
-                                    onChange={handlePaisChange}
-                                    displayEmpty
+                                <Autocomplete
+                                    options={paises}
+                                    getOptionLabel={(option) => option.nombre}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Seleccione un País"
+                                            margin="normal"
+                                            fullWidth
+                                            variant="outlined"
+                                            error={!!errors.pais}
+                                            helperText={errors.pais || ''}
+                                        />
+                                    )}
+                                    value={paises.find(pais => pais.id === selectedPais) || null}
+                                    onChange={(_, newValue) => handlePaisChange({ target: { value: newValue?.id || 0 } })}
+                                    isOptionEqualToValue={(option, value) => option.id === value.id}
                                     disabled={!!currentSucursal.id}
-                                >
-                                    <MenuItem value="" disabled>Seleccione un País</MenuItem>
-                                    {paises.map(pais => (
-                                        <MenuItem key={pais.id} value={pais.id}>
-                                            {pais.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.pais && <FormHelperText>{errors.pais}</FormHelperText>}
+                                />
                             </FormControl>
                         </Grid>
                         <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.provincia}>
-                                <Select
-                                    fullWidth
-                                    value={selectedProvincia || ''}
-                                    onChange={handleProvinciaChange}
-                                    displayEmpty
+                                <Autocomplete
+                                    options={provincias}
+                                    getOptionLabel={(option) => option.nombre}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Seleccione una Provincia"
+                                            margin="normal"
+                                            fullWidth
+                                            variant="outlined"
+                                            error={!!errors.provincia}
+                                            helperText={errors.provincia || ''}
+                                        />
+                                    )}
+                                    value={provincias.find(provincia => provincia.id === selectedProvincia) || null}
+                                    onChange={(_, newValue) => handleProvinciaChange({ target: { value: newValue?.id || 0 } })}
+                                    isOptionEqualToValue={(option, value) => option.id === value.id}
                                     disabled={!selectedPais || !!currentSucursal.id}
-                                >
-                                    <MenuItem value="" disabled>Seleccione una Provincia</MenuItem>
-                                    {provincias.map(provincia => (
-                                        <MenuItem key={provincia.id} value={provincia.id}>
-                                            {provincia.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {!errors.pais && <FormHelperText>{errors.provincia}</FormHelperText>}
+                                />
                             </FormControl>
                         </Grid>
                         <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.localidad}>
-                                <Select
-                                    fullWidth
-                                    value={selectedLocalidad || ''}
-                                    onChange={handleLocalidadChange}
-                                    displayEmpty
+                            <Autocomplete
+                                    options={localidades}
+                                    getOptionLabel={(option) => option.nombre}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Seleccione una Localidad"
+                                            margin="normal"
+                                            fullWidth
+                                            variant="outlined"
+                                            error={!!errors.localidad}
+                                            helperText={errors.localidad || ''}
+                                        />
+                                    )}
+                                    value={localidades.find(localidad => localidad.id === selectedLocalidad) || null}
+                                    onChange={(_, newValue) => handleLocalidadChange({ target: { value: newValue?.id || 0 } })}
+                                    isOptionEqualToValue={(option, value) => option.id === value.id}
                                     disabled={!selectedProvincia || !!currentSucursal.id}
-                                >
-                                    <MenuItem value="" disabled>Seleccione una Localidad</MenuItem>
-                                    {localidades.map(localidad => (
-                                        <MenuItem key={localidad.id} value={localidad.id}>
-                                            {localidad.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {!errors.provincia && <FormHelperText>{errors.localidad}</FormHelperText>}
+                                />
                             </FormControl>
                         </Grid>
                     </Grid>
                 </Box>
                 <Box mt={2} display="flex" justifyContent="space-between">
-                    <Button onClick={handleSave} variant="contained" color="primary">{sucursal.id > 0 ? 'Actualizar' : 'Guardar'}</Button>
+                    <Button onClick={handleSave} variant="contained" sx={{ ...colorConfigs.buttonStyles }}>{sucursal.id > 0 ? 'Actualizar' : 'Guardar'}</Button>
                 </Box>
             </Box>
         </Modal>
