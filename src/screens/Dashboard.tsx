@@ -2,12 +2,14 @@ import SideBar from "../components/common/SideBar";
 import { Chart } from 'react-google-charts';
 import { GananciaGetByFecha, ProductosGetByFecha, TotalGetByFecha } from "../services/PedidoService";
 import { useCallback, useEffect, useState } from "react";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Tooltip, Typography } from "@mui/material";
 import colorConfigs from "../configs/colorConfig";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useAppSelector } from "../redux/hook";
+import ExcelImage from "../assets/images/excel.png";
+import { ReporteGanancias, ReporteProductos } from "../services/Reportes";
 
 export const getStartOfYear = () => {
     const now = new Date();
@@ -39,6 +41,18 @@ function Dashboard() {
         }
     }
 
+    const reporteGanancia = async (startDate: string, endDate: string) => {
+        if (sucursalRedux) {
+            await ReporteGanancias(startDate, endDate, sucursalRedux.id);
+        }
+    }
+
+    const reporteProductos = async (startDate: string, endDate: string) => {
+        if (sucursalRedux) {
+            await ReporteProductos(startDate, endDate, sucursalRedux.id);
+        }
+    }
+
     const getProductos = async (startDate: string, endDate: string) => {
         if (sucursalRedux) {
             const data: Object[] = await ProductosGetByFecha(startDate, endDate, sucursalRedux.id);
@@ -60,6 +74,14 @@ function Dashboard() {
             }
         }
     }, [sucursalRedux]);
+
+    const handleExcelGanancia = () => {
+        reporteGanancia(startDate, endDate);
+    }
+
+    const handleExcelProductos = () => {
+        reporteProductos(startDate, endDate);
+    }
 
     const handleStartChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setStartDate(event.target.value);
@@ -149,8 +171,18 @@ function Dashboard() {
                     </Stack>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }} mt={3}>
-                    <Box sx={{ flex: 1, mr: 1, borderRadius: "20px", border: '1px solid #c5c5c5', p: 2 }}>
-                        <Typography variant="h6" mb={2} align="center">Ganancias</Typography>
+                    <Box sx={{ flex: 1, mr: 1, borderRadius: "20px", border: '1px solid #c5c5c5', p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'end', mb: 2 }}>
+                            <Tooltip title="Descargar Excel" arrow>
+                                <img
+                                    src={ExcelImage}
+                                    alt="ganancias"
+                                    style={{ width: 30, height: 30, cursor: "pointer", marginRight: 8 }}
+                                    onClick={handleExcelGanancia}
+                                />
+                            </Tooltip>
+                            <Typography variant="h6">Ganancias</Typography>
+                        </Box>
                         <Chart
                             chartType="Bar"
                             width="100%"
@@ -158,8 +190,18 @@ function Dashboard() {
                             data={ganancia}
                         />
                     </Box>
-                    <Box sx={{ flex: 1, mr: 1, borderRadius: "20px", border: '1px solid #c5c5c5', p: 2 }}>
-                        <Typography variant="h6" mb={2} align="center">Productos más vendidos</Typography>
+                    <Box sx={{ flex: 1, mr: 1, borderRadius: "20px", border: '1px solid #c5c5c5', p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'end', mb: 2 }}>
+                            <Tooltip title="Descargar Excel" arrow>
+                                <img
+                                    src={ExcelImage}
+                                    alt="ganancias"
+                                    style={{ width: 30, height: 30, cursor: "pointer", marginRight: 8 }}
+                                    onClick={handleExcelProductos}
+                                />
+                            </Tooltip>
+                            <Typography variant="h6">Productos más vendidos</Typography>
+                        </Box>
                         <Chart
                             chartType="PieChart"
                             data={productos}
