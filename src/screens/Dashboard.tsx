@@ -173,41 +173,53 @@ function Dashboard() {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }} mt={3}>
                     <Box sx={{ flex: 1, mr: 1, borderRadius: "20px", border: '1px solid #c5c5c5', p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', alignItems: 'end', mb: 2 }}>
-                            <Tooltip title="Descargar Excel" arrow>
-                                <img
-                                    src={ExcelImage}
-                                    alt="ganancias"
-                                    style={{ width: 30, height: 30, cursor: "pointer", marginRight: 8 }}
-                                    onClick={handleExcelGanancia}
-                                />
-                            </Tooltip>
+                            {ganancia.length > 1 && (
+                                <Tooltip title="Descargar Excel" arrow>
+                                    <img
+                                        src={ExcelImage}
+                                        alt="ganancias"
+                                        style={{ width: 30, height: 30, cursor: "pointer", marginRight: 8 }}
+                                        onClick={handleExcelGanancia}
+                                    />
+                                </Tooltip>
+                            )}
                             <Typography variant="h6">Ganancias</Typography>
                         </Box>
-                        <Chart
-                            chartType="Bar"
-                            width="100%"
-                            height="400px"
-                            data={ganancia}
-                        />
+                        {ganancia.length > 1 ? (
+                            <Chart
+                                chartType="Bar"
+                                width="100%"
+                                height="400px"
+                                data={ganancia}
+                            />
+                        ) : (
+                            <Typography variant="body1">No hay datos para mostrar</Typography>
+                        )}
                     </Box>
                     <Box sx={{ flex: 1, mr: 1, borderRadius: "20px", border: '1px solid #c5c5c5', p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', alignItems: 'end', mb: 2 }}>
-                            <Tooltip title="Descargar Excel" arrow>
-                                <img
-                                    src={ExcelImage}
-                                    alt="ganancias"
-                                    style={{ width: 30, height: 30, cursor: "pointer", marginRight: 8 }}
-                                    onClick={handleExcelProductos}
-                                />
-                            </Tooltip>
+                            {productos.length > 1 && (
+                                <Tooltip title="Descargar Excel" arrow>
+                                    <img
+                                        src={ExcelImage}
+                                        alt="ganancias"
+                                        style={{ width: 30, height: 30, cursor: "pointer", marginRight: 8 }}
+                                        onClick={handleExcelProductos}
+                                    />
+                                </Tooltip>
+                            )}
                             <Typography variant="h6">Productos más vendidos</Typography>
                         </Box>
-                        <Chart
-                            chartType="PieChart"
-                            data={productos}
-                            width="100%"
-                            height="400px"
-                        />
+                        {productos.length > 1 ? (
+                            <Chart
+                                chartType="PieChart"
+                                data={productos}
+                                width="100%"
+                                height="400px"
+                            />
+                        ) : (
+                            <Typography variant="body1">No hay datos para mostrar</Typography>
+                        )}
                     </Box>
                 </Box>
             </Box>

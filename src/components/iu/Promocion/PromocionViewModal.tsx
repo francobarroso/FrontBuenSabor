@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Box, Typography, CardMedia, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { Modal, Box, Typography, CardMedia, List, IconButton, Avatar } from '@mui/material';
 import Promocion from '../../../types/Promocion';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -13,16 +13,16 @@ interface ViewPromocionModalProps {
 
 const ViewPromocionModal: React.FC<ViewPromocionModalProps> = ({ open, onClose, promocion }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
-    
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         date.setDate(date.getDate() + 1);
         return date.toLocaleDateString('es-ES', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
         });
-      };
+    };
 
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % promocion.imagenes.length);
@@ -85,9 +85,16 @@ const ViewPromocionModal: React.FC<ViewPromocionModalProps> = ({ open, onClose, 
                 </Typography>
                 <List>
                     {promocion.promocionDetalles.map((detalle, index) => (
-                        <ListItem key={index}>
-                            <ListItemText primary={`${detalle.cantidad} x ${detalle.articulo.denominacion}`} />
-                        </ListItem>
+                        <Box key={index} mb={1} ml={2} display="flex" alignItems="center">
+                            <Avatar
+                                src={detalle.articulo.imagenes?.[0]?.url || 'default-image-url'}
+                                alt={detalle.articulo.denominacion || 'Artículo'}
+                                sx={{ width: 40, height: 40, marginRight: 1 }}
+                            />
+                            <Typography>
+                                {detalle.cantidad} {detalle.articulo.denominacion || 'Artículo'}
+                            </Typography>
+                        </Box>
                     ))}
                 </List>
             </Box>

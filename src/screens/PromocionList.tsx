@@ -43,7 +43,7 @@ function PromocionList() {
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE,
             },
         });
-        if(sucursalRedux){
+        if (sucursalRedux) {
             const promociones: Promocion[] = await PromocionFindBySucursal(sucursalRedux.id, token);
             setPromociones(promociones);
         }
@@ -108,11 +108,13 @@ function PromocionList() {
                         justifyContent: 'space-between'
                     }}
                 >
-                    <ProtectedComponent roles={['administrador', 'superadmin']}>
-                        <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenModal} sx={{ ...colorConfigs.buttonStyles }}>
-                            Agregar Promoción
-                        </Button>
-                    </ProtectedComponent>
+                    <Box sx={{ flexGrow: 1 }}>
+                        <ProtectedComponent roles={['administrador', 'superadmin']}>
+                            <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenModal} sx={{ ...colorConfigs.buttonStyles }}>
+                                Agregar Promoción
+                            </Button>
+                        </ProtectedComponent>
+                    </Box>
 
                     <Stack direction="column" alignItems="flex-end">
                         <Typography variant="h2" sx={{ fontWeight: 'bold' }}>
