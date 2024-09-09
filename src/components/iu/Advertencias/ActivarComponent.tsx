@@ -2,13 +2,14 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import Promocion from "../../../types/Promocion";
 import ArticuloInsumo from "../../../types/ArticuloInsumo";
 import ArticuloManufacturado from "../../../types/ArticuloManufacturado";
+import Empleado from "../../../types/Empleado";
 
 interface ActivarComponentProps {
     openDialog: boolean;
     onClose: () => void;
     onConfirm: () => void;
     tipo: string;
-    entidad: Promocion | ArticuloInsumo | ArticuloManufacturado
+    entidad: Promocion | ArticuloInsumo | ArticuloManufacturado | Empleado
 }
 
 const ActivarComponent: React.FC<ActivarComponentProps> = ({ openDialog, onClose, onConfirm, tipo, entidad }) => {
@@ -27,11 +28,13 @@ const ActivarComponent: React.FC<ActivarComponentProps> = ({ openDialog, onClose
                 <DialogTitle>Confirmar Acción</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        ¿Activar {tipo}: {entidad.denominacion}?
+                        ¿Activar {tipo}: {'denominacion' in entidad ? entidad.denominacion : entidad.nombre}?
                     </DialogContentText>
-                    <DialogContentText>
-                        Esta acción afectara a todas las sucursales.
-                    </DialogContentText>
+                    {'denominacion' in entidad && (
+                        <DialogContentText>
+                            Esta acción afectara a todas las sucursales.
+                        </DialogContentText>
+                    )}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary" variant="contained">

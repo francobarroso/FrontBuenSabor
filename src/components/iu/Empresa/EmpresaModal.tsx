@@ -4,6 +4,7 @@ import { useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { EmpresaCreate, EmpresaUpdate } from "../../../services/EmpresaService";
 import { useAuth0 } from "@auth0/auth0-react";
+import colorConfigs from "../../../configs/colorConfig";
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -201,7 +202,7 @@ const EmpresaModal: React.FC<EmpresaCardProps> = ({ open, onClose, empresa, succ
 
                 </Box>
                 <Box mt={2} display="flex" justifyContent="space-between">
-                    <Button onClick={handleSave} variant="contained" color="primary">Guardar</Button>
+                    <Button onClick={handleSave} variant="contained" sx={{...colorConfigs.buttonStyles}}>{currentEmpresa.id > 0 ? "Actualizar" : "Crear"}</Button>
                 </Box>
             </Box>
         </Modal>

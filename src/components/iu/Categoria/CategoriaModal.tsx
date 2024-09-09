@@ -238,6 +238,20 @@ const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categori
                                                         name="esInsumo"
                                                         color="primary"
                                                         disabled={categoria.id !== null && categoria.id > 0}
+                                                        sx={{
+                                                            '&.Mui-checked': {
+                                                                color: "#233044"
+                                                            },
+                                                            '&.Mui-disabled': {
+                                                                color: 'rgba(0, 0, 0, 0.38)',
+                                                                '& .MuiSvgIcon-root': {
+                                                                    color: 'rgba(0, 0, 0, 0.38)',
+                                                                },
+                                                            },
+                                                            '&.Mui-disabled.Mui-checked': {
+                                                                color: 'rgba(0, 0, 0, 0.38)',
+                                                            }
+                                                        }}
                                                     />
                                                 }
                                                 label="Es Insumo"
@@ -256,6 +270,15 @@ const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categori
                                                     sx={{
                                                         '&.Mui-checked': {
                                                             color: "#233044"
+                                                        },
+                                                        '&.Mui-disabled': {
+                                                            color: 'rgba(0, 0, 0, 0.38)',
+                                                            '& .MuiSvgIcon-root': {
+                                                                color: 'rgba(0, 0, 0, 0.38)',
+                                                            },
+                                                        },
+                                                        '&.Mui-disabled.Mui-checked': {
+                                                            color: 'rgba(0, 0, 0, 0.38)',
                                                         }
                                                     }}
                                                 />
@@ -290,6 +313,15 @@ const CategoriaModal: React.FC<CategoriaModalProps> = ({ open, onClose, categori
                                                         sx={{
                                                             '&.Mui-checked': {
                                                                 color: "#233044"
+                                                            },
+                                                            '&.Mui-disabled': {
+                                                                color: 'rgba(0, 0, 0, 0.38)',
+                                                                '& .MuiSvgIcon-root': {
+                                                                    color: 'rgba(0, 0, 0, 0.38)',
+                                                                },
+                                                            },
+                                                            '&.Mui-disabled.Mui-checked': {
+                                                                color: 'rgba(0, 0, 0, 0.38)',
                                                             }
                                                         }}
                                                     />

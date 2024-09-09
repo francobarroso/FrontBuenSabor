@@ -10,6 +10,8 @@ import { EmpleadoUpdate } from "../../../services/EmpleadoService";
 import { useAuth0 } from "@auth0/auth0-react";
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { toast } from "react-toastify";
+import DesactivarComponent from "../Advertencias/DesactivarComponent";
+import ActivarComponent from "../Advertencias/ActivarComponent";
 
 interface EmpleadoTableProps {
     onClose: () => void;
@@ -19,6 +21,8 @@ interface EmpleadoTableProps {
 const EmpleadoTable: React.FC<EmpleadoTableProps> = ({ onClose, empleado }) => {
     const [view, setView] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
+    const [openBaja, setOpenBaja] = useState(false);
+    const [openAlta, setOpenAlta] = useState(false);
     const { getAccessTokenSilently } = useAuth0();
 
     const handleEdit = () => {
@@ -41,6 +45,7 @@ const EmpleadoTable: React.FC<EmpleadoTableProps> = ({ onClose, empleado }) => {
             console.log("Error al eliminar el empleado");
         }
 
+        handleCloseDialog();
         handleClose();
     }
 
@@ -59,9 +64,24 @@ const EmpleadoTable: React.FC<EmpleadoTableProps> = ({ onClose, empleado }) => {
         } catch (error) {
             console.log("Error al eliminar el empleado");
         }
-
+        
+        handleCloseDialog();
         handleClose();
     }
+
+    const handleCloseDialog = () => {
+        setOpenBaja(false);
+        setOpenAlta(false);
+    }
+
+    const handleOpenBaja = () => {
+        setOpenBaja(true);
+    }
+
+    const handleOpenAlta = () => {
+        setOpenAlta(true);
+    }
+
 
     const handleView = () => {
         setView(true);
@@ -114,19 +134,21 @@ const EmpleadoTable: React.FC<EmpleadoTableProps> = ({ onClose, empleado }) => {
                                 <>
                                     <IconButton onClick={handleEdit} color="primary"><EditIcon /></IconButton>
                                     <IconButton onClick={handleView} color="secondary"><Visibility /></IconButton>
-                                    <IconButton onClick={handleBaja} color="error"><RemoveCircleOutlineIcon /></IconButton>
+                                    <IconButton onClick={handleOpenBaja} color="error"><RemoveCircleOutlineIcon /></IconButton>
                                 </>
                                 :
                                 <>
                                     <IconButton onClick={handleView} color="secondary"><Visibility /></IconButton>
-                                    <IconButton onClick={handleAlta} color="success"><KeyboardDoubleArrowUpIcon /></IconButton>
+                                    <IconButton onClick={handleOpenAlta} color="success"><KeyboardDoubleArrowUpIcon /></IconButton>
                                 </>
                         }
                     </Box>
                 </TableCell>
             </TableRow>
-            <EmpleadoAddModal open={editOpen} onClose={handleClose} empleado={empleado} success={handleSuccess} error={handleError}/>
+            <EmpleadoAddModal open={editOpen} onClose={handleClose} empleado={empleado} success={handleSuccess} error={handleError} />
             <EmpleadoViewModal open={view} onClose={handleClose} empleado={empleado} />
+            <DesactivarComponent openDialog={openBaja} onClose={handleCloseDialog} onConfirm={handleBaja} tipo='él empleado' entidad={empleado} />
+            <ActivarComponent openDialog={openAlta} onClose={handleCloseDialog} onConfirm={handleAlta} tipo='la promoción' entidad={empleado} />
         </>
     );
 }

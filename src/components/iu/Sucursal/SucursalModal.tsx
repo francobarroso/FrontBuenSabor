@@ -510,6 +510,11 @@ const SucursalModal: React.FC<EmpresaCardProps> = ({ open, onClose, sucursal, su
                                             onChange={handleCheckboxChange}
                                             name="esCasaMatriz"
                                             disabled={hasCasaMatriz && !estado}
+                                            sx={{
+                                                '&.Mui-checked': {
+                                                    color: "#233044"
+                                                }
+                                            }}
                                         />
                                     }
                                     label="Casa Matriz"
@@ -590,7 +595,7 @@ const SucursalModal: React.FC<EmpresaCardProps> = ({ open, onClose, sucursal, su
                     </Grid>
                 </Box>
                 <Box mt={2} display="flex" justifyContent="space-between">
-                    <Button onClick={handleSave} variant="contained" sx={{ ...colorConfigs.buttonStyles }}>{sucursal.id > 0 ? 'Actualizar' : 'Guardar'}</Button>
+                    <Button onClick={handleSave} variant="contained" sx={{ ...colorConfigs.buttonStyles }}>{sucursal.id > 0 ? 'Actualizar' : 'Crear'}</Button>
                 </Box>
             </Box>
         </Modal>

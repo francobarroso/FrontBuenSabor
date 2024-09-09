@@ -60,8 +60,8 @@ function SucursalList() {
     };
 
     const handleClose = async () => {
-        setOpen(false);
         await getAllSucursal();
+        setOpen(false);
         setCurrentSucursal({ ...emptySucursal });
     };
 
