@@ -195,6 +195,9 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
     };
 
     const handleNextStep = () => {
+        if(modalStep === 1 && !validateStep1()) return;
+        if(modalStep === 2 && !validateStep2()) return;
+        
         setModalStep(modalStep + 1);
     };
 
@@ -299,13 +302,54 @@ const ArticuloInsumoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ open, o
         return Object.keys(newErrors).length === 0;
     };
 
+    const validateStep1 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
+        if (!currentArticuloInsumo.denominacion) {
+            newErrors.denominacion = 'La denominación es obligatoria.';
+        }
+        if (!currentArticuloInsumo.unidadMedida.id) {
+            newErrors.unidadMedida = 'La unidad de medida es obligatoria.';
+        }
+        if (!currentArticuloInsumo.categoria.id) {
+            newErrors.categoria = 'La categoria es obligatoria.';
+        }
+        if (files.length === 0 && currentArticuloInsumo.imagenes.length === 0) {
+            newErrors.files = 'Las imagenes son obligatorias.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateStep2 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
+        if (!currentArticuloInsumo.precioCompra) {
+            newErrors.precioCompra = 'El precio de compra es obligatorio.';
+        }
+        if (!currentArticuloInsumo.precioVenta && !currentArticuloInsumo.esParaElaborar) {
+            newErrors.precioVenta = 'El precio de venta es obligatorio.';
+        }
+        if (!currentArticuloInsumo.stockActual) {
+            newErrors.stockActual = 'El stock actual es obligatorio.';
+        }
+        if (!currentArticuloInsumo.stockMinimo) {
+            newErrors.stockMinimo = 'El stock minimo es obligatorio.';
+        }
+        if (!currentArticuloInsumo.stockMaximo) {
+            newErrors.stockMaximo = 'El stock maximo es obligatorio.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleClose = () => {
+        setModalStep(1);
+        setErrors({});
         setCurrentArticuloInsumo(articulo);
         setFiles([]);
-        setModalStep(1);
         setImages(imagenes);
         setArticuloImages(articuloImagenes);
-        setErrors({});
         setAccionLoading("Creando");
         onClose();
     }

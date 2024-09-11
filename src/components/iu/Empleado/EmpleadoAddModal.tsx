@@ -58,8 +58,17 @@ const EmpleadoAddModal: React.FC<EmpleadoTableProps> = ({ open, onClose, emplead
         setCurrentEmpleado(empleado);
     }, [empleado]);
 
-    const handleNext = () => setStep(2);
-    const handleBack = () => setStep(1);
+    const handleNext = () => {
+        if(!validateStep1()) return;
+
+        setStep(2);
+    }
+
+    const handleBack = () => {
+        if(!validateStep2()) return;
+
+        setStep(1);
+    }
 
     const handleClose = () => {
         onClose();
@@ -126,6 +135,40 @@ const EmpleadoAddModal: React.FC<EmpleadoTableProps> = ({ open, onClose, emplead
         if (!currentEmpleado.fechaNacimiento) {
             newErrors.fechaNacimiento = 'La fecha de nacimiento es obligatoria.';
         }
+        if (!currentEmpleado.usuario.email) {
+            newErrors.email = 'El email es obligatorio.';
+        } else if (!currentEmpleado.usuario.email.includes('@' && '.')) {
+            newErrors.email = 'El email tiene un formato incorrecto.';
+        }
+        if (!currentEmpleado.usuario.rol) {
+            newErrors.rol = 'El rol es obligatorio.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateStep1 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
+        if (!currentEmpleado.nombre) {
+            newErrors.nombre = 'El nombre es obligatorio.';
+        }
+        if (!currentEmpleado.apellido) {
+            newErrors.apellido = 'El apellido es obligatorio.';
+        }
+        if (!currentEmpleado.telefono) {
+            newErrors.telefono = 'El telefono es obligatorio.';
+        }
+        if (!currentEmpleado.fechaNacimiento) {
+            newErrors.fechaNacimiento = 'La fecha de nacimiento es obligatoria.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateStep2 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
         if (!currentEmpleado.usuario.email) {
             newErrors.email = 'El email es obligatorio.';
         } else if (!currentEmpleado.usuario.email.includes('@' && '.')) {

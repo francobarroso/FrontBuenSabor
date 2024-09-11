@@ -347,6 +347,10 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
     }
 
     const handleNext = () => {
+        if(step === 1 && !validateStep1()) return;
+        if(step === 2 && !validateStep2()) return;
+        if(step === 3 && !validateStep3()) return;
+        if(step === 4 && !validateStep4()) return;
         setStep((prev) => prev + 1);
     }
     const handleBack = () => setStep((prev) => prev - 1);
@@ -426,6 +430,67 @@ const AddPromocionModal: React.FC<AddPromocionModalProps> = ({ open, onClose, cu
         if (!promocion.precioPromocional) {
             newErrors.precioPromocional = 'El precio promocional es obligatorio.';
         }
+        if (!promocion.sucursales || promocion.sucursales.length === 0) {
+            newErrors.sucursales = 'Debe seleccionar al menos una sucursal.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateStep1 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
+        if (!promocion.denominacion) {
+            newErrors.denominacion = 'La denominación es obligatoria.';
+        }
+        if (!promocion.tipoPromocion) {
+            newErrors.tipoPromocion = 'El tipo de la promoción es obligatorio.';
+        }
+        if (!promocion.fechaDesde) {
+            newErrors.fechaDesde = 'La fecha desde es obligatoria.';
+        }
+        if (!promocion.fechaHasta) {
+            newErrors.fechaHasta = 'La fecha hasta es obligatoria.';
+        }
+        if (!promocion.horaDesde) {
+            newErrors.horaDesde = 'La hora desde es obligatoria.';
+        }
+        if (!promocion.horaHasta) {
+            newErrors.horaHasta = 'La hora hasta es obligatoria.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateStep2 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
+        if (!promocion.descripcionDescuento) {
+            newErrors.descripcionDescuento = 'La descripción es obligatoria.';
+        }
+        if (files.length === 0 && promocion.imagenes.length === 0) {
+            newErrors.files = 'Las imagenes son obligatorias.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateStep3 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
+        if (detalles.length === 0) {
+            newErrors.detalles = 'Los detalles son obligatorios.';
+        }
+        if (!promocion.precioPromocional) {
+            newErrors.precioPromocional = 'El precio promocional es obligatorio.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateStep4 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
         if (!promocion.sucursales || promocion.sucursales.length === 0) {
             newErrors.sucursales = 'Debe seleccionar al menos una sucursal.';
         }

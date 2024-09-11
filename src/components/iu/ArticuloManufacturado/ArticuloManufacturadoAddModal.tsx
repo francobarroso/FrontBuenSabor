@@ -269,6 +269,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
     };
 
     const handleNextStep = () => {
+        if(modalStep === 1 && !validateStep1()) return;
+        if(modalStep === 2 && !validateStep2()) return;
+        if(modalStep === 3 && !validateStep3()) return;
+        
         setModalStep(modalStep + 1);
     };
 
@@ -352,6 +356,54 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
         if (!currentArticuloManufacturado.preparacion) {
             newErrors.preparacion = 'La preparación es obligatoria.';
         }
+        if (detalles.length === 0) {
+            newErrors.detalles = 'Los detalles son obligatorios.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateStep1 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
+        if (!currentArticuloManufacturado.denominacion) {
+            newErrors.denominacion = 'La denominación es obligatoria.';
+        }
+        if (!currentArticuloManufacturado.unidadMedida.id) {
+            newErrors.unidadMedida = 'La unidad de medida es obligatoria.';
+        }
+        if (!currentArticuloManufacturado.categoria.id) {
+            newErrors.categoria = 'La categoria es obligatoria.';
+        }
+        if (files.length === 0 && currentArticuloManufacturado.imagenes.length === 0) {
+            newErrors.files = 'Las imagenes son obligatorias.';
+        }
+        if (!currentArticuloManufacturado.precioVenta) {
+            newErrors.precioVenta = 'El precio de venta es obligatorio.';
+        }
+        if (!currentArticuloManufacturado.tiempoEstimadoMinutos) {
+            newErrors.tiempoEstimadoMinutos = 'El tiempo estimado es obligatorio.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateStep2 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
+        if (!currentArticuloManufacturado.descripcion) {
+            newErrors.descripcion = 'La descripción es obligatoria.';
+        }
+        if (!currentArticuloManufacturado.preparacion) {
+            newErrors.preparacion = 'La preparación es obligatoria.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const validateStep3 = (): boolean => {
+        const newErrors: { [key: string]: string } = {};
         if (detalles.length === 0) {
             newErrors.detalles = 'Los detalles son obligatorios.';
         }
