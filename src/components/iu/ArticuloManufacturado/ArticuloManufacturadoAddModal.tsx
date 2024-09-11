@@ -269,10 +269,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
     };
 
     const handleNextStep = () => {
-        if(modalStep === 1 && !validateStep1()) return;
-        if(modalStep === 2 && !validateStep2()) return;
-        if(modalStep === 3 && !validateStep3()) return;
-        
+        if (modalStep === 1 && !validateStep1()) return;
+        if (modalStep === 2 && !validateStep2()) return;
+        if (modalStep === 3 && !validateStep3()) return;
+
         setModalStep(modalStep + 1);
     };
 
@@ -779,7 +779,10 @@ const ArticuloManufacturadoAddModal: React.FC<ArticuloInsumoAddModalProps> = ({ 
                                         <Card>
                                             <CardContent>
                                                 <Typography variant="body1" gutterBottom mb={2}>
-                                                    {detalle.articuloInsumo.denominacion}
+                                                    {detalle.articuloInsumo.denominacion}{' '}
+                                                    <Typography variant="body1" fontWeight="bold">
+                                                        ({detalle.articuloInsumo.unidadMedida.denominacion})
+                                                    </Typography>
                                                 </Typography>
                                                 <TextField
                                                     type="decimal"

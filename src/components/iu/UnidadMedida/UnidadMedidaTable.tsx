@@ -46,7 +46,7 @@ const UnidadMedidaTable: React.FC<UnidadMedidaTableProps> = ({ onClose, unidad }
         try {
             const data = await deleteUnidadMedida();
             if (data.status !== 200) {
-                toast.error("Error al eliminar la unidad de medida, intente más tarde", {
+                toast.error(data.data.message, {
                     position: "top-right",
                     autoClose: 5000, // Tiempo en milisegundos antes de que se cierre automáticamente
                     hideProgressBar: false,
