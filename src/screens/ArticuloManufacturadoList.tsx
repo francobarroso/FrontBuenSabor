@@ -115,6 +115,7 @@ function ArticuloManufacturadoList() {
     }
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        getAllArticuloManufacturadoBySucursal();
         setSearchTerm(event.target.value);
     };
 
