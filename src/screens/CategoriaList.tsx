@@ -92,7 +92,6 @@ function CategoriaList() {
     }
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        getAllCategoriaBySucursal();
         setSearchTerm(event.target.value);
     };
 

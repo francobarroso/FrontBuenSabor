@@ -99,7 +99,6 @@ function ArticuloInsumoList() {
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        getAllArticuloInsumoBySucursal();
         setSearchTerm(event.target.value);
     };
 
