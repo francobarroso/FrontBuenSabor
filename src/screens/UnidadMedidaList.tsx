@@ -50,6 +50,7 @@ function UnidadMedidaList() {
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        getAllUnidadMedida();
         setSearchTerm(event.target.value);
     };
 
