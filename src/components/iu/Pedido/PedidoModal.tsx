@@ -3,6 +3,7 @@ import { useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import Pedido from "../../../types/Pedido";
 import DetallePedido from "../../../types/DetallePedido";
+import { TipoEnvio } from "../../../types/enums/TipoEnvio";
 
 interface PromocionProps {
     pedido: Pedido;
@@ -60,6 +61,21 @@ const PedidoModal: React.FC<PromocionProps> = ({ pedido, open, onClose }) => {
                                 : 'Hora no disponible'}
                         </Typography>
                     </Box>
+                    {pedido.tipoEnvio === TipoEnvio.DELIVERY && (
+                        <Box mt={3}>
+                            <Box mb={1}>
+                                <Typography variant="h6">Información del cliente:</Typography>
+                            </Box>
+                            <Typography variant="body2">Nombre: {pedido.cliente?.nombre} {pedido.cliente?.apellido}</Typography>
+                            <Typography variant="body2">Domicilio: {pedido.domicilio?.calle}, {pedido.domicilio?.numero}, {pedido.domicilio?.localidad?.nombre}, {pedido.domicilio?.localidad?.provincia.nombre}</Typography>
+                            {pedido.domicilio?.piso !== null && pedido.domicilio?.nroDpto !== null && (
+                                <Box>
+                                    <Typography variant="body2">Piso: {pedido.domicilio?.piso}</Typography>
+                                    <Typography variant="body2">Nro Depto: {pedido.domicilio?.nroDpto}</Typography>
+                                </Box>
+                            )}
+                        </Box>
+                    )}
                     <Typography mt={3} variant="h6" gutterBottom align="left">
                         Detalles del Pedido:
                     </Typography>
